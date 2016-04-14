@@ -1,0 +1,16 @@
+Wed Apr 13 17:29:08 PDT 2016
+
+WIP - this seems to be mostly working - can't figure out how to 
+test that messages get added to redis
+
+also - have not confirmed that server-side handlers are working correctly
+
+TODO: add bitwrap-python from git by adding this to requirements.txt
+
+  -e git+https://github.com/bitwrap/bitwrap-python.git
+
+REVIEW:
+* consider using paver to generate docs
+* review how to use eventlet
+  * https://specs.openstack.org/openstack/openstack-specs/specs/eventlet-best-practices.html
+* http://eventlet.net/doc/modules/semaphore.html
