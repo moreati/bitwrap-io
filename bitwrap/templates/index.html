@@ -31,7 +31,7 @@
     <hr />
     <div class="layout" />
       <script>
-        var socket = io('http://localhost:8080/chat');
+        var socket = io('/chat');
 
         socket.on('connect', function(){
           console.log('connected')

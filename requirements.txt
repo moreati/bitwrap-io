@@ -8,5 +8,5 @@ honcho==0.6.6
 Flask-SocketIO==2.2
 Flask-Cors==2.1.2
 eventlet==0.18.4
--e git+https://github.com/bitwrap/bitwrap-python.git#egg=bitwrap
+-e git+https://github.com/bitwrap/bitwrap-python.git#egg=bitwrap-python
 #-e ../bitwrap-python
