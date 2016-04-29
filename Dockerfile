@@ -1,28 +1,25 @@
-FROM python
+FROM python:3
 
-RUN \
-      apt-get update &&\
-      apt-get install -y \
-        sudo wget curl git vim tig screen tree
+RUN apt-get update && apt-get install -y \
+        wget curl git vim tig screen tree
 
-RUN useradd --uid 1000 -d /opt/bitwrap bitwrap && \
- echo "bitwrap ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN useradd --uid 1000 -d /opt/bitwrap bitwrap
 
-ENV PROJECT_VERSION=0.0.2
+ENV PROJECT_VERSION=0.0.3
 
-RUN pip install virtualenv
+RUN mkdir /opt/app
 
-RUN mkdir /opt/app && chown bitwrap:bitwrap /opt/app
+COPY requirements.txt /opt/app/
 
 COPY . /opt/app/
 WORKDIR /opt/app
 
-RUN virtualenv -p python3 /opt/app/.env
-RUN . /opt/app/.env/bin/activate && pip install -r requirements.txt 
+RUN pip install -r requirements.txt 
+RUN chown bitwrap:bitwrap /opt/app
 
 USER bitwrap
 
 EXPOSE 8080
 VOLUME ["/home/bitwrap", "/opt/bitwrap"]
 
-CMD . /opt/app/.env/bin/activate && python -m bitwrap.io
+CMD python -m bitwrap.io

@@ -14,13 +14,17 @@ A bitwrapp appserver written in python using redis and flask-socketio
 
 ### Docker
 
+#### start neo4j
+
+    docker run  --name neo4j-dev --detach --publish=7474:7474 --volume=${HOME}/neo4j/data:/data neo4j
+
 #### start redis
 
-    docker run -d --name redis-dev redis
+    docker run --name redis-dev --detach redis
 
 #### start linked container
 
-    docker run --name=bitwrap-io-python --link redis-dev:redis -v ~/:/opt/bitwrap -it ${IMAGE}
+    docker run --name=bitwrap-io-python --link redis-dev:redis -v ${HOME}/:/opt/bitwrap -it ${IMAGE}
 
 #### use redis-cli
 

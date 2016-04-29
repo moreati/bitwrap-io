@@ -2,6 +2,7 @@ import eventlet
 eventlet.monkey_patch()
 
 import logging
+import request
 import os
 from flask import Flask, render_template
 from flask_socketio import SocketIO
@@ -11,15 +12,19 @@ from flask.ext.cors import CORS
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(24)
 
+# TODO add redis connection
+
 q = 'redis://%s:%s' % (
-        os.environ['REDIS_PORT_6379_TCP_ADDR'],
-        os.environ['REDIS_PORT_6379_TCP_PORT']
+        os.environ.get('REDIS_PORT_6379_TCP_ADDR', '127.0.0.1'),
+        os.environ.get('REDIS_PORT_6379_TCP_PORT', '6379')
     )
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 socketio = SocketIO(app, async_mode='eventlet', message_queue=q)
 
+# TODO listen to /bitwrap or maybe have an env var ?
+# use redis as a write-through cache 
 @app.route('/')
 def index():
     """Serve the client-side application."""

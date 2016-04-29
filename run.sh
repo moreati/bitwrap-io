@@ -6,8 +6,13 @@ else
   CONTAINER_NAME=$1
 fi
 echo "building: ${CONTAINER_NAME}"
+docker kill $CONTAINER_NAME &>/dev/null
+docker rm $CONTAINER_NAME &>/dev/null
+docker build .
 
 IMAGE_UUID=$(docker build . | awk '/Successfully built/ {  print $3 }')
 echo "using docker image => ${IMAGE_UUID}"
 
-docker run --name=${CONTAINER_NAME} --link redis-dev:redis -v ~/:/opt/bitwrap -p 8080:8080 -it ${IMAGE_UUID}
+# REVIEW: do we need neo?
+#docker run --name=${CONTAINER_NAME} --link redis-dev:redis --link neo4j-dev:neo4j -v ${HOME}:/opt/bitwrap -p 8080:8080 -it ${IMAGE_UUID}
+docker run --name=${CONTAINER_NAME} --link redis-dev:redis -v ${HOME}:/opt/bitwrap -p 8080:8080 -it ${IMAGE_UUID}
