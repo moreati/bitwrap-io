@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:2.7.11
 
 RUN apt-get update && apt-get install -y \
         wget curl git vim tig screen tree
@@ -20,6 +20,6 @@ RUN chown bitwrap:bitwrap /opt/app
 USER bitwrap
 
 EXPOSE 8080
-VOLUME ["/home/bitwrap", "/opt/bitwrap"]
+VOLUME ["/repo"]
 
-CMD python -m bitwrap.io
+ENTRYPOINT ["/opt/app/entry.sh"]

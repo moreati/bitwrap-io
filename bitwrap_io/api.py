@@ -43,5 +43,8 @@ def message(msg):
 def disconnect():
     print('disconnect ')
 
-if __name__ == '__main__':
+def main():
     socketio.run(app, port=8080, host='0.0.0.0', debug=True)
+
+if __name__ == '__main__':
+    main()

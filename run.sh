@@ -14,5 +14,4 @@ IMAGE_UUID=$(docker build . | awk '/Successfully built/ {  print $3 }')
 echo "using docker image => ${IMAGE_UUID}"
 
 # REVIEW: do we need neo?
-#docker run --name=${CONTAINER_NAME} --link redis-dev:redis --link neo4j-dev:neo4j -v ${HOME}:/opt/bitwrap -p 8080:8080 -it ${IMAGE_UUID}
-docker run --name=${CONTAINER_NAME} --link redis-dev:redis -v ${HOME}:/opt/bitwrap -p 8080:8080 -it ${IMAGE_UUID}
+docker run --entrypoint=/bin/bash --name=${CONTAINER_NAME} --link redis-dev:redis -v ${HOME}/.bitwrap:/opt/bitwrap -p 8080:8080 -it ${IMAGE_UUID}

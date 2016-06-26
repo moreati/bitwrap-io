@@ -1,13 +1,14 @@
-Wed Apr 13 17:29:08 PDT 2016
+Sat Jun 25 16:08:04 PDT 2016
 
-WIP - this seems to be mostly working - can't figure out how to 
-test that messages get added to redis
+WIP porting rest API from bitwrap-io
+ *  build this lib as a worker pool using the machine as a
+   *  shared resource w/ greenthreads & mutex locking
+   * use redis as main datastore and pub/sub transport
+   * use libgit2 module to add repo storage option
 
-also - have not confirmed that server-side handlers are working correctly
-
-TODO: add bitwrap-python from git by adding this to requirements.txt
-
-  -e git+https://github.com/bitwrap/bitwrap-python.git
+ICEBOX:
+* test that messages get added to redis
+* socket-io driven api
 
 REVIEW:
 * consider using paver to generate docs
