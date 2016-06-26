@@ -1,50 +1,24 @@
-import eventlet
-eventlet.monkey_patch()
-
-import logging
 import request
 import os
-from flask import Flask, render_template
-from flask_socketio import SocketIO
-from flask.ext.cors import CORS
+from flask import Flask
+from flask import render_template
+from flask import request
+from flask_jsonpify import jsonify
+import bitwrap_io 
 
-
+log = bitwrap_io.log
 app = Flask(__name__)
-app.config["SECRET_KEY"] = os.urandom(24)
 
-# TODO add redis connection
-
-q = 'redis://%s:%s' % (
-        os.environ.get('REDIS_PORT_6379_TCP_ADDR', '127.0.0.1'),
-        os.environ.get('REDIS_PORT_6379_TCP_PORT', '6379')
-    )
-
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
-
-socketio = SocketIO(app, async_mode='eventlet', message_queue=q)
-
-# TODO listen to /bitwrap or maybe have an env var ?
-# use redis as a write-through cache 
 @app.route('/')
 def index():
-    """Serve the client-side application."""
+    """ Serve the client-side application. """
     return render_template('index.html')
 
-@socketio.on('connect', namespace='/chat')
-def connect():
-    print("connect")
-
-@socketio.on('chat message', namespace='/chat')
-def message(msg):
-    print("message ", msg)
-    socketio.emit('event', msg, namespace='/chat')
-
-@socketio.on('disconnect', namespace='/chat')
-def disconnect():
-    print('disconnect ')
-
 def main():
-    socketio.run(app, port=8080, host='0.0.0.0', debug=True)
+    """ Start reactor and run flask app. """
+    bitwrap_io.start() 
+    app.run(host='0.0.0.0', port=8080)
 
 if __name__ == '__main__':
+    log.info('api starting')
     main()

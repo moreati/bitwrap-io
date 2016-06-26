@@ -1,10 +1,13 @@
 import pytest
 import bitwrap_io
-import os
 
 @pytest.fixture
-def karmanom():
-    return bitwrap_io.get('karmanom.com')
+def app():
+    pass
+
+@pytest.fixture
+def schema():
+    return 'karmanom.com'
 
 @pytest.fixture
 def response():
@@ -27,7 +30,5 @@ def response():
          }
      }
 
-
-def test_console(karmanom, response):
-    r = karmanom.console().sender('zim').target('dib').send('positive_tip').commit()
-    assert response == r
+def test_api_transform(schema, response):
+    assert True
