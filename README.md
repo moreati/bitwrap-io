@@ -1,6 +1,8 @@
 # Bitwrap-io-python
 
-A bitwrapp appserver written in python using redis and flask-socketio
+[![Build Status](https://travis-ci.org/bitwrap/bitwrap-io-python.svg?branch=master)](https://travis-ci.org/bitwrap/bitwrap-io-python)
+
+A bitwrapp appserver written in python using flask, twisted, redis, and sock.js
 
 #### run tests
 
