@@ -14,12 +14,17 @@ machines = {}
 # FIXME make this configable via env var
 _schema_path = os.path.join(os.path.dirname(__file__), '../tests/machine/')
 
+# REVIEW: would it make sense for this to be a twisted service?
 def start():
     """ start twisted reactor """
     observer = twisted.python.log.PythonLoggingObserver(__package__)
     observer.start()
     setup()
 
+def stop():
+    """ stop twisted reactor """
+    pass
+
 def get(schema):
     """ get machine """
-    return bitwrap.open_json(schema, os.path.join(_schema_path, schema + '.json'))
+    return bitwrap.open_json(schema.__str__(), os.path.join(_schema_path, schema + '.json'))

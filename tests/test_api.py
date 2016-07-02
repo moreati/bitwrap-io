@@ -1,16 +1,35 @@
 import pytest
+
 import bitwrap_io
+import urllib
+from bitwrap_io.api import app as _app
+import json
+
+bitwrap_io.start()
 
 @pytest.fixture
-def app():
-    pass
+def client(request):
+
+    def teardown():
+        print("teardown")
+
+    request.addfinalizer(teardown)
+
+    return _app.test_client()
 
 @pytest.fixture
 def schema():
     return 'karmanom.com'
 
 @pytest.fixture
-def response():
+def api_message():
+     return {
+         'signal': { 'schema': 'karmanom.com', 'action': 'positive_tip' },
+         'addresses': { 'sender': 'zim', 'target': 'dib' }
+     }
+
+@pytest.fixture
+def api_response():
     return {
         'cache': {
             'control': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -30,5 +49,10 @@ def response():
          }
      }
 
-def test_api_transform(schema, response):
-    assert True
+def test_api_transform(client, schema, api_message, api_response):
+    r = client.get('/api', query_string={ 'msg': json.dumps(api_message) } )
+    res = json.loads(r.data)
+
+    assert 202 == r.status_code
+    #assert api_response == res # FIXME
+

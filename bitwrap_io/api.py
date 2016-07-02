@@ -1,5 +1,5 @@
-import request
 import os
+import json
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -13,6 +13,20 @@ app = Flask(__name__)
 def index():
     """ Serve the client-side application. """
     return render_template('index.html')
+
+@app.route('/api')
+def transform():
+    """ process msg as json and queue up execution """
+    msg = json.loads(request.args['msg'])
+    machine = bitwrap_io.get(msg['signal']['schema'])
+    return jsonify(machine.transform(msg)), 202
+
+@app.route('/api-try')
+def dryRun():
+    """ perform a dry run execution """
+    msg = json.loads(request.args['msg'])
+    machine = bitwrap_io.get(msg['signal']['schema'])
+    return jsonify(machine.transform(msg)), 200
 
 def main():
     """ Start reactor and run flask app. """

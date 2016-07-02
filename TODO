@@ -1,11 +1,8 @@
-Sun Jun 26 12:09:06 PDT 2016
+Fri Jul  1 06:56:40 PDT 2016
 
 WIP: porting rest API from bitwrap-io node project
 * add unit testing for flask API
 * allow optional use of storage provider instead of OrderedDict as provided by bitwrap-python
-
-NOTES:
-* adopting twisted for async processing
 
 ICEBOX:
 * use redis as main datastore and pub/sub transport
@@ -13,4 +10,5 @@ ICEBOX:
 * use libgit2 module to add repo storage option
 
 REVIEW:
+* http://werkzeug.pocoo.org/docs/0.11/test/#testing-api
 * consider using paver to generate docs
