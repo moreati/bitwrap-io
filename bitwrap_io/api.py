@@ -1,38 +1,39 @@
-import os
-import json
-from flask import Flask
-from flask import render_template
-from flask import request
-from flask_jsonpify import jsonify
-import bitwrap_io 
+import sys
+import cyclone.jsonrpc
+from twisted.python import log
+from twisted.internet import defer, reactor
+import bitwrap_io
 
-log = bitwrap_io.log
-app = Flask(__name__)
+class JsonrpcHandler(cyclone.jsonrpc.JsonrpcRequestHandler):
+    def set_default_headers(self):
+        self.set_header('Access-Control-Allow-Origin', '*')
+        self.set_header('Access-Control-Allow-Methods', 'POST')        
+        self.set_header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
 
-@app.route('/')
-def index():
-    """ Serve the client-side application. """
-    return render_template('index.html')
+    def jsonrpc_transform(self, msg):
+        machine = bitwrap_io.get(msg['signal']['schema'])
+        return machine.transform(msg)
 
-@app.route('/api')
-def transform():
-    """ process msg as json and queue up execution """
-    msg = json.loads(request.args['msg'])
-    machine = bitwrap_io.get(msg['signal']['schema'])
-    return jsonify(machine.transform(msg)), 202
+    def jsonrpc_preview(self, msg):
+        machine = bitwrap_io.get(msg['signal']['schema'])
+        return machine.transform(msg)
 
-@app.route('/api-try')
-def dryRun():
-    """ perform a dry run execution """
-    msg = json.loads(request.args['msg'])
-    machine = bitwrap_io.get(msg['signal']['schema'])
-    return jsonify(machine.transform(msg)), 200
+    # REVIEW: perform async call on bitwrap machine
+    # @defer.inlineCallbacks
+    # def jsonrpc_geoip(self, address):
+    #     result = yield cyclone.httpclient.fetch(
+    #         "http://freegeoip.net/json/%s" % address.encode("utf-8"))
+    #     defer.returnValue(result.body)
+
 
 def main():
-    """ Start reactor and run flask app. """
-    bitwrap_io.start() 
-    app.run(host='0.0.0.0', port=8080)
+    log.startLogging(sys.stdout)
+    application = cyclone.web.Application([
+        (r"/api", JsonrpcHandler),
+    ])
 
-if __name__ == '__main__':
-    log.info('api starting')
+    reactor.listenTCP(8080, application)
+    reactor.run()
+
+if __name__ == "__main__":
     main()

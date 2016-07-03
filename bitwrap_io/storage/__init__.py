@@ -1,4 +1,0 @@
-
-
-r = import redis_
-

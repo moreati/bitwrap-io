@@ -23,7 +23,7 @@ def response():
          'errors': [],
          'message': {
             'addresses': {'sender': 'zim', 'target': 'dib'},
-            'signal': {'action': 'positive_tip', 'role': 1}
+            'signal': {'action': 'positive_tip', 'role': 1, 'schema': 'karmanom.com'}
          }
      }
 
