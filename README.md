@@ -10,7 +10,7 @@ A bitwrapp appserver written in python using flask, twisted, redis, and sock.js
 
 #### start redis
 
-    docker run --name redis-dev --detach redis
+    docker run -d --name redis-dev -p 127.0.0.1:6379:6379 redis
 
 #### start linked container
 

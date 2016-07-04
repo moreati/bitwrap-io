@@ -29,5 +29,6 @@ def response():
 
 
 def test_console(karmanom, response):
-    r = karmanom.console().sender('zim').target('dib').send('positive_tip').commit()
-    assert response == r
+    req = karmanom.console().sender('zim').target('dib').send('positive_tip').session
+    res = karmanom.machine.execute(karmanom.machine.new_request(req))
+    assert response == res

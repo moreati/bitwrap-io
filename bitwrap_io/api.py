@@ -10,13 +10,12 @@ class JsonrpcHandler(cyclone.jsonrpc.JsonrpcRequestHandler):
         self.set_header('Access-Control-Allow-Methods', 'POST')        
         self.set_header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
 
+
     def jsonrpc_transform(self, msg):
-        machine = bitwrap_io.get(msg['signal']['schema'])
-        return machine.transform(msg)
+        return machine(msg['signal']['schema']).transform(msg)
 
     def jsonrpc_preview(self, msg):
-        machine = bitwrap_io.get(msg['signal']['schema'])
-        return machine.transform(msg)
+        return machine(msg['signal']['schema']).preview(msg)
 
     # REVIEW: perform async call on bitwrap machine
     # @defer.inlineCallbacks
@@ -25,6 +24,8 @@ class JsonrpcHandler(cyclone.jsonrpc.JsonrpcRequestHandler):
     #         "http://freegeoip.net/json/%s" % address.encode("utf-8"))
     #     defer.returnValue(result.body)
 
+def machine(schema):
+    return bitwrap_io.get(schema)
 
 def main():
     log.startLogging(sys.stdout)
