@@ -50,6 +50,11 @@ class Txn(bitwrap.console.Session):
             defer.returnValue(val)
 
     @defer.inlineCallbacks
+    def store(self, address, val):
+        hval = dict(zip(self.hash_keys, val))
+        yield self.rc.hmset(address, hval)
+
+    @defer.inlineCallbacks
     def new_request(self):
         """ run the transaction without persisting state-vectors """
         self.rc = yield redis.Connection(redis_host, redis_port)
@@ -78,19 +83,13 @@ class Txn(bitwrap.console.Session):
 
         defer.returnValue(self.response)
 
-    @defer.inlineCallbacks
     def on_commit(self, response):
         """ save values to redis """
 
         if len(response['errors']) == 0:
             for key in response['cache']:
-                if key == 'control':
-                    continue
-
-                r = response['cache'][key]
-                h = dict(zip(range(0, len(r)), r))
-
-                yield self.rc.hmset(key, h)
+                if not key == 'control':
+                    self.store(key, response['cache'][key])
 
     def rollback(self):
         """ retrieve address values without running transaction """
