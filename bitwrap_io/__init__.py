@@ -5,6 +5,10 @@ import bitwrap
 from cyclone import redis
 from twisted.internet import defer
 
+
+from twisted.internet.protocol import Factory
+Factory.noisy = False
+
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 log = logging.getLogger(__package__)
 
@@ -26,6 +30,24 @@ def get(schema):
 
 class Txn(bitwrap.console.Session):
     """ state machine transaction """
+    def __init__(self, machine):
+        self.session = {
+            'addresses': {},
+            'signal': {}
+        }
+
+        self.machine = machine
+        self.hash_keys = range(0, len(self.machine.null_action))
+
+    @defer.inlineCallbacks
+    def fetch(self, address):
+        flag = yield self.rc.exists(address)
+
+        if 0 == flag:
+            defer.returnValue(None)
+        else:
+            val = yield self.rc.hmget(address, self.hash_keys)
+            defer.returnValue(val)
 
     @defer.inlineCallbacks
     def new_request(self):
@@ -36,8 +58,8 @@ class Txn(bitwrap.console.Session):
         sender = req['message']['addresses']['sender']
         target = req['message']['addresses']['target']
 
-        req['cache'][sender] = yield self.rc.get(sender)
-        req['cache'][target] = yield self.rc.get(target)
+        req['cache'][sender] = yield self.fetch(sender)
+        req['cache'][target] = yield self.fetch(target)
 
         if req['cache'][sender] == None:
             del(req['cache'][sender])
@@ -56,14 +78,30 @@ class Txn(bitwrap.console.Session):
 
         defer.returnValue(self.response)
 
+    @defer.inlineCallbacks
+    def on_commit(self, response):
+        """ save values to redis """
+
+        if len(response['errors']) == 0:
+            for key in response['cache']:
+                if key == 'control':
+                    continue
+
+                r = response['cache'][key]
+                h = dict(zip(range(0, len(r)), r))
+
+                yield self.rc.hmset(key, h)
+
     def rollback(self):
         """ retrieve address values without running transaction """
         return self.execute()
 
     def commit(self):
         """ run transaction and commit state to persistent storage """
-        # TODO: persist state
-        return self.execute()
+        x = self.execute()
+        x.addCallback(self.on_commit)
+
+        return x
 
 class StateMachine(object):
 
