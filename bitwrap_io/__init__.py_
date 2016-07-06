@@ -38,7 +38,6 @@ class Txn(bitwrap.console.Session):
 
         self.machine = machine
         self.hash_keys = range(0, len(self.machine.null_action))
-        self.dry_run = False
 
     @defer.inlineCallbacks
     def fetch(self, address):
@@ -58,18 +57,19 @@ class Txn(bitwrap.console.Session):
     @defer.inlineCallbacks
     def new_request(self):
         """ run the transaction without persisting state-vectors """
-        self.rc = yield redis.ConnectionPool(redis_host, redis_port)
 
         req = self.machine.new_request(self.session)
         sender = req['message']['addresses']['sender']
         target = req['message']['addresses']['target']
 
+        self.rc = yield redis.ConnectionPool(redis_host, redis_port)
+        self.t = yield self.rc.watch([sender, target])
+
         req['cache'][sender] = yield self.fetch(sender)
         req['cache'][target] = yield self.fetch(target)
 
-        self.t = yield self.rc.watch([sender, target])
         yield self.t.multi()
-
+        
         if req['cache'][sender] == None:
             del(req['cache'][sender])
 
@@ -85,34 +85,55 @@ class Txn(bitwrap.console.Session):
         self.request = yield self.new_request()
         self.response = yield self.machine.execute(self.request)
 
-        if self.dry_run:
-            yield self.t.discard()
-        else:
-            yield self.on_commit(self.request)
-
-        self.rc.disconnect()
         defer.returnValue(self.response)
 
     @defer.inlineCallbacks
     def on_commit(self, response):
         """ save values to redis """
-
         if len(response['errors']) == 0:
             for key in response['cache']:
                 if not key == 'control':
-                    yield self.store(key, response['cache'][key])
+                    self.store(key, response['cache'][key])
+
             yield self.t.commit()
         else:
             yield self.t.discard()
 
+        log.debug(self.response['errors'])
+        self.rc.disconnect()
+
+    @defer.inlineCallbacks
+    def on_rollback(self, res):
+        yield self.t.discard()
+        self.rc.disconnect()
+
+    @defer.inlineCallbacks
+    def on_error(self, err):
+        log.error(err)
+        # KLUDGE: this error doesn't get returned
+        self.response['errors'] = [ '__TRANSACTION_ERROR__', 'transaction conflict' ]
+        try:
+            if self.rc.inTransaction:
+               yield self.t.discard()
+            self.rc.disconnect()
+        except:
+            pass
+
     def rollback(self):
         """ retrieve address values without running transaction """
-        self.dry_run = True
-        return self.execute()
+        x = self.execute()
+        x.addCallback(self.on_rollback)
+        x.addErrback(self.on_error)
+
+        return x
 
     def commit(self):
         """ run transaction and commit state to persistent storage """
-        return self.execute()
+        x = self.execute()
+        x.addCallback(self.on_commit)
+        x.addErrback(self.on_error)
+
+        return x
 
 class StateMachine(object):
 
