@@ -4,8 +4,6 @@ import logging
 import bitwrap
 from cyclone import redis
 from twisted.internet import defer
-
-
 from twisted.internet.protocol import Factory
 Factory.noisy = False
 
@@ -86,18 +84,29 @@ class Txn(bitwrap.console.Session):
         self.response = yield self.machine.execute(self.request)
 
         if self.dry_run:
-            yield self.t.discard()
+            x = self.t.discard()
+            x.addErrback(self.on_error)
+            x.addCallback(self.on_complete)
         else:
-            yield self.on_commit(self.request)
+            x = self.on_commit(self.request)
+            x.addErrback(self.on_error)
+            x.addCallback(self.on_complete)
 
-        self.rc.disconnect()
         defer.returnValue(self.response)
+
+    def on_error(self, err):
+        if self.t.inTransaction:
+            self.t.discard()
+        log.error(err.type)
+
+    def on_complete(self, res):
+        self.rc.disconnect()
 
     @defer.inlineCallbacks
     def on_commit(self, response):
         """ save values to redis """
 
-        if len(response['errors']) == 0:
+        if response['errors'] == []:
             for key in response['cache']:
                 if not key == 'control':
                     yield self.store(key, response['cache'][key])
