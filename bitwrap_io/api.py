@@ -4,28 +4,20 @@ from twisted.python import log
 from twisted.internet import defer, reactor
 import bitwrap_io
 
+def machine(schema):
+    return bitwrap_io.get(schema)
+
 class JsonrpcHandler(cyclone.jsonrpc.JsonrpcRequestHandler):
     def set_default_headers(self):
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Access-Control-Allow-Methods', 'POST')        
         self.set_header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
 
-
     def jsonrpc_transform(self, msg):
         return machine(msg['signal']['schema']).transform(msg)
 
     def jsonrpc_preview(self, msg):
         return machine(msg['signal']['schema']).preview(msg)
-
-    # REVIEW: perform async call on bitwrap machine
-    # @defer.inlineCallbacks
-    # def jsonrpc_geoip(self, address):
-    #     result = yield cyclone.httpclient.fetch(
-    #         "http://freegeoip.net/json/%s" % address.encode("utf-8"))
-    #     defer.returnValue(result.body)
-
-def machine(schema):
-    return bitwrap_io.get(schema)
 
 def main():
     log.startLogging(sys.stdout)

@@ -1,13 +1,12 @@
-Mon Jul  4 14:40:48 PDT 2016
+Wed Jul  6 22:36:00 PDT 2016
 
-WIP: use redis to fetch & store state-vectors
-
-* should publish events to eventstore
+* add redis to travis
 * add github auth with ? http://cyclone.io/documentation/auth.html ?
 
 ICEBOX:
 * use cyclone websockets
 * use libgit2 module to add repo storage option
+* publish events to eventstore
 
 REVIEW:
 * consider using paver to generate docs

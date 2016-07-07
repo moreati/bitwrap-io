@@ -13,8 +13,12 @@ log = logging.getLogger(__package__)
 redis_host = os.environ.get('REDIS_PORT_6379_TCP_ADDR', '127.0.0.1')
 redis_port = os.environ.get('REDIS_PORT_6379_TCP_PORT', 6379)
 
+schema_path = os.environ.get(
+    'BITWRAP_SCHEMA_PATH',
+    os.path.join(os.path.dirname(__file__), '../tests/machine/')
+)
+
 machines = {}
-schema_path = os.environ.get('BITWRAP_SCHEMA_PATH', os.path.join(os.path.dirname(__file__), '../tests/machine/'))
 
 def get(schema):
     """ get machine """
@@ -37,6 +41,7 @@ class Txn(bitwrap.console.Session):
         self.machine = machine
         self.hash_keys = range(0, len(self.machine.null_action))
         self.dry_run = False
+        self.d = defer.Deferred()
 
     @defer.inlineCallbacks
     def fetch(self, address):
@@ -48,25 +53,22 @@ class Txn(bitwrap.console.Session):
             val = yield self.rc.hmget(address, self.hash_keys)
             defer.returnValue(val)
 
-    @defer.inlineCallbacks
     def store(self, address, val):
         hval = dict(zip(self.hash_keys, val))
-        yield self.t.hmset(address, hval)
+        self.t.hmset(address, hval)
 
     @defer.inlineCallbacks
     def new_request(self):
-        """ run the transaction without persisting state-vectors """
-        self.rc = yield redis.ConnectionPool(redis_host, redis_port)
-
+        """ begin transaction """
         req = self.machine.new_request(self.session)
         sender = req['message']['addresses']['sender']
         target = req['message']['addresses']['target']
 
-        req['cache'][sender] = yield self.fetch(sender)
-        req['cache'][target] = yield self.fetch(target)
-
         self.t = yield self.rc.watch([sender, target])
         yield self.t.multi()
+
+        req['cache'][sender] = yield self.fetch(sender)
+        req['cache'][target] = yield self.fetch(target)
 
         if req['cache'][sender] == None:
             del(req['cache'][sender])
@@ -79,54 +81,57 @@ class Txn(bitwrap.console.Session):
     @defer.inlineCallbacks
     def execute(self):
         """ run the transaction without persisting state-vectors """
-
+        self.rc = yield redis.ConnectionPool(redis_host, redis_port)
         self.request = yield self.new_request()
-        self.response = yield self.machine.execute(self.request)
+        self.response = self.machine.execute(self.request)
 
-        if self.dry_run:
-            x = self.t.discard()
-            x.addErrback(self.on_error)
-            x.addCallback(self.on_complete)
-        else:
-            x = self.on_commit(self.request)
-            x.addErrback(self.on_error)
-            x.addCallback(self.on_complete)
-
-        defer.returnValue(self.response)
+        x = self.on_return()
+        x.addErrback(self.on_error)
 
     def on_error(self, err):
         if self.t.inTransaction:
             self.t.discard()
-        log.error(err.type)
 
-    def on_complete(self, res):
+        msg = err.type.__name__
+
+        self.response['errors'] = [['__TRANSACTION_ERROR__', msg]]
+        self.d.callback(self.response)
         self.rc.disconnect()
+        log.error(msg)
 
     @defer.inlineCallbacks
-    def on_commit(self, response):
+    def on_return(self):
         """ save values to redis """
 
-        if response['errors'] == []:
-            for key in response['cache']:
+        if not self.dry_run and self.response['errors'] == []:
+            for key in self.response['cache']:
                 if not key == 'control':
-                    yield self.store(key, response['cache'][key])
+                    self.store(key, self.response['cache'][key])
             yield self.t.commit()
         else:
             yield self.t.discard()
 
-    def rollback(self):
-        """ retrieve address values without running transaction """
+        self.d.callback(self.response)
+        self.rc.disconnect()
+
+    def simulate(self):
+        """ simulate transform and return cache values """
         self.dry_run = True
-        return self.execute()
+        self.execute()
+        return self.d
 
     def commit(self):
-        """ run transaction and commit state to persistent storage """
-        return self.execute()
+        """ run transform and persist state to storage """
+        self.execute()
+        return self.d
 
 class StateMachine(object):
 
     def __init__(self, schema):
-        self.machine = bitwrap.open_json(schema.__str__(), os.path.join(schema_path, schema + '.json'))
+        self.machine = bitwrap.open_json(
+            schema.__str__(),
+            os.path.join(schema_path, schema + '.json')
+        )
 
     def console(self):
         return Txn(self.machine)
@@ -144,4 +149,4 @@ class StateMachine(object):
         return self.session(msg).commit()
 
     def preview(self, msg):
-        return self.session(msg).rollback()
+        return self.session(msg).simulate()
