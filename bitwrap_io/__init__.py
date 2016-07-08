@@ -11,7 +11,7 @@ logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 log = logging.getLogger(__package__)
 
 redis_host = os.environ.get('REDIS_PORT_6379_TCP_ADDR', '127.0.0.1')
-redis_port = os.environ.get('REDIS_PORT_6379_TCP_PORT', 6379)
+redis_port = int(os.environ.get('REDIS_PORT_6379_TCP_PORT', 6379))
 
 schema_path = os.environ.get(
     'BITWRAP_SCHEMA_PATH',
