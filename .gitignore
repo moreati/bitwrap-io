@@ -65,3 +65,4 @@ target/
 *.swo
 .env
 .cache
+_trial*

@@ -14,8 +14,6 @@ Read an article about how event sourcing compliments blockchains [ 6 Components 
 
 #### Development & Testing
 
-    python -m pytest
-
 start redis
 
     docker run -d --name redis-dev -p 127.0.0.1:6379:6379 redis
@@ -27,3 +25,7 @@ start linked container
 use redis-cli
 
     docker exec -it redis-dev redis-cli
+
+run unittests
+
+    trial bitwrap_io.test

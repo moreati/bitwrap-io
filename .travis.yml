@@ -2,5 +2,8 @@ language: python
 python:
   - "2.7"
 
+services:
+    - redis-server
+
 # command to run tests
-script: python -m pytest -svv
+script: trial bitwrap_io.test

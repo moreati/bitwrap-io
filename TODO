@@ -1,9 +1,9 @@
-Wed Jul  6 22:36:00 PDT 2016
+Sun Jul 10 12:00:33 PDT 2016
 
-* add redis to travis
-* add github auth with ? http://cyclone.io/documentation/auth.html ?
+WIP: build a protocol and a stream reciever for bitwrap events
 
 ICEBOX:
+* add github auth with ? http://cyclone.io/documentation/auth.html ?
 * use cyclone websockets
 * use libgit2 module to add repo storage option
 * publish events to eventstore
