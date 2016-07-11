@@ -1,8 +1,28 @@
 import bitwrap_io
 from twisted.trial import unittest
+from cyclone import redis
+from twisted.internet import defer, reactor
+import twisted
+
+#twisted.internet.base.DelayedCall.debug = True
 
 class MachineTestCase(unittest.TestCase):
 
+    @defer.inlineCallbacks
+    def setUp(self):
+        self.rc = yield redis.ConnectionPool(bitwrap_io.redis_host, bitwrap_io.redis_port)
+        self.rc.flushall()
+        self.d = defer.Deferred()
+
+        # add a delay so reactor has time to empty
+        reactor.callLater(1, self.d.callback, None)
+
+    @defer.inlineCallbacks
+    def tearDown(self):
+        self.rc.disconnect()
+        yield self.d
+
+    @defer.inlineCallbacks
     def test_console(self):
         karmanom = bitwrap_io.get('karmanom.com')
 
@@ -25,8 +45,6 @@ class MachineTestCase(unittest.TestCase):
             }
         }
 
-        req = karmanom.console().sender('zim').target('dib').send('positive_tip').session
-        res = karmanom.machine.execute(karmanom.machine.new_request(req))
-        print(res)
-        assert response == res
-
+        res = yield karmanom.console().sender('zim').target('dib').send('positive_tip').commit()
+        print "\n\n", res, "\n"
+        self.assertEqual(res, response)
