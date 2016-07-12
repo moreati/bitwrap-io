@@ -6,6 +6,7 @@ import twisted
 
 #twisted.internet.base.DelayedCall.debug = True
 
+# TODO: http://stackoverflow.com/questions/28529955/twisted-sse-server-subscribed-to-redis-via-pubsub
 class MachineTestCase(unittest.TestCase):
 
     @defer.inlineCallbacks
