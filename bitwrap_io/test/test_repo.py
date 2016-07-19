@@ -1,26 +1,18 @@
-import bitwrap_io
+from bitwrap_storage_pygit2 import Storage
 from twisted.trial import unittest
-from cyclone import redis
 from twisted.internet import defer, reactor
-import twisted
 
 #twisted.internet.base.DelayedCall.debug = True
+class RepoTestCase(unittest.TestCase):
 
-# TODO: http://stackoverflow.com/questions/28529955/twisted-sse-server-subscribed-to-redis-via-pubsub
-class MachineTestCase(unittest.TestCase):
-
-    @defer.inlineCallbacks
     def setUp(self):
-        self.rc = yield redis.ConnectionPool(bitwrap_io.redis_host, bitwrap_io.redis_port)
-        self.rc.flushall()
+        Storage.truncate('karmanom.com')
+        self.storage = Storage.open('karmanom.com')
 
-    @defer.inlineCallbacks
     def tearDown(self):
-        yield self.rc.disconnect()
+        pass
 
-    @defer.inlineCallbacks
     def test_console(self):
-        karmanom = bitwrap_io.get('karmanom.com')
 
         response = {
            'cache': {
@@ -41,6 +33,5 @@ class MachineTestCase(unittest.TestCase):
             }
         }
 
-        res = yield karmanom.console().sender('zim').target('dib').send('positive_tip').commit()
-        print "\n\n", res, "\n"
-        self.assertEqual(res, response)
+        self.storage.commit(response)
+        assert response['cache']['dib'] == self.storage.fetch('dib') 

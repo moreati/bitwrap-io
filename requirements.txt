@@ -1,3 +1,6 @@
 -e git+https://github.com/bitwrap/bitwrap-python.git#egg=bitwrap
+-e git+https://github.com/bitwrap/bitwrap-storage-pygit2.git#egg=bitwrap_storage_pygit2
 cyclone==1.1
 service-identity==16.0.0
+cffi==1.7.0
+pygit2==0.24.0

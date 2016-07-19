@@ -1,9 +1,17 @@
 language: python
+
 python:
   - "2.7"
 
 services:
-    - redis-server
+  - redis-server
 
-# command to run tests
-script: trial bitwrap_io.test
+env: LIBGIT2=~/libgit2/_install/ LD_LIBRARY_PATH=~/libgit2/_install/lib
+
+before_install:
+  - sudo apt-get install cmake
+  - pip install cffi
+  - "./.travis.sh"
+
+script:
+  - trial bitwrap_io.test
