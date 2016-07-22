@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-python -m bitwrap_io.api
+twistd -n -y service.tac

@@ -22,11 +22,12 @@ RUN mkdir /opt/app /repo
 ENV PROJECT_VERSION=0.0.3
 
 COPY requirements.txt /opt/app/
-
-COPY . /opt/app/
 WORKDIR /opt/app
 
 RUN pip install -r requirements.txt 
+
+COPY . /opt/app/
+
 RUN chown bitwrap:bitwrap /opt/app /repo
 
 USER bitwrap
