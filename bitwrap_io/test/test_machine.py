@@ -44,3 +44,5 @@ class MachineTestCase(unittest.TestCase):
         res = yield karmanom.console().sender('zim').target('dib').send('positive_tip').commit()
         print "\n\n", res, "\n"
         self.assertEqual(res, response)
+        res = yield karmanom.console().sender('zim').target('dib').send('deposit_system').commit()
+        print "\n\n", res, "\n"
