@@ -21,6 +21,7 @@ class MachineTestCase(unittest.TestCase):
     @defer.inlineCallbacks
     def test_console(self):
         karmanom = bitwrap_io.get('karmanom.com')
+        self.maxDiff=None
 
         response = {
            'cache': {
@@ -45,13 +46,12 @@ class MachineTestCase(unittest.TestCase):
             'errors': [],
             'message': {
                'addresses': {'sender': 'zim', 'target': 'dib'},
-               'signal': {'action': 'positive_tip', 'role': 1, 'schema': 'karmanom.com'}
-            } # TODO add payload
+               'signal': {'action': 'positive_tip', 'role': 1, 'schema': 'karmanom.com'},
+               'payload': { 'foo': 'bar'}
+            }
         }
 
-        self.maxDiff=None
-        res = yield karmanom.console().sender('zim').target('dib').send('positive_tip').commit()
+        res = yield karmanom.console().sender('zim').target('dib').send('positive_tip').payload({'foo': 'bar'}).commit()
+
         print "\n\n", res, "\n"
         self.assertEqual(res, response)
-        res = yield karmanom.console().sender('zim').target('dib').send('deposit_system').commit()
-        print "\n\n", res, "\n"

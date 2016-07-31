@@ -21,6 +21,8 @@ class StateMachine(object):
                     msg['addresses']['sender']
                 ).target(
                     msg['addresses']['target']
+                ).payload(
+                    msg.get('payload')
                 ).send(
                     msg['signal']['action']
                 )
@@ -37,13 +39,18 @@ class Transaction(bitwrap.console.Session):
     def __init__(self, machine):
         self.session = {
             'addresses': {},
-            'signal': {}
+            'signal': {},
+            'payload': ()
         }
 
         self.machine = machine
         self.hash_keys = range(0, len(self.machine.null_action))
         self.dry_run = False
         self.d = defer.Deferred()
+
+    def payload(self, val):
+        self.session['payload'] = val
+        return self
 
     @defer.inlineCallbacks
     def fetch(self, address):
@@ -73,11 +80,11 @@ class Transaction(bitwrap.console.Session):
         req['cache'][sender] = yield self.fetch(sender)
         req['cache'][target] = yield self.fetch(target)
 
-        if req['cache'][sender] == None:
-            del(req['cache'][sender])
+        if req['cache'].get(sender) == None:
+            req['cache'].pop(sender, None)
 
-        if req['cache'][target] == None:
-            del(req['cache'][target])
+        if req['cache'].get(target) == None:
+            req['cache'].pop(target, None)
 
         defer.returnValue(req)
 
