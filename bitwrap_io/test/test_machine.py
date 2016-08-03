@@ -44,6 +44,7 @@ class MachineTestCase(unittest.TestCase):
                'sender': [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1 ],
             },
             'errors': [],
+            'hash': '402604e1c0d0f1b84a3329543f9cb99e41bac51f',
             'message': {
                'addresses': {'sender': 'zim', 'target': 'dib'},
                'signal': {'action': 'positive_tip', 'role': 1, 'schema': 'karmanom.com'},
@@ -52,6 +53,8 @@ class MachineTestCase(unittest.TestCase):
         }
 
         res = yield karmanom.console().sender('zim').target('dib').send('positive_tip').payload({'foo': 'bar'}).commit()
+
+        res.pop('oid') # ditch :oid since it is unique per commit
 
         print "\n\n", res, "\n"
         self.assertEqual(res, response)

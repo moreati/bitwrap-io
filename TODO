@@ -1,6 +1,6 @@
-Tue Jul 12 20:12:32 PDT 2016
+Tue Aug  2 19:45:08 PDT 2016
 
-WIP: * use libgit2 module to add repo storage option
+WIP - testing git storage integration
 
 ICEBOX:
 * add github auth with ? http://cyclone.io/documentation/auth.html ?
@@ -8,4 +8,4 @@ ICEBOX:
 * publish events to eventstore
 
 REVIEW:
-* consider using paver to generate docs
+* consider using sphinx to generate docs

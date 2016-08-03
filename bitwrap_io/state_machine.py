@@ -1,11 +1,13 @@
 import os
-import bitwrap
+import json
+import bitwrap_io
 from cyclone import redis
 from twisted.internet import defer
-import bitwrap_io 
-import json
+import bitwrap
+from bitwrap_storage_pygit2 import Storage
 
 class StateMachine(object):
+    """ token driven bitwrap state machine """
 
     def __init__(self, schema):
         self.machine = bitwrap.open_json(
@@ -36,6 +38,7 @@ class StateMachine(object):
 
 class Transaction(bitwrap.console.Session):
     """ state machine transaction """
+
     def __init__(self, machine):
         self.session = {
             'addresses': {},
@@ -126,10 +129,7 @@ class Transaction(bitwrap.console.Session):
         actions = []
         for action in self.machine.transitions:
             if self.valid_action(action):
-                print 'valid', action
                 actions.append(action)
-            else:
-                print 'invalid', action
 
         return actions
 
@@ -141,6 +141,14 @@ class Transaction(bitwrap.console.Session):
             for key in self.response['cache']:
                 if not key == 'control':
                     self.store(key, self.response['cache'][key])
+
+            s = Storage.open(self.request['message']['signal']['schema'])
+            git_response = s.commit(self.response)
+
+            self.response['oid'] = git_response['oid'].__str__()
+            self.response['hash'] = git_response['hash']
+
+
             yield self.t.commit()
         else:
             yield self.t.discard()
