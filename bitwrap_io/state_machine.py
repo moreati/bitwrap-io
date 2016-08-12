@@ -83,11 +83,21 @@ class Transaction(bitwrap.console.Session):
         req['cache'][sender] = yield self.fetch(sender)
         req['cache'][target] = yield self.fetch(target)
 
+        s = Storage.open(req['message']['signal']['schema'])
+
         if req['cache'].get(sender) == None:
             req['cache'].pop(sender, None)
+            try:
+                req['cache'][sender] = s.fetch(sender)
+            except:
+                pass
 
         if req['cache'].get(target) == None:
             req['cache'].pop(target, None)
+            try:
+                 req['cache'][target] = s.fetch(target)
+            except:
+                pass
 
         defer.returnValue(req)
 

@@ -4,13 +4,15 @@ from cyclone import redis
 from twisted.internet import defer, reactor
 import twisted
 
+from bitwrap_storage_pygit2 import Storage
+
 #twisted.internet.base.DelayedCall.debug = True
 
-# TODO: http://stackoverflow.com/questions/28529955/twisted-sse-server-subscribed-to-redis-via-pubsub
 class MachineTestCase(unittest.TestCase):
 
     @defer.inlineCallbacks
     def setUp(self):
+        Storage.truncate('karmanom.com')
         self.rc = yield redis.ConnectionPool(bitwrap_io.redis_host, bitwrap_io.redis_port)
         self.rc.flushall()
 
@@ -19,7 +21,7 @@ class MachineTestCase(unittest.TestCase):
         yield self.rc.disconnect()
 
     @defer.inlineCallbacks
-    def test_console(self):
+    def test_with_and_without_redis(self):
         karmanom = bitwrap_io.get('karmanom.com')
         self.maxDiff=None
 
@@ -54,7 +56,19 @@ class MachineTestCase(unittest.TestCase):
 
         res = yield karmanom.console().sender('zim').target('dib').send('positive_tip').payload({'foo': 'bar'}).commit()
 
-        res.pop('oid') # ditch :oid since it is unique per commit
 
         print "\n\n", res, "\n"
+
+        res.pop('oid') # ditch :oid since it is unique per commit
         self.assertEqual(res, response)
+
+        # simulate a loss of redis storage
+        self.rc.flushall()
+
+        # run another transaction 
+        res2 = yield karmanom.console().sender('zim').target('dib').send('deposit_system').payload({'baz': 'qux'}).commit()
+        print res2['cache']
+        self.assertEqual(res2['cache']['dib'], [0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 3, 1])
+
+
+
