@@ -14,4 +14,4 @@ before_install:
   - "./.travis.sh"
 
 script:
-  - trial bitwrap_io.test
+  - PYTHONPATH=./ trial bitwrap_io.test
