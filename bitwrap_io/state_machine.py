@@ -10,7 +10,7 @@ class StateMachine(object):
     """ token driven bitwrap state machine """
 
     def __init__(self, schema):
-        self.machine = bitwrap.open_json(
+        self.machine = bitwrap.import_wrapfile(
             schema.__str__(),
             os.path.join(bitwrap_io.schema_path, schema + '.json')
         )
