@@ -40,6 +40,5 @@ class MachineTestCase(unittest.TestCase):
         }
 
         res = machine.console().sender('zim').target('dib').send('begin').payload({'foo': 'bar'}).commit()
-
-
+        # TODO: actually assert something
         print "\n\n", res, "\n"

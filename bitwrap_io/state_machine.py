@@ -2,7 +2,6 @@ import os
 import json
 import bitwrap_io
 from cyclone import redis
-from twisted.internet import defer
 import bitwrap
 from bitwrap_storage_lmdb import Storage
 import bitwrap_storage_lmdb
@@ -49,7 +48,6 @@ class Transaction(bitwrap.console.Session):
 
         self.machine = machine
         self.dry_run = False
-        self.d = defer.Deferred()
 
     def payload(self, val):
         self.session['payload'] = val
@@ -59,15 +57,14 @@ class Transaction(bitwrap.console.Session):
     def execute(self):
         """ run the transaction without persisting state-vectors """
         self.request = self.machine.new_request(self.session)
-        s = Storage.open(self.request['message']['signal']['schema'])
-        self.response = s.commit(self.machine, self.request, dry_run=self.dry_run)
+        storage = Storage.open(self.request['message']['signal']['schema'])
+        self.response = storage.commit(self.machine, self.request, dry_run=self.dry_run)
         self.response['actions'] = self.valid_actions()
         return self.response
 
     def valid_action(self, action):
         """ simulate an action with the latest cached values """
-        return [] # FIXME: make this work an less ugly
-        _req = json.loads(json.dumps(self.response)) # KLUDGE!
+        _req = json.loads(json.dumps(self.response['event'])) # FIXME find better way to deepcopy request
         _req['message']['signal']['action'] = action
         req = self.machine.new_request(_req['message'])
         req['cache'] = _req['cache']
@@ -96,5 +93,4 @@ class Transaction(bitwrap.console.Session):
 
     def commit(self):
         """ run transform and persist state to storage """
-        self.execute()
-        return self.d
+        return self.execute()

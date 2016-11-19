@@ -1,5 +1,5 @@
 -e git+https://github.com/bitwrap/bitwrap-python.git#egg=bitwrap
--e ../bitwrap-storage-lmdb
+-e git+https://github.com/bitwrap/bitwrap-storage-lmdb.git#egg=bitwrap_storage_lmdb
 cyclone==1.1
 service-identity==16.0.0
 cffi==1.7.0
