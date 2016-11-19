@@ -4,23 +4,18 @@ from cyclone import redis
 from twisted.internet import defer, reactor
 import twisted
 
-from bitwrap_storage_pygit2 import Storage
+from bitwrap_storage_lmdb import Storage
 
 #twisted.internet.base.DelayedCall.debug = True
 
 class MachineTestCase(unittest.TestCase):
 
-    @defer.inlineCallbacks
     def setUp(self):
         Storage.truncate('tic-tac-toe')
-        self.rc = yield redis.ConnectionPool(bitwrap_io.redis_host, bitwrap_io.redis_port)
-        self.rc.flushall()
 
-    @defer.inlineCallbacks
     def tearDown(self):
-        yield self.rc.disconnect()
+        pass
 
-    @defer.inlineCallbacks
     def test_with_and_without_redis(self):
         machine = bitwrap_io.get('tic-tac-toe')
         self.maxDiff=None
@@ -44,7 +39,7 @@ class MachineTestCase(unittest.TestCase):
             }
         }
 
-        res = yield machine.console().sender('zim').target('dib').send('begin').payload({'foo': 'bar'}).commit()
+        res = machine.console().sender('zim').target('dib').send('begin').payload({'foo': 'bar'}).commit()
 
 
         print "\n\n", res, "\n"
