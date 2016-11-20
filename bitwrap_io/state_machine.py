@@ -1,7 +1,6 @@
 import os
 import json
 import bitwrap_io
-from cyclone import redis
 import bitwrap
 from bitwrap_storage_lmdb import Storage
 import bitwrap_storage_lmdb
@@ -15,16 +14,15 @@ class StateMachine(object):
             os.path.join(bitwrap_io.SCHEMA_PATH, schema + '.json')
         )
 
-    def console(self):
-        return Transaction(self.machine)
-
     def session(self, msg):
-        return self.console().sender(
+        txn = Transaction(self.machine)
+
+        return txn.sender(
                     msg['addresses']['sender']
                 ).target(
                     msg['addresses']['target']
                 ).payload(
-                    msg.get('payload')
+                    msg.get('payload', {})
                 ).send(
                     msg['signal']['action']
                 )
@@ -43,7 +41,7 @@ class Transaction(bitwrap.console.Session):
         self.session = {
             'addresses': {},
             'signal': {},
-            'payload': ()
+            'payload': {},
         }
 
         self.machine = machine
@@ -53,13 +51,12 @@ class Transaction(bitwrap.console.Session):
         self.session['payload'] = val
         return self
 
-
     def execute(self):
         """ run the transaction without persisting state-vectors """
         self.request = self.machine.new_request(self.session)
         storage = Storage.open(self.request['message']['signal']['schema'])
         self.response = storage.commit(self.machine, self.request, dry_run=self.dry_run)
-        self.response['actions'] = self.valid_actions()
+        self.response['valid_actions'] = self.valid_actions()
         return self.response
 
     def valid_action(self, action):
@@ -84,12 +81,10 @@ class Transaction(bitwrap.console.Session):
 
         return actions
 
-
     def simulate(self):
         """ simulate transform and return cache values """
         self.dry_run = True
-        self.execute()
-        return self.d
+        return self.execute()
 
     def commit(self):
         """ run transform and persist state to storage """

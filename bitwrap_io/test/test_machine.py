@@ -1,12 +1,7 @@
 import bitwrap_io
 from twisted.trial import unittest
-from cyclone import redis
-from twisted.internet import defer, reactor
-import twisted
 
 from bitwrap_storage_lmdb import Storage
-
-#twisted.internet.base.DelayedCall.debug = True
 
 class MachineTestCase(unittest.TestCase):
 
@@ -16,29 +11,16 @@ class MachineTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_with_and_without_redis(self):
+    def test_machine_transaction(self):
         machine = bitwrap_io.get('tic-tac-toe')
-        self.maxDiff=None
 
-        response = {
-           'cache': {
-           },
-           'actions': [],
-           'context': {
-               'action': [],
-               'control': [],
-               'target': [],
-               'sender': []
-            },
-            'errors': [],
-            'hash': '402604e1c0d0f1b84a3329543f9cb99e41bac51f',
-            'message': {
-               'addresses': {'sender': 'zim', 'target': 'dib'},
-               'signal': {'action': 'begin', 'role': 1, 'schema': 'tic-tac-toe'},
-               'payload': { 'foo': 'bar'}
-            }
-        }
+        req = machine.session({
+            'addresses': { 'sender': 'zim', 'target': 'dib' },
+            'payload': {'foo': 'bar'},
+            'signal': {'action': 'begin'}
+        })
 
-        res = machine.console().sender('zim').target('dib').send('begin').payload({'foo': 'bar'}).commit()
-        # TODO: actually assert something
+        res = req.commit()
+
         print "\n\n", res, "\n"
+        assert res['hash'] == 'df167e75dc8b46e746b008b06c4259ccd5490ae8'
