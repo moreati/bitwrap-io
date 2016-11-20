@@ -21,6 +21,8 @@ class MachineTestCase(unittest.TestCase):
         })
 
         res = req.commit()
-
         print "\n\n", res, "\n"
-        assert res['hash'] == 'df167e75dc8b46e746b008b06c4259ccd5490ae8'
+
+        assert res['hash'] == 'a12a03d7e8bf422e30cabac4581e49c212588a10'
+        assert res['event']['cache']['dib'] != None
+        assert res['event']['cache']['zim'] != None
