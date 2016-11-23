@@ -32,7 +32,7 @@ RUN chown bitwrap:bitwrap /opt/app /repo
 
 USER bitwrap
 
-EXPOSE 8080
+EXPOSE 80
 VOLUME ["/repo"]
 
 ENV BITWRAP_REPO_PATH=/repo/
