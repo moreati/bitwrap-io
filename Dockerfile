@@ -30,7 +30,7 @@ COPY . /opt/app/
 
 RUN chown bitwrap:bitwrap /opt/app /repo
 
-USER bitwrap
+USER root
 
 EXPOSE 80
 VOLUME ["/repo"]
