@@ -3,7 +3,7 @@ from bitwrap_io.api import JsonrpcHandler
 import cyclone.web
 from twisted.application import service, internet
 
-_port = int(os.environ.get('BITWRAP_PORT', 80))
+_port = int(os.environ.get('BITWRAP_PORT', 8080))
 
 application = service.Application("bitwrap")
 io = cyclone.web.Application([(r"/api", JsonrpcHandler)])

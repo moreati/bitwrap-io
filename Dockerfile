@@ -1,40 +1,25 @@
 FROM python:2.7.11
 
 RUN apt-get update && apt-get install -y \
-        wget curl git vim tig screen tree \
-        cmake
+        wget curl git vim tig tree cmake
 
-RUN useradd --uid 1000 -d /opt/bitwrap bitwrap
+RUN mkdir /opt/bitwrap /repo
 
-WORKDIR /opt/
-RUN git clone --depth=1 -b maint/v0.24 https://github.com/libgit2/libgit2.git
+ENV PROJECT_VERSION=0.0.4
 
-RUN mkdir /opt/libgit2/build
-WORKDIR /opt/libgit2/build
+COPY requirements.txt /opt/bitwrap/
+RUN pip install -r /opt/bitwrap/requirements.txt 
 
-RUN cmake .. -DCMAKE_INSTALL_PREFIX=../_install -DBUILD_CLAR=OFF
-RUN cmake --build . --target install
+COPY bitwrap_io /opt/bitwrap/bitwrap_io
+COPY entry.sh /opt/bitwrap/
+COPY service.tac /opt/bitwrap/
 
-ENV LIBGIT2=/opt/libgit2/_install/ LD_LIBRARY_PATH=/opt/libgit2/_install/lib
-
-RUN mkdir /opt/app /repo
-
-ENV PROJECT_VERSION=0.0.3
-
-COPY requirements.txt /opt/app/
-WORKDIR /opt/app
-
-RUN pip install -r requirements.txt 
-
-COPY . /opt/app/
-
-RUN chown bitwrap:bitwrap /opt/app /repo
-
-USER root
+WORKDIR /opt/bitwrap
 
 EXPOSE 80
 VOLUME ["/repo"]
 
 ENV BITWRAP_REPO_PATH=/repo/
+ENV BITWRAP_PORT=80
 
-ENTRYPOINT ["/opt/app/entry.sh"]
+ENTRYPOINT ["/opt/bitwrap/entry.sh"]

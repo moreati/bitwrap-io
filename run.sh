@@ -13,4 +13,4 @@ docker build .
 IMAGE_UUID=$(docker build . | awk '/Successfully built/ {  print $3 }')
 echo "using docker image => ${IMAGE_UUID}"
 
-docker run --entrypoint=/bin/bash --name=${CONTAINER_NAME} -v ${HOME}/:/opt/bitwrap -p 8080:8080 -it ${IMAGE_UUID}
+docker run --entrypoint=/bin/bash --name=${CONTAINER_NAME} -v ${HOME}:/root -p 8080:8080 -it ${IMAGE_UUID}
