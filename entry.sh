@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-twistd -n -y service.tac
+PYTHONPATH=./ twistd -n -y service.tac
