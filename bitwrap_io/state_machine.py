@@ -4,6 +4,7 @@ import bitwrap_io
 import bitwrap
 from bitwrap_storage_lmdb import Storage
 import bitwrap_storage_lmdb
+from bitwrap_storage_arangodb import Storage as EventStore
 
 class StateMachine(object):
     """ token driven bitwrap state machine """
@@ -54,8 +55,14 @@ class Transaction(bitwrap.console.Session):
     def execute(self):
         """ run the transaction without persisting state-vectors """
         self.request = self.machine.new_request(self.session)
+
         storage = Storage.open(self.request['message']['signal']['schema'])
         self.response = storage.commit(self.machine, self.request, dry_run=self.dry_run)
+
+        eventstore = EventStore.open(self.request['message']['signal']['schema'])
+        eventstore.commit(self.machine, self.response, dry_run=self.dry_run)
+
+        # TODO: dispatch to txrdq for further processing
         self.response['valid_actions'] = self.valid_actions()
         return self.response
 
