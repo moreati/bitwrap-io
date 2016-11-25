@@ -1,22 +1,36 @@
 import os
 import json
-import bitwrap_io
+from txrdq.rdq import ResizableDispatchQueue
+
 import bitwrap
+import bitwrap_io
 from bitwrap_storage_lmdb import Storage
 import bitwrap_storage_lmdb
 from bitwrap_storage_arangodb import Storage as EventStore
+
+
+def __handler__(txn):
+    eventstore = EventStore.open(txn.schema)
+    eventstore.commit(txn.machine, txn.response, dry_run=txn.dry_run)
+
+_QUEUE = ResizableDispatchQueue(__handler__, 10)
+
+def __dispatch__(txn):
+    _QUEUE.put(txn)
 
 class StateMachine(object):
     """ token driven bitwrap state machine """
 
     def __init__(self, schema):
+        self.schema = schema.__str__()
+
         self.machine = bitwrap.import_wrapfile(
-            schema.__str__(),
+            self.schema,
             os.path.join(bitwrap_io.SCHEMA_PATH, schema + '.json')
         )
 
     def session(self, msg):
-        txn = Transaction(self.machine)
+        txn = Transaction(self.machine, self.schema)
 
         return txn.sender(
                     msg['addresses']['sender']
@@ -38,7 +52,8 @@ class StateMachine(object):
 class Transaction(bitwrap.console.Session):
     """ state machine transaction """
 
-    def __init__(self, machine):
+    def __init__(self, machine, schema):
+        self.schema = schema
         self.session = {
             'addresses': {},
             'signal': {},
@@ -58,11 +73,8 @@ class Transaction(bitwrap.console.Session):
 
         storage = Storage.open(self.request['message']['signal']['schema'])
         self.response = storage.commit(self.machine, self.request, dry_run=self.dry_run)
+        __dispatch__(self)
 
-        eventstore = EventStore.open(self.request['message']['signal']['schema'])
-        eventstore.commit(self.machine, self.response, dry_run=self.dry_run)
-
-        # TODO: dispatch to txrdq for further processing
         self.response['valid_actions'] = self.valid_actions()
         return self.response
 
