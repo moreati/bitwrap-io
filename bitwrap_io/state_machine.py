@@ -8,12 +8,13 @@ from bitwrap_storage_lmdb import Storage
 import bitwrap_storage_lmdb
 from bitwrap_storage_arangodb import Storage as EventStore
 
+POOL_SIZE = int(os.environ.get('BITWRAP_EVENTSTORE_POOL', 100))
 
 def __handler__(txn):
     eventstore = EventStore.open(txn.schema)
     eventstore.commit(txn.machine, txn.response, dry_run=txn.dry_run)
 
-_QUEUE = ResizableDispatchQueue(__handler__, 10)
+_QUEUE = ResizableDispatchQueue(__handler__, POOL_SIZE)
 
 def __dispatch__(txn):
     _QUEUE.put(txn)
