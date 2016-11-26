@@ -7,3 +7,4 @@ cffi==1.7.0
 lmdb==0.92
 python-arango==3.4.0
 txRDQ==0.2.14
+xxhash==0.6.1
