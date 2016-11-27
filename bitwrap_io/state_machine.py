@@ -9,9 +9,8 @@ from bitwrap_storage_lmdb import Storage
 import bitwrap_storage_lmdb
 from bitwrap_storage_arangodb import Storage as EventStore
 
-POOL_SIZE = int(os.environ.get('BITWRAP_EVENTSTORE_POOL', 100))
+POOL_SIZE = int(os.environ.get('BITWRAP_EVENTSTORE_POOL', 20))
 LOCK=defer.DeferredLock()
-SHOW_ACTIONS = os.environ.get('BITWRAP_RETURN_ACTIONS', None)
 
 def __handler__(txn):
     eventstore = EventStore.open(txn.schema)
@@ -76,9 +75,6 @@ class Transaction(bitwrap.console.Session):
         self.request = self.machine.new_request(self.session)
         self.response = yield LOCK.run(self._exec)
 
-        if SHOW_ACTIONS:
-            self.response['valid_actions'] = self.valid_actions()
-
         defer.returnValue(self.response)
 
         __dispatch__(self)
@@ -86,28 +82,6 @@ class Transaction(bitwrap.console.Session):
     def _exec(self, tries=0):
         stor = Storage.open(self.schema)
         return stor.commit(self.machine, self.request, dry_run=self.dry_run)
-
-    def valid_action(self, action):
-        """ simulate an action with the latest cached values """
-        _req = json.loads(json.dumps(self.response['event'])) # FIXME find better way to deepcopy request
-        _req['message']['signal']['action'] = action
-        req = self.machine.new_request(_req['message'])
-        req['cache'] = _req['cache']
-
-        # bypass roles
-        req['cache']['control'] = [1] * len(self.machine.places)
-
-        res = self.machine.execute(req)
-
-        return res['errors'] == []
-
-    def valid_actions(self):
-        actions = []
-        for action in self.machine.transitions:
-            if self.valid_action(action):
-                actions.append(action)
-
-        return actions
 
     def simulate(self):
         """ simulate transform and return cache values """
