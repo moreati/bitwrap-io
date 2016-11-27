@@ -74,10 +74,8 @@ class Transaction(bitwrap.console.Session):
         """ run the transaction without persisting state-vectors """
         self.request = self.machine.new_request(self.session)
         self.response = yield LOCK.run(self._exec)
-
-        defer.returnValue(self.response)
-
         __dispatch__(self)
+        defer.returnValue(self.response)
 
     def _exec(self, tries=0):
         stor = Storage.open(self.schema)
