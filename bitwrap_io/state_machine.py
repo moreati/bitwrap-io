@@ -1,6 +1,7 @@
 import os
 import json
 from txrdq.rdq import ResizableDispatchQueue
+from twisted.internet import defer
 
 import bitwrap
 import bitwrap_io
@@ -9,6 +10,8 @@ import bitwrap_storage_lmdb
 from bitwrap_storage_arangodb import Storage as EventStore
 
 POOL_SIZE = int(os.environ.get('BITWRAP_EVENTSTORE_POOL', 100))
+LOCK=defer.DeferredLock()
+SHOW_ACTIONS = os.environ.get('BITWRAP_RETURN_ACTIONS', None)
 
 def __handler__(txn):
     eventstore = EventStore.open(txn.schema)
@@ -49,7 +52,6 @@ class StateMachine(object):
     def preview(self, msg):
         return self.session(msg).simulate()
 
-
 class Transaction(bitwrap.console.Session):
     """ state machine transaction """
 
@@ -68,16 +70,22 @@ class Transaction(bitwrap.console.Session):
         self.session['payload'] = val
         return self
 
+    @defer.inlineCallbacks
     def execute(self):
         """ run the transaction without persisting state-vectors """
         self.request = self.machine.new_request(self.session)
+        self.response = yield LOCK.run(self._exec)
 
-        storage = Storage.open(self.request['message']['signal']['schema'])
-        self.response = storage.commit(self.machine, self.request, dry_run=self.dry_run)
+        if SHOW_ACTIONS:
+            self.response['valid_actions'] = self.valid_actions()
+
+        defer.returnValue(self.response)
+
         __dispatch__(self)
 
-        self.response['valid_actions'] = self.valid_actions()
-        return self.response
+    def _exec(self, tries=0):
+        stor = Storage.open(self.schema)
+        return stor.commit(self.machine, self.request, dry_run=self.dry_run)
 
     def valid_action(self, action):
         """ simulate an action with the latest cached values """

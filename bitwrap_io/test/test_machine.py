@@ -1,5 +1,6 @@
 import bitwrap_io
 from twisted.trial import unittest
+from twisted.internet import defer
 
 from bitwrap_storage_lmdb import Storage
 
@@ -11,6 +12,7 @@ class MachineTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
+    @defer.inlineCallbacks
     def test_machine_transaction(self):
         machine = bitwrap_io.get('tic-tac-toe')
 
@@ -20,9 +22,10 @@ class MachineTestCase(unittest.TestCase):
             'signal': {'action': 'begin'}
         })
 
-        res = req.commit()
+        req.commit()
+        res = yield req.commit()
         print "\n\n", res, "\n"
 
-        assert res['hash'] == 'cfa44297ff4d15c5'
+        assert res['hash'] == '63193cf0e7bbf3ea'
         assert res['event']['cache']['dib'] != None
         assert res['event']['cache']['zim'] != None
