@@ -1,4 +1,4 @@
-Tue Aug  2 19:45:08 PDT 2016
+Mon Nov 28 07:21:22 PST 2016
 
 WIP - publish events to arango
 
@@ -9,3 +9,5 @@ BACKLOG:
 ICEBOX:
 * add github auth
 * use cyclone websockets for reporting on secondary transactions
+* consider https://github.com/quantmind/pulsar/
+* also http://www.actordb.com/
