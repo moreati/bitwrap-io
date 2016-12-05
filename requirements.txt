@@ -1,6 +1,5 @@
 -e git+https://github.com/bitwrap/bitwrap-python.git#egg=bitwrap
--e git+https://github.com/bitwrap/bitwrap-storage-lmdb.git#egg=bitwrap_storage_lmdb
--e git+https://github.com/bitwrap/bitwrap-storage-arangodb.git#egg=bitwrap_storage_arangodb
+-e git+https://github.com/bitwrap/bitwrap-storage-actordb.git#egg=bitwrap_storage_actordb
 cyclone==1.1
 service-identity==16.0.0
 cffi==1.7.0
@@ -9,3 +8,4 @@ python-arango==3.4.0
 txRDQ==0.2.14
 xxhash==0.6.1
 ujson==1.35
+thrift==0.9.3

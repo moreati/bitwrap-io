@@ -1,8 +1,10 @@
 import bitwrap_io
+import twisted
 from twisted.trial import unittest
 from twisted.internet import defer
+twisted.internet.base.DelayedCall.debug = True
 
-from bitwrap_storage_lmdb import Storage
+from bitwrap_storage_actordb import Storage
 
 class MachineTestCase(unittest.TestCase):
 

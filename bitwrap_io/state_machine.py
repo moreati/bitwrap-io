@@ -5,18 +5,17 @@ from twisted.internet import defer
 
 import bitwrap
 import bitwrap_io
-from bitwrap_storage_lmdb import Storage
-import bitwrap_storage_lmdb
-from bitwrap_storage_arangodb import Storage as EventStore
+from bitwrap_storage_actordb import Storage
 
-POOL_SIZE = int(os.environ.get('BITWRAP_EVENTSTORE_POOL', 20))
+QUEUE_WIDTH = int(os.environ.get('BITWRAP_QUEUE_WIDTH', 20))
 LOCK=defer.DeferredLock()
 
 def __handler__(txn):
-    eventstore = EventStore.open(txn.schema)
-    eventstore.commit(txn.machine, txn.response, dry_run=txn.dry_run)
+    #eventstore = EventStore.open(txn.schema)
+    #eventstore.commit(txn.machine, txn.response, dry_run=txn.dry_run)
+    pass
 
-_QUEUE = ResizableDispatchQueue(__handler__, POOL_SIZE)
+_QUEUE = ResizableDispatchQueue(__handler__, QUEUE_WIDTH)
 
 def __dispatch__(txn):
     _QUEUE.put(txn)
