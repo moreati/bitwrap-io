@@ -11,14 +11,18 @@ QUEUE_WIDTH = int(os.environ.get('BITWRAP_QUEUE_WIDTH', 20))
 LOCK=defer.DeferredLock()
 
 def __handler__(txn):
-    #eventstore = EventStore.open(txn.schema)
-    #eventstore.commit(txn.machine, txn.response, dry_run=txn.dry_run)
-    pass
+    d = LOCK.run(txn._exec)
+
+    def _return(res):
+        txn.response.callback(res)
+
+    d.addCallback(_return)
+
 
 _QUEUE = ResizableDispatchQueue(__handler__, QUEUE_WIDTH)
 
 def __dispatch__(txn):
-    _QUEUE.put(txn)
+    return _QUEUE.put(txn)
 
 class StateMachine(object):
     """ token driven bitwrap state machine """
@@ -68,13 +72,13 @@ class Transaction(bitwrap.console.Session):
         self.session['payload'] = val
         return self
 
-    @defer.inlineCallbacks
     def execute(self):
         """ run the transaction without persisting state-vectors """
         self.request = self.machine.new_request(self.session)
-        self.response = yield LOCK.run(self._exec)
-        __dispatch__(self)
-        defer.returnValue(self.response)
+        self.response = defer.Deferred()
+        job = __dispatch__(self)
+
+        return self.response
 
     def _exec(self, tries=0):
         stor = Storage.open(self.schema)

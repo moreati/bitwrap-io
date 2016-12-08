@@ -1,5 +1,6 @@
 -e git+https://github.com/bitwrap/bitwrap-python.git#egg=bitwrap
--e git+https://github.com/bitwrap/bitwrap-storage-actordb.git#egg=bitwrap_storage_actordb
+#-e git+https://github.com/bitwrap/bitwrap-storage-actordb.git#egg=bitwrap_storage_actordb
+-e ../bitwrap-storage-actordb
 cyclone==1.1
 service-identity==16.0.0
 cffi==1.7.0
