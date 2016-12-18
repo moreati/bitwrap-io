@@ -83,16 +83,16 @@ class Machine(object):
         result = []
 
         for action, tx in self.machine['transitions'].items():
-            if Machine.is_valid(vadd(self.machine['state'], tx['delta'])):
+            if self.is_valid(self.vadd(self.machine['state'], tx['delta'])):
                 result.append(action)
 
         return result
 
     def transform(self, action):
         """ update self.vector """
-        vsum = vadd(self.machine['state'], self.machine['transitions'][action]['delta'])
+        vsum = self.vadd(self.machine['state'], self.machine['transitions'][action]['delta'])
 
-        if Machine.is_valid(vsum):
+        if self.is_valid(vsum):
             self.machine['state'] = vsum
             return True
         else:

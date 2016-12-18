@@ -16,7 +16,7 @@ DB_PATH = os.path.join(REPO_ROOT, 'bitwrap.lmdb')
 _DB = lmdb.open(DB_PATH, max_dbs=MAX_DB, map_size=MAP_SIZE)
 
 def open_db(base_name, label):
-    """ open sub_db """
+    """ open sub-db """
     key = base_name + label
     return _DB.open_db(key)
 
@@ -25,8 +25,9 @@ class Storage(object):
 
     @staticmethod
     def truncate():
-        """ delete lmdb file """
-        shutil.rmtree(DB_PATH)
+        """ delete lmdb folder """
+        if os.path.isdir(DB_PATH):
+            shutil.rmtree(DB_PATH)
 
     @staticmethod
     def open(repo_name):
@@ -62,7 +63,6 @@ class Storage(object):
 
             transition = state_machine.machine['transitions'][action]
             output = state_machine.vadd(state, transition['delta'])
-
 
             res = {
                 "oid": oid,
