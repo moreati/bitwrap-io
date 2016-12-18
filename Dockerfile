@@ -24,10 +24,11 @@ COPY bitwrap_pnml/ /opt/bitwrap-pnml/bitwrap_pnml
 RUN chown -R bitwrap:bitwrap /opt/bitwrap-pnml
 USER bitwrap
 
-EXPOSE 8000
-EXPOSE 8080
-EXPOSE 9090
+EXPOSE 80
 
-VOLUME ["/opt/bitwrap"]
+VOLUME ["/opt/bitwrap", "/repo"]
+
+ENV BITWRAP_REPO_PATH=/repo/
+ENV BITWRAP_PORT=80
 
 ENTRYPOINT ["/opt/bitwrap-pnml/entry.sh"]
