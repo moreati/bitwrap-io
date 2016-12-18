@@ -46,19 +46,15 @@ class Transaction(object):
         self.request = request
         self.response = defer.Deferred()
         self.machine = machine
-        self.dry_run = False
+        self.dry_run = None
 
     def simulate(self):
         """ simulate transform and return cache values """
-        self.dry_run = True
-        return self.execute()
+        return self.commit(dry_run=True)
 
-    def commit(self):
+    def commit(self, dry_run=False):
         """ transform and persist state to storage """
-        return self.execute()
-
-    def execute(self):
-        """ run transformation """
+        self.dry_run=dry_run
         TXN_QUEUE.put(self)
         return self.response
 

@@ -27,7 +27,7 @@ class MachineTestCase(unittest.TestCase):
         })
 
         res = yield req.commit()
-        print "\n\n", res, "\n"
+        assert res['event']['state'] == [0, 0, 0, 1, 0, 0]
 
         req = machine.session({
             'oid': 'fake-oid',
@@ -35,4 +35,4 @@ class MachineTestCase(unittest.TestCase):
         })
 
         res = yield req.commit()
-        print "\n\n", res, "\n"
+        assert res['event']['state'] == [1, 1, 0, 0, 0, 0]

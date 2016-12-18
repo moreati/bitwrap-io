@@ -70,6 +70,8 @@ class Storage(object):
                 "state": output,
                 "payload": req.get('payload', {}),
                 "previous": txn.get(oid, db=self.transactions),
+                "endpoint": req.get('endpoint', None),
+                "ip": req.get('ip', None),
                 "error": 0
             }
 

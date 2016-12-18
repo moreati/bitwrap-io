@@ -43,8 +43,7 @@ class JsonrpcHandler(JsonrpcRequestHandler):
 
     def jsonrpc_transform(self, msg):
         """ execute a state machine transformation"""
-        # FIXME
-        #msg['ip'] = self.request['remote_ip']
-        #msg['endpoint'] = self.request['Host']
+        msg['ip'] = self.request.remote_ip
+        msg['endpoint'] = self.request.host
 
         return machine(msg['schema']).transform(msg)

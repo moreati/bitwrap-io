@@ -7,7 +7,7 @@ from twisted.application import internet
 from twisted.internet.defer import inlineCallbacks
 import cyclone.httpclient
 from bitwrap_pnml.storage import Storage
-import bitwrap_pnml.api as api
+from bitwrap_pnml.api import factory as ApiFactory
 
 IFACE = '127.0.0.1'
 PORT = 8080
@@ -17,7 +17,7 @@ class PingTest(TestCase):
 
     def setUp(self):
         Storage.truncate()
-        self.service = internet.TCPServer(PORT, api.factory(), interface=IFACE)
+        self.service = internet.TCPServer(PORT, ApiFactory(), interface=IFACE)
         self.service.startService()
         self.cli = cyclone.httpclient.JsonRPC('http://%s:%s/api' % (IFACE, PORT))
 
