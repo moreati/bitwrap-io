@@ -91,11 +91,11 @@ class Storage(object):
             else:
                 return {'event': res}
 
-    def fetch_str(self, key, database='state'):
+    def fetch_str(self, key, db_name='state'):
         """ fetch raw json string from address keystore"""
         with _DB.begin(write=False) as txn:
-            return txn.get(key, db=getattr(self, database))
+            return txn.get(key, db=getattr(self, db_name))
 
-    def fetch(self, key, database='state'):
+    def fetch(self, key, db_key='state'):
         """ fetch and load json """
-        return self.decode(self.fetch_str(key, database=getattr(self, database)))
+        return self.decode(self.fetch_str(key, db_name=db_key))
