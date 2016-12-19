@@ -1,12 +1,8 @@
-FROM python:2.7.11
-
-RUN apt-get update && \
-    apt-get install -y \
-        sudo wget curl git vim tig screen tree
+FROM python:2.7.12
 
 ENV PROJECT_VERSION=0.0.1
 
-RUN mkdir /opt/bitwrap-pnml
+RUN mkdir -p /opt/bitwrap-pnml
 
 COPY requirements.txt /opt/bitwrap-pnml/
 WORKDIR /opt/bitwrap-pnml
