@@ -27,15 +27,15 @@ class StorageTestCase(unittest.TestCase):
         """
 
         req = self.machine.session({
-            'oid': 'fake-oid',
+            'oid': 'fake-oid2',
             'action': 'T0',
             'payload': {'foo': 'bar'}
         })
 
         yield req.commit()
 
-        res = yield self.store.fetch_str('fake-oid')
+        res = yield self.store.fetch_str('fake-oid2')
         assert res == json.dumps([0, 0, 0, 1, 0, 0])
 
-        res = yield self.store.fetch('fake-oid')
+        res = yield self.store.fetch('fake-oid2')
         assert res == [0, 0, 0, 1, 0, 0]
