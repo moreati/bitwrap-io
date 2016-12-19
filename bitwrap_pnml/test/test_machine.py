@@ -12,15 +12,16 @@ class MachineTestCase(unittest.TestCase):
 
     def setUp(self):
         Storage.truncate()
+        self.machine = bitwrap_pnml.get('split_join_1')
 
     def tearDown(self):
         pass
 
     @defer.inlineCallbacks
     def test_machine_transaction(self):
-        machine = bitwrap_pnml.get('split_join_1')
+        """ invoke state machine transformations """
 
-        req = machine.session({
+        req = self.machine.session({
             'oid': 'fake-oid',
             'action': 'T0',
             'payload': {'foo': 'bar'}
@@ -29,7 +30,7 @@ class MachineTestCase(unittest.TestCase):
         res = yield req.commit()
         assert res['event']['state'] == [0, 0, 0, 1, 0, 0]
 
-        req = machine.session({
+        req = self.machine.session({
             'oid': 'fake-oid',
             'action': 'T1'
         })

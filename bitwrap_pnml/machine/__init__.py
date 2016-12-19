@@ -1,22 +1,18 @@
 """
-bitwrap_pnml machine 
+bitwrap_pnml machine
 
 build a state machine model from Petri-net markup language
 """
 
 import os
 import sys
-import bitwrap_pnml.machine
 from bitwrap_pnml.machine import dsl, petrinet
 
 PNML_PATH = os.environ.get('PNML_PATH', os.path.abspath(__file__ + '/../../../examples'))
 
-def open(network_name):
-    """ open network by filename """
-    return open_xml(os.path.join(PNML_PATH, '%s.xml' % network_name))
-
-def open_xml(path):
+def open_xml(network_name):
     """ parse file """
+    path = os.path.join(PNML_PATH, '%s.xml' % network_name)
     return petrinet.parse_pnml_file(path)[0]
 
 class Network(object):
@@ -26,19 +22,22 @@ class Network(object):
 
     def __init__(self, name):
         self.name = name
-        self.net = bitwrap_pnml.machine.open(name)
+        self.net = open_xml(name)
         self.reindex()
 
     def reindex(self):
+        """ rebuild network from pnml """
         dsl.append_roles(self.net)
         self.places = dsl.places(self.net)
         self.transitions = dsl.transitions(self.net, self.places)
         dsl.apply_edges(self.net, self.places, self.transitions)
 
     def empty_vector(self):
+        """ return an empty state-vector """
         return dsl.empty_vector(len(self.places))
 
     def inital_vector(self):
+        """ return inital state-vector """
         vector = self.empty_vector()
 
         for key in self.places:
@@ -48,7 +47,8 @@ class Network(object):
         return vector
 
     def open(self, state_vector=None):
-        if state_vector == None:
+        """ open p/t-net """
+        if state_vector is None:
             state_vector = self.inital_vector()
 
         return {'state': state_vector, 'transitions': self.transitions}
@@ -82,8 +82,8 @@ class Machine(object):
         """ update self.vector """
         result = []
 
-        for action, tx in self.machine['transitions'].items():
-            if self.is_valid(self.vadd(self.machine['state'], tx['delta'])):
+        for action, txn in self.machine['transitions'].items():
+            if self.is_valid(self.vadd(self.machine['state'], txn['delta'])):
                 result.append(action)
 
         return result

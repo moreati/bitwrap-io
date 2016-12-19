@@ -3,7 +3,6 @@ bitwrap_pnml.state_machine
 
 Combine storage and machine modules to provide a persitent state machine object
 """
-import os
 from txrdq.rdq import ResizableDispatchQueue
 from twisted.internet import defer
 
@@ -54,7 +53,7 @@ class Transaction(object):
 
     def commit(self, dry_run=False):
         """ transform and persist state to storage """
-        self.dry_run=dry_run
+        self.dry_run = dry_run
         TXN_QUEUE.put(self)
         return self.response
 

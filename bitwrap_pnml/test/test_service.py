@@ -41,13 +41,13 @@ class PingTest(TestCase):
         }
 
         res = yield self.cli.transform(req)
-        assert [1] == res['event']['state']
-        assert 0 == res['event']['error']
+        assert res['event']['state'] == [1]
+        assert res['event']['error'] == 0
 
         res = yield self.cli.transform(req)
-        assert 'fakeoid-trial0' == res['event']['oid']
-        assert [2] == res['event']['state']
-        assert 0 == res['event']['error']
+        assert res['event']['oid'] == 'fakeoid-trial0'
+        assert res['event']['state'] == [2]
+        assert res['event']['error'] == 0
 
     @inlineCallbacks
     def test_preview(self):
@@ -60,9 +60,9 @@ class PingTest(TestCase):
         }
 
         res = yield self.cli.preview(req)
-        assert 0 == res['event']['error']
-        assert [1] == res['event']['state']
+        assert res['event']['error'] == 0
+        assert res['event']['state'] == [1]
 
         res = yield self.cli.preview(req)
-        assert [1] == res['event']['state']
-        assert 0 == res['event']['error']
+        assert res['event']['state'] == [1]
+        assert res['event']['error'] == 0
