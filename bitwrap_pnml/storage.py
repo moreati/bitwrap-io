@@ -75,18 +75,21 @@ class Storage(object):
                 "error": 0
             }
 
-            if dry_run or not state_machine.is_valid(output):
+            if not state_machine.is_valid(output):
+                dry_run = True
                 res["error"] = 1
                 return {'event': res}
-            else:
+
+            if not dry_run:
                 event_str = json.dumps(res)
                 txnid = xxhash.xxh64(event_str, seed=XX_SEED).hexdigest()
-
-                txn.put(oid, json.dumps(output), db=self.state)
                 txn.put(txnid, event_str, db=self.events)
+                txn.put(oid, json.dumps(output), db=self.state)
                 txn.put(oid, txnid, db=self.transactions)
 
                 return {'id': txnid, 'event': res}
+            else:
+                return {'event': res}
 
     def fetch_str(self, key, database='state'):
         """ fetch raw json string from address keystore"""

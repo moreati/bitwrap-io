@@ -48,3 +48,21 @@ class PingTest(TestCase):
         assert 'fakeoid-trial0' == res['event']['oid']
         assert [2] == res['event']['state']
         assert 0 == res['event']['error']
+
+    @inlineCallbacks
+    def test_preview(self):
+        """ call transform api """
+
+        req = {
+            "schema": "counter",
+            "oid": "fakeoid-trial1",
+            "action": "INC"
+        }
+
+        res = yield self.cli.preview(req)
+        assert 0 == res['event']['error']
+        assert [1] == res['event']['state']
+
+        res = yield self.cli.preview(req)
+        assert [1] == res['event']['state']
+        assert 0 == res['event']['error']
