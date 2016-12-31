@@ -35,7 +35,9 @@ class StorageTestCase(unittest.TestCase):
         yield req.commit()
 
         res = yield self.store.fetch_str('fake-oid2')
+        # pylint: disable=E1103
         assert res == json.dumps([0, 0, 0, 1, 0, 0])
+        # pylint: enable=E1103
 
         res = yield self.store.fetch('fake-oid2')
         assert res == [0, 0, 0, 1, 0, 0]

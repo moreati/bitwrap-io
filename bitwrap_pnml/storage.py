@@ -15,6 +15,8 @@ DB_PATH = os.path.join(REPO_ROOT, 'bitwrap.lmdb')
 
 _DB = lmdb.open(DB_PATH, max_dbs=MAX_DB, map_size=MAP_SIZE)
 
+# pylint: disable=E1103
+
 def open_db(base_name, label):
     """ open sub-db """
     key = base_name + label
@@ -40,7 +42,12 @@ class Storage(object):
         return input_str.encode('latin-1')
 
     @staticmethod
-    def decode(val):
+    def serialize(val):
+        """ unserialize json from lmdb """
+        return json.dumps(val)
+
+    @staticmethod
+    def unserialize(val):
         """ unserialize json from lmdb """
         if val is None:
             return None
@@ -48,7 +55,7 @@ class Storage(object):
             return json.loads(val)
 
     def __init__(self, repo_name):
-        self.state = open_db(repo_name, ':db')
+        self.state = open_db(repo_name, ':state')
         self.events = open_db(repo_name, ':events')
         self.transactions = open_db(repo_name, ':transactions')
 
@@ -58,7 +65,7 @@ class Storage(object):
 
         with _DB.begin(write=(not dry_run)) as txn:
             oid = self.encode_key(req['oid'])
-            state = self.decode(txn.get(oid, db=self.state)) or state_machine.machine['state']
+            state = self.unserialize(txn.get(oid, db=self.state)) or state_machine.machine['state']
             action = req['action']
 
             transition = state_machine.machine['transitions'][action]
@@ -78,13 +85,12 @@ class Storage(object):
             if not state_machine.is_valid(output):
                 dry_run = True
                 res["error"] = 1
-                return {'event': res}
 
             if not dry_run:
-                event_str = json.dumps(res)
+                event_str = self.serialize(res)
                 txnid = xxhash.xxh64(event_str, seed=XX_SEED).hexdigest()
                 txn.put(txnid, event_str, db=self.events)
-                txn.put(oid, json.dumps(output), db=self.state)
+                txn.put(oid, self.serialize(output), db=self.state)
                 txn.put(oid, txnid, db=self.transactions)
 
                 return {'id': txnid, 'event': res}
@@ -98,4 +104,6 @@ class Storage(object):
 
     def fetch(self, key, db_key='state'):
         """ fetch and load json """
-        return self.decode(self.fetch_str(key, db_name=db_key))
+        return self.unserialize(self.fetch_str(key, db_name=db_key))
+
+# pylint: enable=E1103

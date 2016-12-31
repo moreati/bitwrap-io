@@ -17,7 +17,9 @@ class PingTest(TestCase):
 
     def setUp(self):
         Storage.truncate()
+        # pylint: disable=E1103
         self.service = internet.TCPServer(PORT, ApiFactory(), interface=IFACE)
+        # pylint: enable=E1103
         self.service.startService()
         self.cli = cyclone.httpclient.JsonRPC('http://%s:%s/api' % (IFACE, PORT))
 

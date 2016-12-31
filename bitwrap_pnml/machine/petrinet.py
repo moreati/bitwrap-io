@@ -8,6 +8,8 @@ see MIT license: https://github.com/irgangla/pntools/blob/master/LICENSE
 This program implements an XML parser and a python data structure for
 Petri nets/PNML.
 """
+# pylint: disable=R0903
+# pylint: disable=C0103
 
 import sys # argv for test file path
 import xml.etree.ElementTree as ET # XML parser
@@ -266,6 +268,9 @@ def parse_pnml_file(filename):
 
     return nets
 
+
+# pylint: enable=R0903
+# pylint: enable=C0103
 
 if __name__ == "__main__":
 

@@ -15,7 +15,7 @@ def open_xml(network_name):
     path = os.path.join(PNML_PATH, '%s.xml' % network_name)
     return petrinet.parse_pnml_file(path)[0]
 
-class Network(object):
+class PTNet(object):
     """
     Load PNML as a matrix of places and transitions
     """
@@ -23,6 +23,8 @@ class Network(object):
     def __init__(self, name):
         self.name = name
         self.net = open_xml(name)
+        self.places = None
+        self.transitions = None
         self.reindex()
 
     def reindex(self):
@@ -40,8 +42,7 @@ class Network(object):
         """ return inital state-vector """
         vector = self.empty_vector()
 
-        for key in self.places:
-            place = self.places[key]
+        for _, place in self.places.items():
             vector[place['offset']] = place['inital']
 
         return vector
@@ -59,7 +60,7 @@ class Machine(object):
 
     def __init__(self, network_name, init_state=None):
         self.network_name = network_name
-        self.machine = Network(network_name).open(init_state)
+        self.machine = PTNet(network_name).open(init_state)
 
     @staticmethod
     def vadd(vector1, vector2):
@@ -87,13 +88,3 @@ class Machine(object):
                 result.append(action)
 
         return result
-
-    def transform(self, action):
-        """ update self.vector """
-        vsum = self.vadd(self.machine['state'], self.machine['transitions'][action]['delta'])
-
-        if self.is_valid(vsum):
-            self.machine['state'] = vsum
-            return True
-        else:
-            return False

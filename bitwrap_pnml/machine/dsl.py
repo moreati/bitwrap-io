@@ -24,7 +24,7 @@ def places(net):
             if place == 'BEGIN':
                 inital = 1
             else:
-                inital = 0 # FIXME: use initial markings from pnml
+                inital = 0 # TODO: use initial markings from pnml
 
             _places[place] = {'inital': inital, 'offset': offset}
             offset += 1
