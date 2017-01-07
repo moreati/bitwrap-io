@@ -14,11 +14,11 @@ COPY entry.sh /opt/bitwrap-pnml/
 COPY examples/ /opt/bitwrap-pnml/examples
 COPY bitwrap_pnml/ /opt/bitwrap-pnml/bitwrap_pnml
 
-EXPOSE 80
+EXPOSE 8080
 
 VOLUME ["/opt/bitwrap", "/repo"]
 
 ENV BITWRAP_REPO_PATH=/repo/
-ENV BITWRAP_PORT=80
+ENV BITWRAP_PORT=8080
 
 ENTRYPOINT ["/opt/bitwrap-pnml/entry.sh"]
