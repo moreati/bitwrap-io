@@ -1,0 +1,2 @@
+recursive-include bitwrap_pnml *.py
+recursive-include examples *.xml

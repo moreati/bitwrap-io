@@ -1,6 +1,22 @@
-Sat Dec 31 08:49:28 PST 2016
+Sat Jan  7 12:39:54 PST 2017
 
-WIP: allow module to be used as a twisted plugin
+
+WIP - fix pypi release to properly deploy v 0.1.0
+some files and subfolders are missing from the release
+
+Metadata-Version: 1.1
+Name: bitwrap_pnml
+Version: 0.1.0
+Author: Matthew York
+Author-email: myork at stackdump com
+Home-page: http://getbitwrap.com
+Download-url: UNKNOWN
+Summary: a cyclone.io based JsonRPC API suitable for modeling and storing state transformations defined by elementary petri-nets 
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+
 
 BACKLOG:
+* allow module to be used as a twisted plugin
 * use x-requested-for to add request ip to message
