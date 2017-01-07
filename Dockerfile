@@ -1,6 +1,6 @@
 FROM python:2.7.12
 
-ENV PROJECT_VERSION=0.0.1
+ENV PROJECT_VERSION=0.1.0
 
 RUN mkdir -p /opt/bitwrap-pnml
 
