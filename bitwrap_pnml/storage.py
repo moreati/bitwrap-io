@@ -13,17 +13,14 @@ XX_SEED = int(os.environ.get('BITWRAP_HASH_SEED', 662607004))
 MAP_SIZE = int(os.environ.get('BITWRAP_DB_SIZE', 1048576000))
 DB_PATH = os.path.join(REPO_ROOT, 'bitwrap.lmdb')
 
-_DB = lmdb.open(DB_PATH, max_dbs=MAX_DB, map_size=MAP_SIZE)
-
 # pylint: disable=E1103
-
-def open_db(base_name, label):
-    """ open sub-db """
-    key = base_name + label
-    return _DB.open_db(key)
-
 class Storage(object):
     """ lmdb Storage provider """
+
+    def open_db(self, base_name, label):
+        """ open sub-db """
+        key = base_name + label
+        return self.db.open_db(key)
 
     @staticmethod
     def truncate():
@@ -55,15 +52,17 @@ class Storage(object):
             return json.loads(val)
 
     def __init__(self, repo_name):
-        self.state = open_db(repo_name, ':state')
-        self.events = open_db(repo_name, ':events')
-        self.transactions = open_db(repo_name, ':transactions')
+        self.db = lmdb.open(os.path.join(REPO_ROOT, repo_name + '.lmdb'), max_dbs=MAX_DB, map_size=MAP_SIZE)
+        #self.db = lmdb.open(DB_PATH, max_dbs=MAX_DB, map_size=MAP_SIZE)
+        self.state = self.open_db(repo_name, ':state')
+        self.events = self.open_db(repo_name, ':events')
+        self.transactions = self.open_db(repo_name, ':transactions')
 
 
     def commit(self, state_machine, req, dry_run=False):
         """ execute transition and persist to storage on success """
 
-        with _DB.begin(write=(not dry_run)) as txn:
+        with self.db.begin(write=(not dry_run)) as txn:
             oid = self.encode_key(req['oid'])
             state = self.unserialize(txn.get(oid, db=self.state)) or state_machine.machine['state']
             action = req['action']
@@ -99,7 +98,7 @@ class Storage(object):
 
     def fetch_str(self, key, db_name='state'):
         """ fetch raw json string from address keystore"""
-        with _DB.begin(write=False) as txn:
+        with self.db.begin(write=False) as txn:
             return txn.get(key, db=getattr(self, db_name))
 
     def fetch(self, key, db_key='state'):
