@@ -13,6 +13,8 @@ XX_SEED = int(os.environ.get('BITWRAP_HASH_SEED', 662607004))
 MAP_SIZE = int(os.environ.get('BITWRAP_DB_SIZE', 1048576000))
 DB_PATH = os.path.join(REPO_ROOT, 'bitwrap.lmdb')
 
+_POOL = {}
+
 # pylint: disable=E1103
 class Storage(object):
     """ lmdb Storage provider """
@@ -52,8 +54,12 @@ class Storage(object):
             return json.loads(val)
 
     def __init__(self, repo_name):
-        self.db = lmdb.open(os.path.join(REPO_ROOT, repo_name + '.lmdb'), max_dbs=MAX_DB, map_size=MAP_SIZE)
-        #self.db = lmdb.open(DB_PATH, max_dbs=MAX_DB, map_size=MAP_SIZE)
+        if _POOL.has_key(repo_name):
+            self.db = _POOL[repo_name]
+        else:
+            self.db = lmdb.open(os.path.join(REPO_ROOT, repo_name + '.lmdb'), max_dbs=MAX_DB, map_size=MAP_SIZE)
+            _POOL[repo_name] = self.db
+
         self.state = self.open_db(repo_name, ':state')
         self.events = self.open_db(repo_name, ':events')
         self.transactions = self.open_db(repo_name, ':transactions')
