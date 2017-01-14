@@ -1,7 +1,7 @@
 """
 bitwrap_pnml.state_machine
 
-Combine storage and machine modules to provide a persitent state machine object
+Combine storage and machine modules to provide a persistent state machine object
 """
 from txrdq.rdq import ResizableDispatchQueue
 from twisted.internet import defer
@@ -11,7 +11,7 @@ from bitwrap_pnml.machine import Machine
 
 class StateMachine(object):
     """
-    State Machine object with persistant storage
+    State Machine object with persistent storage
     """
 
     def __init__(self, schema):
@@ -23,11 +23,11 @@ class StateMachine(object):
         return Transaction(self.machine, self.schema, request)
 
     def transform(self, msg):
-        """ execute a tranformation """
+        """ execute a transformation """
         return self.session(msg).commit()
 
     def preview(self, msg):
-        """ simulate a tranformation """
+        """ simulate a transformation """
         return self.session(msg).simulate()
 
     @staticmethod

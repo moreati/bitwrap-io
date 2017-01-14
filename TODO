@@ -1,7 +1,8 @@
-Sat Jan  7 13:18:35 PST 2017
+Sat Jan 14 09:00:40 PST 2017
 
-* WIP - releasing 0.1.1 to pypi
+WIP - support uploading new PNML files through API
+  * record changes in an event stream using *metaschema*
 
 BACKLOG:
-* allow module to be used as a twisted plugin
+* add restful routes for reading events and statevectors
 * use x-requested-for to add request ip to message

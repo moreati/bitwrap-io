@@ -12,7 +12,7 @@ from bitwrap_pnml.api import factory as ApiFactory
 IFACE = '127.0.0.1'
 PORT = 8080
 
-class PingTest(TestCase):
+class JsonRpcTest(TestCase):
     """ setup rpc endpoint and invoke ping method """
 
     def setUp(self):

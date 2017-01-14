@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><pnml>
+<net id="Net-One" type="P/T net">
+<token id="Default" enabled="true" red="0" green="0" blue="0"/>
+<place id="ACTIVE">
+<graphics>
+<position x="120.0" y="30.0"/>
+</graphics>
+<name>
+<value>ACTIVE</value>
+<graphics>
+<offset x="81.0" y="13.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="update_tally">
+<graphics>
+<position x="285.0" y="30.0"/>
+</graphics>
+<name>
+<value>update_tally</value>
+<graphics>
+<offset x="122.0" y="22.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<transition id="disable">
+<graphics>
+<position x="180.0" y="90.0"/>
+</graphics>
+<name>
+<value>disable</value>
+<graphics>
+<offset x="75.0" y="37.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="enable">
+<graphics>
+<position x="60.0" y="90.0"/>
+</graphics>
+<name>
+<value>enable</value>
+<graphics>
+<offset x="-5.0" y="35.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="update">
+<graphics>
+<position x="330.0" y="90.0"/>
+</graphics>
+<name>
+<value>update</value>
+<graphics>
+<offset x="72.0" y="33.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<arc id="ACTIVE to disable" source="ACTIVE" target="disable">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="142" y="53" curvePoint="false"/>
+<arcpath id="001" x="186" y="102" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="enable to ACTIVE" source="enable" target="ACTIVE">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="76" y="102" curvePoint="false"/>
+<arcpath id="001" x="121" y="53" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="update to num_updates" source="update" target="update_tally">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="336" y="102" curvePoint="false"/>
+<arcpath id="001" x="305" y="54" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+</net>
+</pnml>
