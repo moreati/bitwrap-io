@@ -1,6 +1,7 @@
 # Bitwrap-pnml
 
 [![Build Status](https://travis-ci.org/stackdump/bitwrap-pnml.svg?branch=master)](https://travis-ci.org/stackdump/bitwrap-pnml)
+[![PyPI version](https://badge.fury.io/py/bitwrap_pnml.svg)](https://badge.fury.io/py/bitwrap_pnml)
 
 A port of bitwrap-io that uses Petri-Net Markup Language (PNML) to construct state machines that model resources and events.
 
