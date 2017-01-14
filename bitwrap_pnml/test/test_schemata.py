@@ -2,29 +2,17 @@
 test calls against the json-rpc API
 
 """
-from twisted.trial.unittest import TestCase
-from twisted.application import internet
-from twisted.internet.defer import inlineCallbacks
 import cyclone.httpclient
-from bitwrap_pnml.storage import Storage
-from bitwrap_pnml.api import factory as ApiFactory
+from twisted.internet.defer import inlineCallbacks
+from bitwrap_pnml.test import ApiTest
 
-IFACE = '127.0.0.1'
-PORT = 8080
 
-class SchemaTest(TestCase):
-    """ setup rpc endpoint and invoke ping method """
+class SchemaTest(ApiTest):
+    """
+    setup rpc endpoint and invoke ping method
+    """
 
-    def setUp(self):
-        Storage.truncate()
-        # pylint: disable=E1103
-        self.service = internet.TCPServer(PORT, ApiFactory(), interface=IFACE)
-        # pylint: enable=E1103
-        self.service.startService()
-        self.cli = cyclone.httpclient.JsonRPC('http://%s:%s/api' % (IFACE, PORT))
-
-    def tearDown(self):
-        self.service.stopService()
+    transformer = ApiTest.client('api')
 
     @inlineCallbacks
     def test_schema_tranformation(self):
@@ -37,11 +25,16 @@ class SchemaTest(TestCase):
             "payload": { 'xml': '<?xml version="1.0" encoding="ISO-8859-1"?><pnml></pnml>' }
         }
 
-        res = yield self.cli.transform(req)
+        res = yield self.transformer.transform(req)
         assert res['event']['state'] == [0, 1]
         assert res['event']['error'] == 0
         
-    def test_schema_upload(self):
-        # TODO: add routes that allow PNML schemata to be uploaded via the API
+    def test_schema_post(self):
+        """ upload a new PNML file """
         assert False
-    test_schema_upload.skip = True
+    test_schema_post.skip = True
+
+    def test_schema_get(self):
+        """ retrieve schema xml """
+        assert False
+    test_schema_get.skip = True

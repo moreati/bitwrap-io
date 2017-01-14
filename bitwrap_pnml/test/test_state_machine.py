@@ -1,14 +1,13 @@
-""" test state machine operations """
-import twisted
+"""
+test state machine operations using python API
+"""
 from twisted.trial import unittest
 from twisted.internet import defer
 import bitwrap_pnml
 from bitwrap_pnml.storage import Storage
 
-twisted.internet.base.DelayedCall.debug = True
-
-class MachineTestCase(unittest.TestCase):
-    """ test machine transactions """
+class StateMachineTestCase(unittest.TestCase):
+    """ test state_machine transactions """
 
     def setUp(self):
         Storage.truncate()
@@ -19,7 +18,7 @@ class MachineTestCase(unittest.TestCase):
 
     @defer.inlineCallbacks
     def test_machine_transaction(self):
-        """ invoke state machine transformations """
+        """ invoke state_machine transformations """
 
         req = self.machine.session({
             'oid': 'fake-oid',
