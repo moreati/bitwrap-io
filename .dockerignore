@@ -1,0 +1,13 @@
+.git
+run.sh
+README.md
+TODO
+.travis.yml
+.pylintrc
+.gitignore
+*.egg-info
+_trial_temp/
+*.pyc
+*.log
+*.pid
+.env

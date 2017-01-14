@@ -11,7 +11,6 @@ REPO_ROOT = os.environ.get('BITWRAP_REPO_PATH', os.path.abspath(__file__ + '/../
 MAX_DB = int(os.environ.get('BITWRAP_REPO_MAX_DB', 10))
 XX_SEED = int(os.environ.get('BITWRAP_HASH_SEED', 662607004))
 MAP_SIZE = int(os.environ.get('BITWRAP_DB_SIZE', 1048576000))
-DB_PATH = os.path.join(REPO_ROOT, 'bitwrap.lmdb')
 
 _POOL = {}
 
@@ -27,6 +26,7 @@ class Storage(object):
     @staticmethod
     def truncate():
         """ delete lmdb folder """
+        # FIXME - should dir.glob *.lmdb and rmtree
         if os.path.isdir(DB_PATH):
             shutil.rmtree(DB_PATH)
 

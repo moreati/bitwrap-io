@@ -1,18 +1,10 @@
 FROM python:2.7.12
 
-ENV PROJECT_VERSION=0.1.2
+ENV PROJECT_VERSION=0.1.3
 
-RUN mkdir -p /opt/bitwrap-pnml
-
-COPY requirements.txt /opt/bitwrap-pnml/
 WORKDIR /opt/bitwrap-pnml
-
+COPY . /opt/bitwrap-pnml/ 
 RUN pip install -r requirements.txt 
-
-COPY app.tac /opt/bitwrap-pnml/ 
-COPY entry.sh /opt/bitwrap-pnml/
-COPY examples/ /opt/bitwrap-pnml/examples
-COPY bitwrap_pnml/ /opt/bitwrap-pnml/bitwrap_pnml
 
 EXPOSE 8080
 

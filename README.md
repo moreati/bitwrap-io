@@ -13,28 +13,48 @@ see examples directory for petri-nets used for testing
 * [PIPEv4](https://sourceforge.net/projects/pipe2/files/PIPEv4/PIPEv4.3.0/) - PIPEv4.3.0 (I found to be more stable than v5)
 * [Platform Independent Petrinet Editor](https://github.com/sarahtattersall/PIPE) - v5 being released on github
 
+### install
+
+    pip install bitwrap_pnml
+
+### run
+
+    twistd -n bitwrap --listen-address 127.0.0.1 --listen-port 8080 --pnml-path ./examples --lmdb-path /tmp
 
 ### Sample
 
-request:
+See [examples/curl_rpc.sh](examples/curl_rpc.sh):
 
-    curl 'http://127.0.0.1:8080/api' \
-           -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \
-           --data '{"id":2,"method":"transform","params":[{"oid": "fake-oid7", "schema": "counter", "action": "INC" }]}'
-
-
-response:
-
-    {
-      "error": null,
-       "id": 2,
-       "result": {
-         "id": "3939f6b3b16f70dc",
-         "event": { "oid": "fake-oid7",
-                    "state": [1],
-                    "error": 0,
-                    "action": "INC",
-                    "payload": {},
-                    "previous": "830121e8a6bb3b6d" }
-       }
+    request => {
+        "id": 1484353985,
+        "method": "transform",
+        "params": [
+            {
+                "action": "INC",
+                "oid": "000000000",
+                "schema": "counter"
+            }
+        ]
     }
+    
+    
+    response => {
+        "error": null,
+        "id": 1484353985,
+        "result": {
+            "event": {
+                "action": "INC",
+                "endpoint": "127.0.0.1:8080",
+                "error": 0,
+                "ip": "127.0.0.1",
+                "oid": "000000000",
+                "payload": {},
+                "previous": "e56e9d211926d5bf",
+                "state": [
+                    2
+                ]
+            },
+            "id": "398306197ef41ee9"
+        }
+    }
+    PASS

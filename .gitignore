@@ -68,3 +68,5 @@ target/
 *.retry
 _trial*
 *.lmdb
+twisted/plugins/dropin.cache
+*.pid
