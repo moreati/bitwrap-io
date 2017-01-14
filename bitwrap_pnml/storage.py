@@ -2,6 +2,7 @@
 bitwrap_pnml.storage - provide state machine storage using lmdb
 """
 import os
+import glob
 import shutil
 import lmdb
 import xxhash
@@ -24,11 +25,10 @@ class Storage(object):
         return self.db.open_db(key)
 
     @staticmethod
-    def truncate():
-        """ delete lmdb folder """
-        # FIXME - should dir.glob *.lmdb and rmtree
-        if os.path.isdir(DB_PATH):
-            shutil.rmtree(DB_PATH)
+    def truncate(pattern='*.lmdb'):
+        """ delete all lmdb folders """
+        for d in glob.glob(REPO_ROOT + '/' + pattern):
+            shutil.rmtree(d)
 
     @staticmethod
     def open(repo_name):
