@@ -10,11 +10,6 @@ from bitwrap_pnml.machine import dsl, petrinet
 
 PNML_PATH = os.environ.get('PNML_PATH', os.path.abspath(__file__ + '/../../../examples'))
 
-def open_xml(network_name):
-    """ parse file """
-    path = os.path.join(PNML_PATH, '%s.xml' % network_name)
-    return petrinet.parse_pnml_file(path)[0]
-
 class PTNet(object):
     """
     Load PNML as a matrix of places and transitions
@@ -22,10 +17,14 @@ class PTNet(object):
 
     def __init__(self, name):
         self.name = name
-        self.net = open_xml(name)
         self.places = None
         self.transitions = None
+        self.filename = os.path.join(PNML_PATH, '%s.xml' % name)
+        self.net = petrinet.parse_pnml_file(self.filename)[0]
         self.reindex()
+
+        with open(self.filename, 'r') as pnml:
+            self.xml = pnml.read()
 
     def reindex(self):
         """ rebuild network from pnml """
@@ -54,13 +53,13 @@ class PTNet(object):
 
         return {'state': state_vector, 'transitions': self.transitions}
 
-
 class Machine(object):
     """ Use a network as a state machine """
 
     def __init__(self, network_name, init_state=None):
         self.network_name = network_name
-        self.machine = PTNet(network_name).open(init_state)
+        self.net = PTNet(network_name)
+        self.machine = self.net.open(init_state)
 
     @staticmethod
     def vadd(vector1, vector2):

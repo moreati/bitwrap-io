@@ -12,7 +12,7 @@ def factory():
     return cyclone.web.Application([
         (r"/api", transformer.Handler),
         (r"/schemata", schema.ListResource),
-        (r"/schema/(.*)", schema.Resource),
+        (r"/schema/(.*).xml", schema.Resource),
         (r"/machines.json", machine.ListResource),
         (r"/machine/(.*).json", machine.Resource)
     ])

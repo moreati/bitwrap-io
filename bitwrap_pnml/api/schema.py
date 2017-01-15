@@ -1,44 +1,32 @@
 """
 
 """
-import cyclone.web
-from cyclone.jsonrpc import JsonrpcRequestHandler
+from cyclone.web import RequestHandler
 import bitwrap_pnml
 
 MACHINE = bitwrap_pnml.get('metaschema')
 
-class ListResource(JsonrpcRequestHandler):
+class ListResource(RequestHandler):
     """
     List PNML
     """
-
-    def set_default_headers(self):
-        """ allow cors """
-        self.set_header('Access-Control-Allow-Origin', '*')
-        self.set_header('Access-Control-Allow-Methods', 'GET')
-        self.set_header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
 
     def get(schema_name):
         """ list schema as xml """
         pass
 
-class Resource(JsonrpcRequestHandler):
+class Resource(RequestHandler):
     """
     REST for PNML
     """
 
-    def set_default_headers(self):
-        """ allow cors """
-        self.set_header('Access-Control-Allow-Origin', '*')
-        self.set_header('Access-Control-Allow-Methods', 'POST')
-        self.set_header('Access-Control-Allow-Methods', 'GET')
-        self.set_header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-
-    def get(self, request):
+    def get(self, name):
         """ read schema xml """
-        pass
+        self.set_header('Content-Type', 'application/xml')
+        self.write(bitwrap_pnml.get(name).machine.net.xml)
 
     def post(self, request):
         """ update schema xml """
-        # TODO: load bitwra
+        # TODO: add event for schema modification
+        # and overwrite the xml file in filesystem
         pass
