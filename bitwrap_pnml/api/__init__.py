@@ -13,6 +13,6 @@ def factory():
         (r"/api", transformer.Handler),
         (r"/schemata", schema.ListResource),
         (r"/schema/(.*)", schema.Resource),
-        (r"/machines", machine.ListResource),
-        (r"/machine/(.*)", machine.Resource)
+        (r"/machines.json", machine.ListResource),
+        (r"/machine/(.*).json", machine.Resource)
     ])

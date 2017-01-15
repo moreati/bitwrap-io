@@ -2,35 +2,23 @@
 
 """
 import os
-from cyclone.jsonrpc import JsonrpcRequestHandler
+from cyclone.web import RequestHandler
 import bitwrap_pnml
 
-class ListResource(JsonrpcRequestHandler):
+class ListResource(RequestHandler):
     """
-    List PNML
+    List schemata
     """
 
-    def set_default_headers(self):
-        """ allow cors """
-        self.set_header('Access-Control-Allow-Origin', '*')
-        self.set_header('Access-Control-Allow-Methods', 'GET')
-        self.set_header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-
-    def get(schema_name):
+    def get(self):
         """ list machines as json """
-        pass
+        self.write({ 'machines': bitwrap_pnml.MACHINES.keys() })
 
-class Resource(JsonrpcRequestHandler):
+class Resource(RequestHandler):
+    """
+    Return state machine json
     """
 
-    """
-
-    def set_default_headers(self):
-        """ allow cors """
-        self.set_header('Access-Control-Allow-Origin', '*')
-        self.set_header('Access-Control-Allow-Methods', 'GET')
-        self.set_header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-
-    def get(self, request):
+    def get(self, name):
         """ return state machine definition as json """
-        pass
+        self.write( bitwrap_pnml.get(name).machine.machine )
