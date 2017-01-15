@@ -41,9 +41,7 @@ class SchemaTest(ApiTest):
     def test_view(self):
         """ retrieve schema xml """
         res = yield ApiTest.fetch('schema/metaschema.xml')
-        print res.body
-        print res.headers
-        assert True
+        assert res.code == 200
 
     def test_update(self):
         """ upload a new PNML file """

@@ -28,8 +28,11 @@ class MachineTest(ApiTest):
 
     @inlineCallbacks
     def test_machine(self):
-        """ retrieve machine def as json """
+        """
+        retrieve machine def as json
+        'state' represents the default state for a machine
+        """
         res = yield ApiTest.fetch('machine/counter.json')
         assert res.code == 200
-        machine = json.loads(res.body)
-        assert machine['state'] == [0]
+        obj = json.loads(res.body)
+        assert obj['machine']['state'] == [0]

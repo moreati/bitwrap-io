@@ -21,4 +21,15 @@ class Resource(RequestHandler):
 
     def get(self, name):
         """ return state machine definition as json """
-        self.write( bitwrap_pnml.get(name).machine.machine )
+
+        sm = bitwrap_pnml.get(name).machine
+        m = sm.machine
+
+        self.write({
+            'machine': {
+                'schema': name,
+                'state': sm.machine['state'],
+                'places': sm.net.places,
+                'transitions': m['transitions']
+            }
+        })
