@@ -6,7 +6,7 @@ this module defines a json-rpc api using cyclone.io
 import os
 import cyclone.web
 from cyclone.web import RequestHandler
-from bitwrap_pnml.api import rpc, pnml, machine
+from bitwrap_pnml.api import rpc, state, pnml, machine
 
 VERSION = 'v1'
 
@@ -18,7 +18,8 @@ def factory():
         (r"/machine/(.*).json", machine.Resource),
         ("/machines.json", machine.ListResource),
         (r"/pnml/(.*).xml", pnml.Resource),
-        ("/pnml.json", pnml.ListResource)
+        ("/pnml.json", pnml.ListResource),
+        (r"/(.*)/(.*).json", state.Resource)
     ])
 
 class Index(RequestHandler):
