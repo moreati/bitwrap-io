@@ -41,7 +41,7 @@ class SchemaTest(ApiTest):
     @inlineCallbacks
     def test_view(self):
         """ retrieve schema xml """
-        res = yield ApiTest.fetch('schema/metaschema.xml')
+        res = yield ApiTest.fetch('pnml/metaschema.xml')
         assert res.code == 200
 
     @inlineCallbacks
@@ -50,18 +50,25 @@ class SchemaTest(ApiTest):
         upload a new PNML file
         and use it to invoke an transformation
         """
+        split2 = bitwrap_pnml.get('split_join_1').machine.net.xml
+
         bitwrap_pnml.rm('split_join_2')
-        split = bitwrap_pnml.get('split_join_1').machine.net.xml
-        
-        res = yield ApiTest.fetch('schema/split_join_2.xml', postdata = split)
-        assert res.code == 200
+        res0 = yield ApiTest.fetch('pnml/split_join_2.xml')
+        assert res0.code == 404
+
+        res1 = yield ApiTest.fetch('pnml/split_join_2.xml', postdata = split2)
+        assert res1.code == 200
+
+        res2 = yield ApiTest.fetch('pnml/split_join_2.xml')
+        assert res2.code == 200
+        assert res2.body == split2
 
         cli = ApiTest.client('api')
-        res1 = yield cli.transform({
+        res = yield cli.transform({
             "schema": "split_join_2",
             "oid": 'fake-oid-1',
             "action": "T0",
         })
 
-        assert res1['event']['error'] == 0
+        assert res['event']['error'] == 0
         bitwrap_pnml.rm('split_join_2')

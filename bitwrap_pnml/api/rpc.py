@@ -19,11 +19,6 @@ class Handler(JsonrpcRequestHandler):
         self.set_header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
 
     @staticmethod
-    def jsonrpc_ping():
-        """ allow clients to test api connection """
-        return True
-
-    @staticmethod
     def jsonrpc_preview(msg):
         """ preview a state machine transformation"""
         return bitwrap_pnml.get(msg['schema']).preview(msg)

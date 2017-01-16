@@ -21,8 +21,11 @@ class Resource(RequestHandler):
 
     def get(self, name):
         """ read schema xml """
-        self.set_header('Content-Type', 'application/xml')
-        self.write(bitwrap_pnml.get(name).machine.net.xml)
+        try:
+            self.set_header('Content-Type', 'application/xml')
+            self.write(bitwrap_pnml.get(name).machine.net.xml)
+        except:
+            self.set_status(404)
 
     def post(self, name):
         """ update schema xml """

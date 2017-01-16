@@ -6,16 +6,10 @@ from twisted.internet.defer import inlineCallbacks
 from bitwrap_pnml.test import ApiTest
 
 
-class TransformerTest(ApiTest):
-    """ setup rpc endpoint and invoke ping method """
+class RpcTest(ApiTest):
+    """ invoke rpc methods """
 
     cli = ApiTest.client('api')
-
-    @inlineCallbacks
-    def test_ping(self):
-        """ ping the rpc api """
-        flag = yield self.cli.ping()
-        assert flag
 
     @inlineCallbacks
     def test_transform(self):
