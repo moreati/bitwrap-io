@@ -23,13 +23,11 @@ class Resource(RequestHandler):
         """ return state machine definition as json """
 
         sm = bitwrap_pnml.get(name).machine
-        m = sm.machine
 
         self.write({
             'machine': {
-                'schema': name,
-                'state': sm.machine['state'],
+                'name': name,
                 'places': sm.net.places,
-                'transitions': m['transitions']
+                'transitions': sm.net.transitions
             }
         })

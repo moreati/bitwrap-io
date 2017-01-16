@@ -1,8 +1,7 @@
-Sun Jan 15 00:18:33 PST 2017
+Sun Jan 15 17:06:35 PST 2017
 
-WIP - support uploading new PNML files through API
-  * record changes in an event stream using *metaschema*
+WIP - record schema update in an event stream using *metaschema*
 
 BACKLOG:
-* add restful routes for reading events and statevectors
+* add restful routes for statevectors
 * use x-requested-for to add request ip to message

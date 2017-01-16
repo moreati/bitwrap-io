@@ -4,15 +4,14 @@
 from cyclone.web import RequestHandler
 import bitwrap_pnml
 
-MACHINE = bitwrap_pnml.get('metaschema')
-
 class ListResource(RequestHandler):
     """
     List PNML
     """
 
     def get(schema_name):
-        """ list schema as xml """
+        """ list schema files """
+        # FIXME 
         pass
 
 class Resource(RequestHandler):
@@ -25,8 +24,6 @@ class Resource(RequestHandler):
         self.set_header('Content-Type', 'application/xml')
         self.write(bitwrap_pnml.get(name).machine.net.xml)
 
-    def post(self, request):
+    def post(self, name):
         """ update schema xml """
-        # TODO: add event for schema modification
-        # and overwrite the xml file in filesystem
-        pass
+        bitwrap_pnml.put(name, self.request.body)

@@ -5,13 +5,16 @@ test calls against the json-rpc API
 import ujson as json
 import cyclone.httpclient
 from twisted.internet.defer import inlineCallbacks
+import bitwrap_pnml
 from bitwrap_pnml.test import ApiTest
 
 
+# preload some schemata
+bitwrap_pnml.get('metaschema')
+bitwrap_pnml.get('counter')
+
 class MachineTest(ApiTest):
-    """
-    setup rpc endpoint and invoke ping method
-    """
+    """ test machine resources"""
 
     @inlineCallbacks
     def test_list(self):
@@ -23,7 +26,8 @@ class MachineTest(ApiTest):
         assert res.code == 200
         obj = json.loads(res.body)
 
-        assert obj['machines'] == ['metaschema']
+
+        assert obj['machines'] == ['metaschema', 'counter']
 
 
     @inlineCallbacks
@@ -35,4 +39,4 @@ class MachineTest(ApiTest):
         res = yield ApiTest.fetch('machine/counter.json')
         assert res.code == 200
         obj = json.loads(res.body)
-        assert obj['machine']['state'] == [0]
+        assert obj['machine']['name'] == 'counter'

@@ -11,9 +11,6 @@ from bitwrap_pnml.api import factory as ApiFactory
 IFACE = '127.0.0.1'
 PORT = 8080
 
-def url(resource):
-    return 'http://%s:%s/%s' % (IFACE, PORT, resource)
-
 class ApiTest(TestCase):
     """ setup rpc endpoint and invoke ping method """
 
@@ -26,12 +23,15 @@ class ApiTest(TestCase):
 
     def tearDown(self):
         self.service.stopService()
-
+        
+    @staticmethod
+    def url(resource):
+        return 'http://%s:%s/%s' % (IFACE, PORT, resource)
 
     @staticmethod
     def client(resource):
-        return cyclone.httpclient.JsonRPC(url(resource))
+        return cyclone.httpclient.JsonRPC(ApiTest.url(resource))
 
     @staticmethod
-    def fetch(resource):
-        return cyclone.httpclient.fetch(url(resource))
+    def fetch(resource, **kwargs):
+        return cyclone.httpclient.fetch(ApiTest.url(resource), **kwargs)

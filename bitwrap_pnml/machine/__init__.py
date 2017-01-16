@@ -10,6 +10,19 @@ from bitwrap_pnml.machine import dsl, petrinet
 
 PNML_PATH = os.environ.get('PNML_PATH', os.path.abspath(__file__ + '/../../../examples'))
 
+def schema_to_file(name):
+    return os.path.join(PNML_PATH, '%s.xml' % name)
+
+def write_schema(schema, xml_str):
+    with open(schema_to_file(schema), 'w') as pnml:
+        pnml.write(xml_str)
+
+def rm_schema(schema):
+    try:
+        os.remove(schema_to_file(schema))
+    except OSError:
+        pass
+
 class PTNet(object):
     """
     Load PNML as a matrix of places and transitions
@@ -19,7 +32,7 @@ class PTNet(object):
         self.name = name
         self.places = None
         self.transitions = None
-        self.filename = os.path.join(PNML_PATH, '%s.xml' % name)
+        self.filename = schema_to_file(name)
         self.net = petrinet.parse_pnml_file(self.filename)[0]
         self.reindex()
 

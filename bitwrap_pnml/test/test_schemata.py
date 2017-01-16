@@ -17,10 +17,11 @@ class SchemaTest(ApiTest):
     def test_schema_transform(self):
         """ call transform python api """
         transformer = bitwrap_pnml.get('metaschema')
+        oid = 'test_schemata.py'
 
         res1 = yield transformer.transform({
             "schema": "metaschema",
-            "oid": "metaschema",
+            "oid": oid,
             "action": "update",
             "payload": { 'xml': '<?xml version="1.0" encoding="ISO-8859-1"?><pnml></pnml>' }
         })
@@ -30,7 +31,7 @@ class SchemaTest(ApiTest):
 
         res2 = yield transformer.transform({
             "schema": "metaschema",
-            "oid": "metaschema",
+            "oid": oid,
             "action": "enable"
         })
 
@@ -43,7 +44,24 @@ class SchemaTest(ApiTest):
         res = yield ApiTest.fetch('schema/metaschema.xml')
         assert res.code == 200
 
+    @inlineCallbacks
     def test_update(self):
-        """ upload a new PNML file """
-        assert False
-    test_update.skip = True
+        """
+        upload a new PNML file
+        and use it to invoke an transformation
+        """
+        bitwrap_pnml.rm('split_join_2')
+        split = bitwrap_pnml.get('split_join_1').machine.net.xml
+        
+        res = yield ApiTest.fetch('schema/split_join_2.xml', postdata = split)
+        assert res.code == 200
+
+        cli = ApiTest.client('api')
+        res1 = yield cli.transform({
+            "schema": "split_join_2",
+            "oid": 'fake-oid-1',
+            "action": "T0",
+        })
+
+        assert res1['event']['error'] == 0
+        bitwrap_pnml.rm('split_join_2')
