@@ -9,7 +9,7 @@ from bitwrap_pnml.test import ApiTest
 import ujson as json
 
 
-class StateTest(ApiTest):
+class EventTest(ApiTest):
     """
     setup rpc endpoint and invoke ping method
     """
@@ -20,16 +20,17 @@ class StateTest(ApiTest):
         oid = '000000000'
         transformer = bitwrap_pnml.get('counter')
 
-        ex = yield transformer.transform({
+        txn = yield transformer.transform({
             "schema": "counter",
             "oid": oid,
             "action": "INC"
         })
-        res = yield ApiTest.fetch('counter/' + oid + '.json')
 
-        # TODO: add last transaction to response
-        # and add { 'state': { 'vector': [], 'HEAD': 'asdfadfasdf' } } # wrapper
-
+        url = 'event/' + txn['id'] + '.json'
+        # FIXME
+        print url
+        res = yield ApiTest.fetch('event/' + txn['id'] + '.json')
+        print res.body
+        print res.code
         assert res.code == 200
-
 
