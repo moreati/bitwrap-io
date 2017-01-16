@@ -20,7 +20,7 @@ class Resource(RequestHandler):
             self.set_header('Content-Type', 'application/json')
             
             if res:
-                self.write('{ "event": ' + res + ' }')
+                self.write('{ "event": ' + res + ', "id": "' + eventid +'" }')
                 return
         except:
             pass
@@ -45,7 +45,7 @@ class HeadResource(RequestHandler):
             self.set_header('Content-Type', 'application/json')
             
             if res:
-                self.write('{ "event": ' + res + ' }')
+                self.write('{ "event": ' + res + ', "id": "' + head_event +'" }')
                 return
         except:
             pass
