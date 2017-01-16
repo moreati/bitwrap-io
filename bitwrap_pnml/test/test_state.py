@@ -17,6 +17,7 @@ class SchemaTest(ApiTest):
     @inlineCallbacks
     def test_view(self):
         """ retrieve schema xml """
+        # FIXME actually test state
         res = yield ApiTest.fetch('pnml/metaschema.xml')
         assert res.code == 200
 

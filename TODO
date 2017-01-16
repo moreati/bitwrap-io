@@ -1,7 +1,6 @@
-Sun Jan 15 21:21:31 PST 2017
-
-WIP - extend rpc API to query and aggregate events
+Sun Jan 15 21:23:17 PST 2017
 
 BACKLOG:
+* extend rpc API to query and aggregate events
 * record schema updates in an event stream using *metaschema*
 * use x-requested-for to add request ip to message in jsonrpc
