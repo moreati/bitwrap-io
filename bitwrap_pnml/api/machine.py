@@ -11,8 +11,8 @@ class ListResource(RequestHandler):
     """
 
     def get(self):
-        """ list machines as json """
-        self.write({ 'machines': bitwrap_pnml.MACHINES.keys() })
+        """ list machines that are loaded into memory """
+        self.write({'machines': bitwrap_pnml.MACHINES.keys()})
 
 class Resource(RequestHandler):
     """

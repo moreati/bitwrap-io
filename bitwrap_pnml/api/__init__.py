@@ -15,10 +15,10 @@ def factory():
     return cyclone.web.Application([
         ("/", Index),
         ("/api", rpc.Handler),
-        ("/machines.json", machine.ListResource),
         (r"/machine/(.*).json", machine.Resource),
-        ("/pnml.json", pnml.ListResource),
-        (r"/pnml/(.*).xml", pnml.Resource)
+        ("/machines.json", machine.ListResource),
+        (r"/pnml/(.*).xml", pnml.Resource),
+        ("/pnml.json", pnml.ListResource)
     ])
 
 class Index(RequestHandler):

@@ -1,7 +1,7 @@
-Sun Jan 15 17:06:35 PST 2017
+Sun Jan 15 20:24:00 PST 2017
 
-WIP - record schema update in an event stream using *metaschema*
+WIP - add restful routes for statevectors
 
 BACKLOG:
-* add restful routes for statevectors
-* use x-requested-for to add request ip to message
+* record schema update in an event stream using *metaschema*
+* use x-requested-for to add request ip to message in jsonrpc

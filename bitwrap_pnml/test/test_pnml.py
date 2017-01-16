@@ -6,6 +6,7 @@ import cyclone.httpclient
 from twisted.internet.defer import inlineCallbacks
 import bitwrap_pnml
 from bitwrap_pnml.test import ApiTest
+import ujson as json
 
 
 class SchemaTest(ApiTest):
@@ -38,6 +39,14 @@ class SchemaTest(ApiTest):
         assert res1['event']['error'] == 0
         assert res2['event']['state'] == [1, 1]
         
+    @inlineCallbacks
+    def test_list(self):
+        """ retrieve schema xml """
+        res = yield ApiTest.fetch('pnml.json')
+        obj = json.loads(res.body)
+        assert res.code == 200
+        assert obj['pnml'] == ["counter", "split_join_1", "metaschema"]
+
     @inlineCallbacks
     def test_view(self):
         """ retrieve schema xml """

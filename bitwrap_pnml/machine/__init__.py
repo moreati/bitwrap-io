@@ -6,22 +6,29 @@ build a state machine model from Petri-net markup language
 
 import os
 import sys
+import glob
 from bitwrap_pnml.machine import dsl, petrinet
 
 PNML_PATH = os.environ.get('PNML_PATH', os.path.abspath(__file__ + '/../../../examples'))
 
 def schema_to_file(name):
+    """ build schema filename from name """
     return os.path.join(PNML_PATH, '%s.xml' % name)
 
 def write_schema(schema, xml_str):
+    """ write pnml to filesystem """
     with open(schema_to_file(schema), 'w') as pnml:
         pnml.write(xml_str)
 
 def rm_schema(schema):
+    """ remove pnml from filesystem """
     try:
         os.remove(schema_to_file(schema))
     except OSError:
         pass
+
+def schema_list():
+    return glob.glob(PNML_PATH + '/*.xml')
 
 class PTNet(object):
     """
