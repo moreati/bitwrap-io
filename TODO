@@ -1,4 +1,6 @@
-Mon Jan 16 08:50:41 PST 2017
+Mon Jan 16 11:36:46 PST 2017
+
+TODO -> add swagger.json api spec
 
 BACKLOG:
 * record schema updates in an event stream using *metaschema*

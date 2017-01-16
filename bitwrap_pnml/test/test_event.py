@@ -33,3 +33,20 @@ class EventTest(ApiTest):
         assert res.code == 200
         assert obj['event']['payload'] == { 'foo': 'bar' }
 
+    @inlineCallbacks
+    def test_head(self):
+        """ retrieve schema xml """
+        oid = '000000000'
+        transformer = bitwrap_pnml.get('counter')
+
+        txn = yield transformer.transform({
+            "schema": "counter",
+            "oid": oid,
+            "action": "INC",
+            "payload": { 'foo': 'bar' }
+        })
+
+        url = 'head/' + txn['id'] + '.json'
+        res = yield ApiTest.fetch('head/counter/' + oid + '.json')
+        obj = json.loads(res.body)
+        assert res.code == 200
