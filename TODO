@@ -1,7 +1,5 @@
 Mon Jan 16 08:50:41 PST 2017
-WIP - add REST route for events
 
 BACKLOG:
-* return latest eventid (transaction) with state-vector requests
 * record schema updates in an event stream using *metaschema*
 * use x-requested-for to add request ip to message in jsonrpc

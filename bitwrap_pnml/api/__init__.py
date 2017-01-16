@@ -1,7 +1,7 @@
 """
 bitwrap_pnml.api
 
-this module defines a json-rpc api using cyclone.io
+this module defines routes
 """
 import os
 import cyclone.web
@@ -17,9 +17,9 @@ def factory():
         (r"/api", rpc.Handler),
         (r"/machine/(.*).json", machine.Resource),
         (r"/machines.json", machine.ListResource),
-        (r"/event/(.*).json", event.Resource),
         (r"/pnml/(.*).xml", pnml.Resource),
         (r"/pnml.json", pnml.ListResource),
+        (r"/event/(.*)/(.*).json", event.Resource),
         (r"/(.*)/(.*).json", state.Resource)
     ])
 

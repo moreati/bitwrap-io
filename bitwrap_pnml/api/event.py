@@ -9,7 +9,7 @@ import bitwrap_pnml
 class Resource(RequestHandler):
     """ index """
 
-    def get(self, oid):
+    def get(self, schema, oid):
         """ return event json """
 
         try:
@@ -18,12 +18,12 @@ class Resource(RequestHandler):
             stor = Storage.encode_key(schema)
             res = Storage.open(stor).fetch_str(key, db_name='events')
             self.set_header('Content-Type', 'application/json')
-
+            
             if res:
-                self.write(res)
+                self.write('{ "event": ' + res + ' }')
                 return
         except:
             pass
 
-        self.write('')
+        self.write({ 'event': None })
         self.set_status(404)

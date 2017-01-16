@@ -23,14 +23,13 @@ class EventTest(ApiTest):
         txn = yield transformer.transform({
             "schema": "counter",
             "oid": oid,
-            "action": "INC"
+            "action": "INC",
+            "payload": { 'foo': 'bar' }
         })
 
         url = 'event/' + txn['id'] + '.json'
-        # FIXME
-        print url
-        res = yield ApiTest.fetch('event/' + txn['id'] + '.json')
-        print res.body
-        print res.code
+        res = yield ApiTest.fetch('event/counter/' + txn['id'] + '.json')
+        obj = json.loads(res.body)
         assert res.code == 200
+        assert obj['event']['payload'] == { 'foo': 'bar' }
 

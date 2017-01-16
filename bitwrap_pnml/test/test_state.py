@@ -27,9 +27,10 @@ class StateTest(ApiTest):
         })
         res = yield ApiTest.fetch('counter/' + oid + '.json')
 
-        # TODO: add last transaction to response
-        # and add { 'state': { 'vector': [], 'HEAD': 'asdfadfasdf' } } # wrapper
-
+        obj = json.loads(res.body)
         assert res.code == 200
+
+        # KLUDGE: dirty tests [1] or [2]
+        assert obj['state']['vector'][0] > 0
 
 
