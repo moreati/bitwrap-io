@@ -1,0 +1,127 @@
+---
+swagger: 2.0
+info:
+  version: v1
+  title: bitwrap-pnml
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /:
+    get:
+      tags:
+      - Api
+      summary: report api version
+      operationId: api.info
+  /api:
+    post:
+      tags:
+      - Api
+      summary: process new events
+      operationId: api.rpc
+      parameters:
+      - name: msg
+        in: body
+        required: true
+        default:  '{"id": 0,"method":"transform","params":[{"oid": "000000000", "schema": "counter", "action": "INC" }]}'
+        type: string
+  /machines.json:
+    get:
+      tags:
+      - Machine
+      summary: list machines loaded in memory
+      operationId: machine.list
+      parameters:
+      - name: name
+        in: path
+        required: true
+        default:  counter
+        type: string
+  /machine/{name}.json:
+    get:
+      tags:
+      - Machine
+      summary: get machine def
+      operationId: machine.view
+      parameters:
+      - name: name
+        in: path
+        required: true
+        default:  counter
+        type: string
+  /pnml.json:
+    get:
+      tags:
+      - PNML
+      summary: list PNML files found in filesystem
+      operationId: pnml.list
+      parameters:
+      - name: name
+        in: path
+        required: true
+        default:  counter
+        type: string
+  /pnml/{name}.xml:
+    get:
+      tags:
+      - PNML
+      summary: get PNML source (XML)
+      operationId: pnml.view
+      parameters:
+      - name: name
+        in: path
+        required: true
+        default:  counter
+        type: string
+  /head/{schema}/{oid}.json:
+    get:
+      tags:
+      - Event
+      summary: get latest event by oid
+      operationId: event.head
+      parameters:
+      - name: schema
+        in: path
+        required: true
+        default:  counter
+        type: string
+      - name: oid
+        in: path
+        required: true
+        default:  '000000000'
+        type: string
+  /event/{schema}/{eventid}.json:
+    get:
+      tags:
+      - Event
+      summary: get event by eventid
+      operationId: event.view
+      parameters:
+      - name: schema
+        in: path
+        required: true
+        default:  counter
+        type: string
+      - name: eventid
+        in: path
+        required: true
+        default:  7738a82da2840074
+        type: string
+  /{schema}/{oid}.json:
+    get:
+      tags:
+      - State
+      summary: get statevector by oid
+      operationId: state.vector
+      parameters:
+      - name: schema
+        in: path
+        required: true
+        default:  counter
+        type: string
+      - name: oid
+        in: path
+        required: true
+        default:  '000000000'
+        type: string

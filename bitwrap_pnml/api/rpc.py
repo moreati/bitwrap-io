@@ -16,7 +16,9 @@ class Handler(JsonrpcRequestHandler):
         """ allow cors """
         self.set_header('Access-Control-Allow-Origin', os.environ.get('ALLOW_ORIGIN', '*'))
         self.set_header('Access-Control-Allow-Methods', 'POST')
+        self.set_header('Access-Control-Allow-Methods', 'OPTIONS')
         self.set_header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+        self.set_header('Content-Type', 'application/json')
 
     @staticmethod
     def jsonrpc_preview(msg):

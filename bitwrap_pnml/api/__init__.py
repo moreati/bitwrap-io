@@ -6,15 +6,20 @@ this module defines routes
 import os
 import cyclone.web
 from cyclone.web import RequestHandler
-from bitwrap_pnml.api import rpc, pnml, state, machine, event
+from bitwrap_pnml.api import spec, rpc, pnml, state, machine, event
 
 VERSION = 'v1'
+
+VENDOR_PATH = os.path.abspath(__file__ + '/../../../vendor')
 
 def factory():
     """ build a valid cyclone app """
     return cyclone.web.Application([
         (r"/", Index),
         (r"/api", rpc.Handler),
+        (r"/swagger.json", spec.Resource),
+        (r"/ui/?", cyclone.web.RedirectHandler, {"url": "/ui/index.html"}),
+        (r"/ui/(.+)", cyclone.web.StaticFileHandler, {"path": VENDOR_PATH + '/swagger-ui'}),
         (r"/machine/(.*).json", machine.Resource),
         (r"/machines.json", machine.ListResource),
         (r"/pnml/(.*).xml", pnml.Resource),

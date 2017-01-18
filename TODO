@@ -1,7 +1,12 @@
-Mon Jan 16 11:36:46 PST 2017
+Tue Jan 17 20:51:19 PST 2017
 
-TODO -> add swagger.json api spec
+WIP - test all ops w/ swagger-ui
+
+Extend the API spec to help build post body for /API if possible
+
 
 BACKLOG:
+* refactor to add base class to control headers
+  * set content type consitently
 * record schema updates in an event stream using *metaschema*
 * use x-requested-for to add request ip to message in jsonrpc
