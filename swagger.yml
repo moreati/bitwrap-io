@@ -28,12 +28,6 @@ paths:
       - Machine
       summary: list machines loaded in memory
       operationId: machine.list
-      parameters:
-      - name: name
-        in: path
-        required: true
-        default:  counter
-        type: string
   /machine/{name}.json:
     get:
       tags:
@@ -52,12 +46,6 @@ paths:
       - PNML
       summary: list PNML files found in filesystem
       operationId: pnml.list
-      parameters:
-      - name: name
-        in: path
-        required: true
-        default:  counter
-        type: string
   /pnml/{name}.xml:
     get:
       tags:

@@ -1,12 +1,8 @@
-Tue Jan 17 20:51:19 PST 2017
+Wed Jan 18 22:01:12 PST 2017
 
-WIP - test all ops w/ swagger-ui
-
-Extend the API spec to help build post body for /API if possible
-
+test with bitwrap-ui / front end development
 
 BACKLOG:
-* refactor to add base class to control headers
-  * set content type consitently
+* Extend the swagger def to use json-schema when building post body for API
 * record schema updates in an event stream using *metaschema*
 * use x-requested-for to add request ip to message in jsonrpc

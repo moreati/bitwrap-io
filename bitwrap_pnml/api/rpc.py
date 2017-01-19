@@ -5,28 +5,23 @@ this module defines a json-rpc api using cyclone.io
 """
 import os
 from cyclone.jsonrpc import JsonrpcRequestHandler
+from bitwrap_pnml.api import headers
 import bitwrap_pnml
 
-class Handler(JsonrpcRequestHandler):
+class Handler(headers.Mixin, JsonrpcRequestHandler):
     """
     Invoke transform actions on PNML state machines
     """
 
-    def set_default_headers(self):
-        """ allow cors """
-        self.set_header('Access-Control-Allow-Origin', os.environ.get('ALLOW_ORIGIN', '*'))
-        self.set_header('Access-Control-Allow-Methods', 'POST')
-        self.set_header('Access-Control-Allow-Methods', 'OPTIONS')
-        self.set_header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-        self.set_header('Content-Type', 'application/json')
-
     @staticmethod
     def jsonrpc_preview(msg):
         """ preview a state machine transformation"""
+        self.set_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
         return bitwrap_pnml.get(msg['schema']).preview(msg)
 
     def jsonrpc_transform(self, msg):
         """ execute a state machine transformation"""
+        self.set_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
         msg['ip'] = self.request.remote_ip
         msg['endpoint'] = self.request.host
 

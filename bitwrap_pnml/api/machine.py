@@ -3,9 +3,10 @@
 """
 import os
 from cyclone.web import RequestHandler
+from bitwrap_pnml.api import headers
 import bitwrap_pnml
 
-class ListResource(RequestHandler):
+class ListResource(headers.Mixin, RequestHandler):
     """
     List schemata
     """
@@ -14,7 +15,7 @@ class ListResource(RequestHandler):
         """ list machines that are loaded into memory """
         self.write({'machines': bitwrap_pnml.MACHINES.keys()})
 
-class Resource(RequestHandler):
+class Resource(headers.Mixin, RequestHandler):
     """
     Return state machine json
     """

@@ -3,10 +3,11 @@ return statevectors
 """
 from cyclone.web import RequestHandler
 from bitwrap_pnml.storage import Storage
+from bitwrap_pnml.api import headers
 import bitwrap_pnml
 
 
-class Resource(RequestHandler):
+class Resource(headers.Mixin, RequestHandler):
     """ index """
 
     def get(self, schema, eventid):
@@ -17,7 +18,6 @@ class Resource(RequestHandler):
             key = Storage.encode_key(eventid)
             stor = Storage.encode_key(schema)
             res = Storage.open(stor).fetch_str(key, db_name='events')
-            self.set_header('Content-Type', 'application/json')
             
             if res:
                 self.write('{ "event": ' + res + ', "id": "' + eventid +'" }')
@@ -28,7 +28,7 @@ class Resource(RequestHandler):
         self.write({ 'event': None })
         self.set_status(404)
 
-class HeadResource(RequestHandler):
+class HeadResource(headers.Mixin, RequestHandler):
     """ index """
 
     def get(self, schema, oid):
@@ -42,7 +42,6 @@ class HeadResource(RequestHandler):
             head_event = storage.fetch_str(key, db_name='transactions')
 
             res = storage.fetch_str(head_event, db_name='events')
-            self.set_header('Content-Type', 'application/json')
             
             if res:
                 self.write('{ "event": ' + res + ', "id": "' + head_event +'" }')

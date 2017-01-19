@@ -5,8 +5,9 @@ import os
 from cyclone.web import RequestHandler
 import bitwrap_pnml
 import bitwrap_pnml.machine
+from bitwrap_pnml.api import headers
 
-class ListResource(RequestHandler):
+class ListResource(headers.Mixin, RequestHandler):
     """
     List PNML
     """
@@ -16,7 +17,7 @@ class ListResource(RequestHandler):
         _list = [ os.path.basename(xml)[:-4] for xml in bitwrap_pnml.machine.schema_list()]
         self.write({'pnml': _list})
 
-class Resource(RequestHandler):
+class Resource(headers.Mixin, RequestHandler):
     """
     REST for PNML
     """

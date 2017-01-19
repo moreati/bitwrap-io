@@ -6,7 +6,7 @@ this module defines routes
 import os
 import cyclone.web
 from cyclone.web import RequestHandler
-from bitwrap_pnml.api import spec, rpc, pnml, state, machine, event
+from bitwrap_pnml.api import headers, spec, rpc, pnml, state, machine, event
 
 VERSION = 'v1'
 
@@ -29,7 +29,7 @@ def factory():
         (r"/(.*)/(.*).json", state.Resource)
     ])
 
-class Index(RequestHandler):
+class Index(headers.Mixin, RequestHandler):
     """ index """
 
     def get(self):
