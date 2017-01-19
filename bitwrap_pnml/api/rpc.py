@@ -13,8 +13,7 @@ class Handler(headers.Mixin, JsonrpcRequestHandler):
     Invoke transform actions on PNML state machines
     """
 
-    @staticmethod
-    def jsonrpc_preview(msg):
+    def jsonrpc_preview(self, msg):
         """ preview a state machine transformation"""
         self.set_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
         return bitwrap_pnml.get(msg['schema']).preview(msg)
