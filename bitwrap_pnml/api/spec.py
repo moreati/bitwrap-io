@@ -4,7 +4,7 @@ import yaml
 import ujson as json
 from bitwrap_pnml.api import headers
 
-with open(os.path.abspath(__file__ + '/../../../swagger.yml'), 'r') as stream:
+with open(os.path.abspath(__file__ + '/../swagger.yml'), 'r') as stream:
     SPEC = json.dumps(yaml.load(stream))
 
 class Resource(headers.Mixin, cyclone.web.RequestHandler):

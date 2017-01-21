@@ -10,7 +10,7 @@ from bitwrap_pnml.api import headers, spec, rpc, pnml, state, machine, event
 
 VERSION = 'v1'
 
-VENDOR_PATH = os.path.abspath(__file__ + '/../../../vendor')
+VENDOR_PATH = os.path.abspath(__file__ + '/../../vendor')
 
 def factory():
     """ build a valid cyclone app """

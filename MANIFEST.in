@@ -1,5 +1,2 @@
-include *.md
-recursive-include bitwrap_pnml *.py
+recursive-include bitwrap_pnml *.*
 recursive-include twisted *.py
-recursive-include examples *.xml
-recursive-include vendor *.*

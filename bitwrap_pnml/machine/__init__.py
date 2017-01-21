@@ -9,7 +9,7 @@ import sys
 import glob
 from bitwrap_pnml.machine import dsl, petrinet
 
-PNML_PATH = os.environ.get('PNML_PATH', os.path.abspath(__file__ + '/../../../examples'))
+PNML_PATH = os.environ.get('PNML_PATH', os.path.abspath(__file__ + '/../../examples'))
 
 def schema_to_file(name):
     """ build schema filename from name """
