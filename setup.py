@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="bitwrap_pnml",
-    version="0.1.5-rc",
+    version="0.1.6",
     author="Matthew York",
     author_email="myork@stackdump.com",
     description="A blockchain style eventsourcing service using cyclone.io and lmdb",
