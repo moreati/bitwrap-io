@@ -57,38 +57,53 @@ class ListResource(headers.Mixin, RequestHandler):
     """ index """
 
     @staticmethod
-    def _get_recurse(storage, eventid, events=[]):
-        key = Storage.encode_key(eventid)
-        evt = storage.fetch(key, db_key='events')
-        evt['id'] = eventid
+    def _get_list(storage, eventid):
+        events=[]
+
+        def _get_event(eventid):
+            key = Storage.encode_key(eventid)
+            evt = storage.fetch(key, db_key='events')
+            if evt is None:
+                return None
+            else:
+                evt['id'] = eventid
+                return evt
+
+        evt = _get_event(eventid)
+
+        if not evt:
+            return events
+
+        if not evt['previous'] and len(events) == 0:
+          events.append(evt)
+          return events
+
+        while evt['previous']:
+            events.append(evt)
+            evt = _get_event(evt['previous'])
 
         events.append(evt)
 
-        if evt['previous']:
-          return ListResource._get_recurse(storage, evt['previous'], events=events)
-        else:
-          return events
+        return events
 
     def get(self, schema, oid):
         """ return event json """
 
-        try:
-            bitwrap_pnml.get(schema)
-            key = Storage.encode_key(oid)
-            stor = Storage.encode_key(schema)
-            storage = Storage.open(stor)
-            head_event = storage.fetch_str(key, db_name='transactions')
+        assert bitwrap_pnml.get(schema)
+        key = Storage.encode_key(oid)
+        stor = Storage.encode_key(schema)
+        storage = Storage.open(stor)
 
-            _list = self._get_recurse(storage, head_event)
-            
-            if head_event:
-                return self.write({
-                    'events': _list,
-                    'oid': oid,
-                    'head': head_event
-                })
-        except:
-            pass
+        head_event = storage.fetch_str(key, db_name='transactions')
 
-        self.write({ 'events': [] })
-        self.set_status(404)
+        if head_event:
+
+            self.write({
+                'events': self._get_list(storage, head_event),
+                'oid': oid,
+                'head': head_event
+            })
+
+        else:
+            self.write({ 'events': [] })
+            self.set_status(404)

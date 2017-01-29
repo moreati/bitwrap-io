@@ -66,5 +66,4 @@ class EventTest(ApiTest):
 
         url = 'head/' + txn['id'] + '.json'
         res = yield ApiTest.fetch('list/counter/' + oid + '.json')
-        obj = json.loads(res.body)
         assert res.code == 200
