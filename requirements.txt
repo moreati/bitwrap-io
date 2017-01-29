@@ -4,4 +4,4 @@ service-identity==16.0.0
 txRDQ==0.2.14
 ujson==1.35
 xxhash==0.6.1
--e ./
+PyYAML==3.12

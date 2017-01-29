@@ -243,7 +243,9 @@ def parse_pnml_file(filename):
             place.offset = [float(off_node.get('x')), float(off_node.get('y'))]
             position_node = place_node.find('./graphics/position')
             place.position = [float(position_node.get('x')), float(position_node.get('y'))]
-            #place.marking = float(place_node.find('./initialMarking/text').text)
+
+            marking_str = place_node.find('./initialMarking/value')
+            place.marking = int(marking_str.text.split(',')[1])
 
             net.places[place.id] = place
 

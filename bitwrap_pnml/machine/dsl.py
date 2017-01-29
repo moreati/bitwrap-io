@@ -19,14 +19,15 @@ def places(net):
     offset = 0
 
     for place in net.places:
+
         # KLUDGE: refactor these conventions to be more explicit
         if not '_role' in place:
-            if place == 'BEGIN':
-                inital = 1
-            else:
-                inital = 0 # TODO: use initial markings from pnml
+            _places[place] = {
+                'offset': offset,
+                'position': net.places[place].position,
+                'inital': net.places[place].marking
+            }
 
-            _places[place] = {'inital': inital, 'offset': offset}
             offset += 1
 
     return _places
