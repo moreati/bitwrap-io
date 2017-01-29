@@ -92,6 +92,23 @@ paths:
         required: true
         default:  7738a82da2840074
         type: string
+  /list/{schema}/{oid}.json:
+    get:
+      tags:
+      - Event
+      summary: get all events by oid
+      operationId: event.list
+      parameters:
+      - name: schema
+        in: path
+        required: true
+        default:  counter
+        type: string
+      - name: oid
+        in: path
+        required: true
+        default:  '000000000'
+        type: string
   /{schema}/{oid}.json:
     get:
       tags:

@@ -26,6 +26,7 @@ def factory():
         (r"/pnml.json", pnml.ListResource),
         (r"/head/(.*)/(.*).json", event.HeadResource),
         (r"/event/(.*)/(.*).json", event.Resource),
+        (r"/list/(.*)/(.*).json", event.ListResource),
         (r"/(.*)/(.*).json", state.Resource)
     ])
 

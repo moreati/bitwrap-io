@@ -1,8 +1,8 @@
-Fri Jan 20 20:54:37 PST 2017
+Sun Jan 29 13:41:15 PST 2017
 
 test with bitwrap-ui / front end development
 
 BACKLOG:
-* Extend the swagger def to use json-schema when building post body for API
+* update pnml parser to retain position information for transitions ( just like places )
 * record schema updates in an event stream using *metaschema*
 * use x-requested-for to add request ip to message in jsonrpc

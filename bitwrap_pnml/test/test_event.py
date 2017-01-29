@@ -16,7 +16,7 @@ class EventTest(ApiTest):
 
     @inlineCallbacks
     def test_view(self):
-        """ retrieve schema xml """
+        """ retrieve event by id """
         oid = '000000000'
         transformer = bitwrap_pnml.get('counter')
 
@@ -35,7 +35,7 @@ class EventTest(ApiTest):
 
     @inlineCallbacks
     def test_head(self):
-        """ retrieve schema xml """
+        """ retrieve latest event """
         oid = '000000000'
         transformer = bitwrap_pnml.get('counter')
 
@@ -48,5 +48,23 @@ class EventTest(ApiTest):
 
         url = 'head/' + txn['id'] + '.json'
         res = yield ApiTest.fetch('head/counter/' + oid + '.json')
+        obj = json.loads(res.body)
+        assert res.code == 200
+
+    @inlineCallbacks
+    def test_list(self):
+        """ retrieve all events """
+        oid = '000000000'
+        transformer = bitwrap_pnml.get('counter')
+
+        txn = yield transformer.transform({
+            "schema": "counter",
+            "oid": oid,
+            "action": "INC",
+            "payload": { 'foo': 'bar' }
+        })
+
+        url = 'head/' + txn['id'] + '.json'
+        res = yield ApiTest.fetch('list/counter/' + oid + '.json')
         obj = json.loads(res.body)
         assert res.code == 200
