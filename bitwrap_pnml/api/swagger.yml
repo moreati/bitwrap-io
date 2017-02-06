@@ -109,7 +109,7 @@ paths:
         required: true
         default:  '000000000'
         type: string
-  /{schema}/{oid}.json:
+  /state/{schema}/{oid}.json:
     get:
       tags:
       - State

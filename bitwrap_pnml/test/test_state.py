@@ -25,7 +25,7 @@ class StateTest(ApiTest):
             "oid": oid,
             "action": "INC"
         })
-        res = yield ApiTest.fetch('counter/' + oid + '.json')
+        res = yield ApiTest.fetch('state/counter/' + oid + '.json')
 
         obj = json.loads(res.body)
         assert res.code == 200
