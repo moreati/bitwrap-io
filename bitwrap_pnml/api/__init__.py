@@ -15,7 +15,8 @@ VENDOR_PATH = os.path.abspath(__file__ + '/../../vendor')
 def factory():
     """ build a valid cyclone app """
     return cyclone.web.Application([
-        (r"/", Index),
+        (r"/", cyclone.web.RedirectHandler, {"url": "/version"}),
+        (r"/version", Version),
         (r"/api", rpc.Handler),
         (r"/swagger.json", spec.Resource),
         (r"/ui/?", cyclone.web.RedirectHandler, {"url": "/ui/index.html"}),
@@ -30,7 +31,7 @@ def factory():
         (r"/(.*)/(.*).json", state.Resource)
     ])
 
-class Index(headers.Mixin, RequestHandler):
+class Version(headers.Mixin, RequestHandler):
     """ index """
 
     def get(self):

@@ -1,6 +1,6 @@
 FROM python:2.7.12
 
-ENV PROJECT_VERSION=0.2.1
+ENV PROJECT_VERSION=0.2.2
 
 WORKDIR /opt/bitwrap-pnml
 COPY . /opt/bitwrap-pnml/ 

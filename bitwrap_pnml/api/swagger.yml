@@ -4,18 +4,18 @@ info:
   version: v1
   title: bitwrap-pnml
 paths:
-  /:
+  /version:
     get:
       tags:
       - Api
       summary: report api version
-      operationId: api.info
+      operationId: version
   /api:
     post:
       tags:
       - Api
       summary: process new events
-      operationId: api.rpc
+      operationId: rpc
       parameters:
       - name: msg
         in: body
@@ -27,13 +27,13 @@ paths:
       tags:
       - Machine
       summary: list machines loaded in memory
-      operationId: machine.list
+      operationId: list
   /machine/{name}.json:
     get:
       tags:
       - Machine
       summary: get machine def
-      operationId: machine.view
+      operationId: view
       parameters:
       - name: name
         in: path
@@ -45,13 +45,13 @@ paths:
       tags:
       - PNML
       summary: list PNML files found in filesystem
-      operationId: pnml.list
+      operationId: list
   /pnml/{name}.xml:
     get:
       tags:
       - PNML
       summary: get PNML source (XML)
-      operationId: pnml.view
+      operationId: view
       parameters:
       - name: name
         in: path
@@ -63,7 +63,7 @@ paths:
       tags:
       - Event
       summary: get latest event by oid
-      operationId: event.head
+      operationId: head
       parameters:
       - name: schema
         in: path
@@ -80,7 +80,7 @@ paths:
       tags:
       - Event
       summary: get event by eventid
-      operationId: event.view
+      operationId: view
       parameters:
       - name: schema
         in: path
@@ -90,14 +90,14 @@ paths:
       - name: eventid
         in: path
         required: true
-        default:  7738a82da2840074
+        default:  deadbeefdeadbeef
         type: string
   /list/{schema}/{oid}.json:
     get:
       tags:
       - Event
       summary: get all events by oid
-      operationId: event.list
+      operationId: list
       parameters:
       - name: schema
         in: path
@@ -114,7 +114,7 @@ paths:
       tags:
       - State
       summary: get statevector by oid
-      operationId: state.vector
+      operationId: view
       parameters:
       - name: schema
         in: path
