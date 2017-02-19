@@ -5,7 +5,7 @@ setup(
     version="0.3.0",
     author="Matthew York",
     author_email="myork@stackdump.com",
-    description="A blockchain style eventsourcing service using cyclone.io and lmdb",
+    description="A blockchain style embedded eventstore using twisted, cyclone.io and lmdb",
     license='MIT',
     keywords='PNML petri-net eventsourcing actor-model',
     packages=find_packages() + ['twisted.plugins'],
