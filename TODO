@@ -1,6 +1,8 @@
-Fri Feb 17 14:15:29 PST 2017
+Sun Feb 19 15:48:24 PST 2017
 
-WIP - refactor to match amazon lambda gateway 
+WIP - fix bug where /machines route doesn't work
+
+refactor to make use of bitwrap-lambda
 
 BACKLOG:
 * update pnml parser to retain position information for transitions ( just like places )

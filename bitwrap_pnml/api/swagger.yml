@@ -1,7 +1,7 @@
 ---
 swagger: 2.0
 info:
-  version: v1
+  version: v2
   title: bitwrap-pnml
 paths:
   /version:
@@ -22,12 +22,6 @@ paths:
         required: true
         default:  '{"id": 0,"method":"transform","params":[{"oid": "000000000", "schema": "counter", "action": "INC" }]}'
         type: string
-  /machines:
-    get:
-      tags:
-      - Machine
-      summary: list machines loaded in memory
-      operationId: list
   /machine/{name}:
     get:
       tags:
@@ -40,6 +34,12 @@ paths:
         required: true
         default:  counter
         type: string
+  /machine:
+    get:
+      tags:
+      - Machine
+      summary: list machines loaded in memory
+      operationId: list
   /pnml.json:
     get:
       tags:
