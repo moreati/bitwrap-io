@@ -22,7 +22,7 @@ class MachineTest(ApiTest):
         retrieve machine def as json
         NOTE: 'metaschema' is the only machine loaded by default
         """
-        res = yield ApiTest.fetch('machines.json')
+        res = yield ApiTest.fetch('machine')
         assert res.code == 200
         obj = json.loads(res.body)
 
@@ -36,7 +36,7 @@ class MachineTest(ApiTest):
         retrieve machine def as json
         'state' represents the default state for a machine
         """
-        res = yield ApiTest.fetch('machine/counter.json')
+        res = yield ApiTest.fetch('machine/counter')
         assert res.code == 200
         obj = json.loads(res.body)
         assert obj['machine']['name'] == 'counter'

@@ -27,8 +27,8 @@ class EventTest(ApiTest):
             "payload": { 'foo': 'bar' }
         })
 
-        url = 'event/' + txn['id'] + '.json'
-        res = yield ApiTest.fetch('event/counter/' + txn['id'] + '.json')
+        url = 'event/' + txn['id']
+        res = yield ApiTest.fetch('event/counter/' + txn['id'])
         obj = json.loads(res.body)
         assert res.code == 200
         assert obj['event']['payload'] == { 'foo': 'bar' }
@@ -46,8 +46,8 @@ class EventTest(ApiTest):
             "payload": { 'foo': 'bar' }
         })
 
-        url = 'head/' + txn['id'] + '.json'
-        res = yield ApiTest.fetch('head/counter/' + oid + '.json')
+        url = 'head/' + txn['id']
+        res = yield ApiTest.fetch('head/counter/' + oid)
         obj = json.loads(res.body)
         assert res.code == 200
 
@@ -64,6 +64,6 @@ class EventTest(ApiTest):
             "payload": { 'foo': 'bar' }
         })
 
-        url = 'head/' + txn['id'] + '.json'
-        res = yield ApiTest.fetch('list/counter/' + oid + '.json')
+        url = 'head/' + txn['id']
+        res = yield ApiTest.fetch('stream/counter/' + oid)
         assert res.code == 200

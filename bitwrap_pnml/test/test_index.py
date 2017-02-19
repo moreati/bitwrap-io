@@ -19,4 +19,4 @@ class IndexTest(ApiTest):
         """ retrieve api version from index """
         res = yield ApiTest.fetch('version')
         info = json.loads(res.body)
-        assert info['bitwrap_pnml.api'] == 'v1'
+        assert info['bitwrap_pnml.api'] == 'v2'

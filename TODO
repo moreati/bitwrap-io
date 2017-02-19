@@ -1,6 +1,6 @@
-Sun Feb  5 20:15:01 PST 2017
+Fri Feb 17 14:15:29 PST 2017
 
-test with bitwrap-ui / front end development
+WIP - refactor to match amazon lambda gateway 
 
 BACKLOG:
 * update pnml parser to retain position information for transitions ( just like places )

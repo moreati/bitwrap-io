@@ -22,13 +22,13 @@ paths:
         required: true
         default:  '{"id": 0,"method":"transform","params":[{"oid": "000000000", "schema": "counter", "action": "INC" }]}'
         type: string
-  /machines.json:
+  /machines:
     get:
       tags:
       - Machine
       summary: list machines loaded in memory
       operationId: list
-  /machine/{name}.json:
+  /machine/{name}:
     get:
       tags:
       - Machine
@@ -58,7 +58,7 @@ paths:
         required: true
         default:  counter
         type: string
-  /head/{schema}/{oid}.json:
+  /head/{schema}/{oid}:
     get:
       tags:
       - Event
@@ -75,7 +75,7 @@ paths:
         required: true
         default:  '000000000'
         type: string
-  /event/{schema}/{eventid}.json:
+  /event/{schema}/{eventid}:
     get:
       tags:
       - Event
@@ -92,29 +92,12 @@ paths:
         required: true
         default:  deadbeefdeadbeef
         type: string
-  /list/{schema}/{oid}.json:
+  /stream/{schema}/{oid}:
     get:
       tags:
       - Event
       summary: get all events by oid
       operationId: list
-      parameters:
-      - name: schema
-        in: path
-        required: true
-        default:  counter
-        type: string
-      - name: oid
-        in: path
-        required: true
-        default:  '000000000'
-        type: string
-  /state/{schema}/{oid}.json:
-    get:
-      tags:
-      - State
-      summary: get statevector by oid
-      operationId: view
       parameters:
       - name: schema
         in: path

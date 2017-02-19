@@ -8,7 +8,7 @@ import cyclone.web
 from cyclone.web import RequestHandler
 from bitwrap_pnml.api import headers, spec, rpc, pnml, state, machine, event
 
-VERSION = 'v1'
+VERSION = 'v2'
 
 VENDOR_PATH = os.path.abspath(__file__ + '/../../vendor')
 
@@ -17,18 +17,17 @@ def factory():
     return cyclone.web.Application([
         (r"/", cyclone.web.RedirectHandler, {"url": "/ui/index.html"}),
         (r"/version", Version),
-        (r"/api", rpc.Handler),
         (r"/swagger.json", spec.Resource),
         (r"/ui/?", cyclone.web.RedirectHandler, {"url": "/ui/index.html"}),
         (r"/ui/(.+)", cyclone.web.StaticFileHandler, {"path": VENDOR_PATH + '/swagger-ui'}),
-        (r"/machine/(.*).json", machine.Resource),
-        (r"/machines.json", machine.ListResource),
         (r"/pnml/(.*).xml", pnml.Resource),
         (r"/pnml.json", pnml.ListResource),
-        (r"/head/(.*)/(.*).json", event.HeadResource),
-        (r"/event/(.*)/(.*).json", event.Resource),
-        (r"/list/(.*)/(.*).json", event.ListResource),
-        (r"/state/(.*)/(.*).json", state.Resource)
+        (r"/api", rpc.Handler),
+        (r"/event/(.*)/(.*)", event.Resource),
+        (r"/machine/(.*)", machine.Resource),
+        (r"/machine", machine.ListResource),
+        (r"/head/(.*)/(.*)", event.HeadResource),
+        (r"/stream/(.*)/(.*)", event.ListResource)
     ])
 
 class Version(headers.Mixin, RequestHandler):
