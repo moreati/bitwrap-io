@@ -1,6 +1,7 @@
 Sun Feb 19 15:48:24 PST 2017
 
 WIP - fix bug where /machines route doesn't work
+relocate to bitwrap-io repo
 
 refactor to make use of bitwrap-lambda
 

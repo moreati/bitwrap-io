@@ -1,11 +1,35 @@
-# Bitwrap-pnml
+# Bitwrap-io
 
-[![Build Status](https://travis-ci.org/stackdump/bitwrap-pnml.svg?branch=master)](https://travis-ci.org/stackdump/bitwrap-pnml)
-[![PyPI version](https://badge.fury.io/py/bitwrap_pnml.svg)](https://badge.fury.io/py/bitwrap_pnml)
+[![Build Status](https://travis-ci.org/bitwrap/bitwrap-io.svg?branch=master)](https://travis-ci.org/bitwrap/bitwrap-io)
 
-A port of bitwrap-io that uses Petri-Net Markup Language (PNML) to construct state machines that model resources and events.
+A blockchain style eventsourcing service using cyclone.io and lmdb - Symas Lightning Memory-mapped Database
 
-See [getbitwrap.com](http://getbitwrap.com) for more info.
+### Status - active development
+
+Currently refactoring sql & lmdb storeage modules to be interchangeable.
+
+#### Milestones
+
+
+1. complete prototype[stackdump/marble](https://github.com/stackdump/marble).
+   * support only PNML and elementary Petri-nets
+   * support auth against Github
+   * publish data only to keen.io
+   * design event-stream driven models
+
+2. refactor bitwrap-io by extending bitwrap-pnml
+   * support colored Petri-nets
+   * allow actions between elemetary nets
+   * support colored-token protocols
+
+
+### Reference
+
+Read Martin Fowler's description of [Event Sourcing](http://martinfowler.com/eaaDev/EventSourcing.html)
+
+Watch an event sourcing video from [Greg Young](https://www.youtube.com/watch?v=8JKjvY4etTY)
+
+Read an article about how event sourcing compliments blockchain [ 6 Components of any Blockchain design solution ] (http://blockchain.glorat.net/2015/11/16/6-components-of-any-blockchain-design-solution/)
 
 ### PNML Tools 
 
@@ -16,11 +40,11 @@ see examples directory for petri-nets used for testing
 
 ### install
 
-    pip install bitwrap_pnml
+TODO: add 2 ways of running bitwrap w/ sql & w/ lmbd
 
 ### run
 
-    twistd -n bitwrap --listen-address 127.0.0.1 --listen-port 8080 --pnml-path ./examples --lmdb-path /tmp
+    twistd -n bitwrap --listen-address 127.0.0.1 --listen-port 8080 --io-path ./examples --lmdb-path /tmp
 
 ### Sample
 

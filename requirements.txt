@@ -5,3 +5,4 @@ txRDQ==0.2.14
 ujson==1.35
 xxhash==0.6.1
 PyYAML==3.12
+-e git+https://github.com/stackdump/bitwrap-lambda.git#egg=bitrwrap_lambda
