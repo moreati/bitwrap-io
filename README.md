@@ -2,18 +2,24 @@
 
 [![Build Status](https://travis-ci.org/bitwrap/bitwrap-io.svg?branch=master)](https://travis-ci.org/bitwrap/bitwrap-io)
 
-A blockchain style eventsourcing service using cyclone.io and lmdb - Symas Lightning Memory-mapped Database
+A blockchain-style eventstore.
+
 
 ### Status
 
-Refactoring sql & lmdb storeage modules to be interchangeable.
+Developing Web App - http://bitwrap.github.io 
 
-* completed prototypes
-   * [stackdump/marble](https://github.com/stackdump/marble).
-   * [bitwrap/bitwrap-lambda](https://github.com/bitwrap/bitwrap-lambda).
+* completed components and prototypes
+   * [stackdump/marble](https://github.com/stackdump/marble)
+   * [stackdump/bitwrap-pnml](https://github.com/stackdump/bitwrap-pnml)
+   * [bitwrap/bitwrap-lambda](https://github.com/bitwrap/bitwrap-lambda)
+   * [bitwrap/bitwrap-ui](https://github.com/bitwrap/bitwrap-ui)
+   * [bitwrap/wrapserver](https://github.com/bitwrap/wrapserver)
 
 
 ### Roadmap
+
+WIP - Refactoring sql & lmdb storeage modules to be interchangeable
 
 * support all pnml functions when creating/reading json definitions
 * support colored tokens
