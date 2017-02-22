@@ -1,8 +1,14 @@
-Tue Feb 21 23:07:45 PST 2017
+Wed Feb 22 00:00:13 PST 2017
 
-refactor to make use of either LMDB or RDS backends
+WIP - refactor to make use of either LMDB or RDS backends
+currently pulling parts of bitwrap_lambda into the project
 
 BACKLOG:
-* update pnml parser to retain position information for transitions ( just like places )
-* record schema updates in an event stream using *metaschema*
-* use x-requested-for to add request ip to message in jsonrpc
+* (for UI) - update pnml parser to retain graphics position information
+
+GOAL : try to remove as much Async code without ditching cyclone as rpc base
+also try to emulate the AWS_lambda event harness where incoming events have
+some extra extraction based on which pipeline they are part of
+
+Long Term: 
+Make this lib deployable to either aws-lambda or runable as a docker container w/ similar API/event harness 

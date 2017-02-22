@@ -7,7 +7,7 @@ from bitwrap_pnml.api import factory as ApiFactory
 
 Factory.noisy = False
 
-application = service.Application("bitwrap-pnml")
+application = service.Application("bitwrap-io")
 
 internet.TCPServer(
     int(os.environ.get('BITWRAP_PORT', 8080)),

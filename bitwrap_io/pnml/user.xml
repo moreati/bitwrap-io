@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><pnml>
 <net id="Net-One" type="P/T net">
 <token id="Default" enabled="true" red="0" green="0" blue="0"/>
-<place id="ACTIVE">
+<place id="disabled">
 <graphics>
-<position x="120.0" y="30.0"/>
+<position x="195.0" y="120.0"/>
 </graphics>
 <name>
-<value>ACTIVE</value>
+<value>disabled</value>
 <graphics>
-<offset x="81.0" y="13.0"/>
+<offset x="91.0" y="22.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,1</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="schemata">
+<graphics>
+<position x="195.0" y="255.0"/>
+</graphics>
+<name>
+<value>schemata</value>
+<graphics>
+<offset x="98.0" y="18.0"/>
 </graphics>
 </name>
 <initialMarking>
@@ -21,34 +41,14 @@
 <value>0</value>
 </capacity>
 </place>
-<place id="update_tally">
+<transition id="ADD_SCHEMA">
 <graphics>
-<position x="285.0" y="30.0"/>
+<position x="135.0" y="180.0"/>
 </graphics>
 <name>
-<value>update_tally</value>
+<value>ADD_SCHEMA</value>
 <graphics>
-<offset x="122.0" y="22.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<transition id="disable">
-<graphics>
-<position x="180.0" y="90.0"/>
-</graphics>
-<name>
-<value>disable</value>
-<graphics>
-<offset x="75.0" y="37.0"/>
+<offset x="-18.0" y="28.0"/>
 </graphics>
 </name>
 <orientation>
@@ -67,14 +67,14 @@
 <value>1</value>
 </priority>
 </transition>
-<transition id="enable">
+<transition id="CONFIRM_EMAIL">
 <graphics>
-<position x="60.0" y="90.0"/>
+<position x="135.0" y="60.0"/>
 </graphics>
 <name>
-<value>enable</value>
+<value>CONFIRM_EMAIL</value>
 <graphics>
-<offset x="-5.0" y="35.0"/>
+<offset x="-7.0" y="30.0"/>
 </graphics>
 </name>
 <orientation>
@@ -93,14 +93,14 @@
 <value>1</value>
 </priority>
 </transition>
-<transition id="update">
+<transition id="DEL_SCHEMA">
 <graphics>
-<position x="330.0" y="90.0"/>
+<position x="135.0" y="315.0"/>
 </graphics>
 <name>
-<value>update</value>
+<value>DEL_SCHEMA</value>
 <graphics>
-<offset x="72.0" y="33.0"/>
+<offset x="-16.0" y="33.0"/>
 </graphics>
 </name>
 <orientation>
@@ -119,7 +119,7 @@
 <value>1</value>
 </priority>
 </transition>
-<arc id="ACTIVE to disable" source="ACTIVE" target="disable">
+<arc id="ADD_SCHEMA to schemata" source="ADD_SCHEMA" target="schemata">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -128,11 +128,24 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="142" y="53" curvePoint="false"/>
-<arcpath id="001" x="186" y="102" curvePoint="false"/>
+<arcpath id="000" x="151" y="197" curvePoint="false"/>
+<arcpath id="001" x="197" y="255" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="enable to ACTIVE" source="enable" target="ACTIVE">
+<arc id="disabled to ADD_SCHEMA" source="disabled" target="ADD_SCHEMA">
+<graphics/>
+<inscription>
+<value/>
+<graphics/>
+</inscription>
+<tagged>
+<value/>
+</tagged>
+<arcpath id="000" x="196" y="142" curvePoint="false"/>
+<arcpath id="001" x="152" y="187" curvePoint="false"/>
+<type value="inhibitor"/>
+</arc>
+<arc id="disabled to CONFIRM_EMAIL" source="disabled" target="CONFIRM_EMAIL">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -141,11 +154,11 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="76" y="102" curvePoint="false"/>
-<arcpath id="001" x="121" y="53" curvePoint="false"/>
+<arcpath id="000" x="196" y="120" curvePoint="false"/>
+<arcpath id="001" x="151" y="72" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="update to num_updates" source="update" target="update_tally">
+<arc id="schemata to DEL_SCHEMA" source="schemata" target="DEL_SCHEMA">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -154,8 +167,8 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="336" y="102" curvePoint="false"/>
-<arcpath id="001" x="305" y="54" curvePoint="false"/>
+<arcpath id="000" x="196" y="278" curvePoint="false"/>
+<arcpath id="001" x="151" y="327" curvePoint="false"/>
 <type value="normal"/>
 </arc>
 </net>

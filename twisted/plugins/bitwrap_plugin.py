@@ -11,11 +11,12 @@ Factory.noisy = False
 
 class Options(usage.Options):
 
+    # TODO: optionally accept mysql connection string
     optParameters = (
         ("listen-port", "p", int(os.environ.get('BITWRAP_PORT', 8080)), "The port number to listen on."),
         ("listen-address", "a", os.environ.get('BITWRAP_IFACE', "127.0.0.1"), "The listen address."),
-        ("pnml-path", "d", os.environ.get('PNML_PATH', os.path.abspath(__file__ + '/../../../examples')), "Path to read *.pnml"),
-        ("lmdb-path", "d", os.environ.get('BITWRAP_REPO_PATH', '/tmp'), "Path to write *.lmdb")
+        ("schema-path", "s", os.environ.get('SCHEMA_PATH', os.path.abspath(__file__ + '/../../../examples')), "Path to read *.pnml/*.json"),
+        ("lmdb-path", "l", os.environ.get('LMDB_PATH', '/tmp'), "Path to write *.lmdb")
     )
 
 
@@ -23,15 +24,15 @@ class ServiceFactory(object):
     implements(IServiceMaker, IPlugin)
 
     tapname = "bitwrap"
-    description = "event-sourced statevector database"
+    description = "statevector eventstore"
     options = Options
 
     def makeService(self, options):
 
-        os.environ['PNML_PATH'] = options['pnml-path']
-        os.environ['BITWRAP_REPO_PATH'] = options['lmdb-path']
+        os.environ['SCHEMA_PATH'] = options['schmea-path']
+        os.environ['LMDB_PATH'] = options['lmdb-path']
 
-        from bitwrap_pnml.api import factory as ApiFactory
+        from bitwrap_io.api import factory as ApiFactory
 
         service = MultiService()
 

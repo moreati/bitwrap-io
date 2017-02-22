@@ -1,24 +1,23 @@
 """
-bitwrap_pnml machine
-
 build a state machine model from Petri-net markup language
 """
 
 import os
 import sys
 import glob
-from bitwrap_pnml.machine import dsl, petrinet
+import json
+import bitwrap_io.machine
 
-PNML_PATH = os.environ.get('PNML_PATH', os.path.abspath(__file__ + '/../../examples'))
+JSON_PATH = os.environ.get('JSON_PATH', os.path.abspath(__file__ + '/../schemata'))
 
 def schema_to_file(name):
     """ build schema filename from name """
-    return os.path.join(PNML_PATH, '%s.xml' % name)
+    return os.path.join(JSON_PATH, '%s.json' % name)
 
-def write_schema(schema, xml_str):
+def write_schema(schema, json_str):
     """ write pnml to filesystem """
     with open(schema_to_file(schema), 'w') as pnml:
-        pnml.write(xml_str)
+        pnml.write(json_str)
 
 def rm_schema(schema):
     """ remove pnml from filesystem """
@@ -28,34 +27,27 @@ def rm_schema(schema):
         pass
 
 def schema_list():
-    return glob.glob(PNML_PATH + '/*.xml')
+    return glob.glob(JSON_PATH + '/*.json')
 
 class PTNet(object):
     """
-    Load PNML as a matrix of places and transitions
+    Load bitwrap machine
     """
 
     def __init__(self, name):
         self.name = name
-        self.places = None
-        self.transitions = None
         self.filename = schema_to_file(name)
-        self.net = petrinet.parse_pnml_file(self.filename)[0]
-        self.reindex()
 
-        with open(self.filename, 'r') as pnml:
-            self.xml = pnml.read()
+        with open(self.filename, 'r') as schema_file:
+            self.data = json.load(schema_file)
+            assert self.data['machine']['name'] == self.name
+            self.places = self.data['machine']['places']
+            self.transitions = self.data['machine']['transitions']
 
-    def reindex(self):
-        """ rebuild network from pnml """
-        dsl.append_roles(self.net)
-        self.places = dsl.places(self.net)
-        self.transitions = dsl.transitions(self.net, self.places)
-        dsl.apply_edges(self.net, self.places, self.transitions)
 
     def empty_vector(self):
         """ return an empty state-vector """
-        return dsl.empty_vector(len(self.places))
+        return [0] * len(self.places)
 
     def inital_vector(self):
         """ return inital state-vector """
