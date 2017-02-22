@@ -1,20 +1,20 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="bitwrap_pnml",
-    version="0.3.0",
+    name="bitwrap_io",
+    version="0.1.0",
     author="Matthew York",
     author_email="myork@stackdump.com",
-    description="A blockchain style embedded eventstore using twisted, cyclone.io and lmdb",
+    description="A blockchain-style python eventstore using choice of mysql or LMDB backend",
     license='MIT',
-    keywords='PNML petri-net eventsourcing actor-model',
+    keywords='PNML petri-net eventstore state-machine actor-model',
     packages=find_packages() + ['twisted.plugins'],
     include_package_data=True,
-    install_requires=['cyclone==1.1', 'lmdb==0.92', 'service-identity==16.0.0', 'txRDQ==0.2.14', 'ujson==1.35', 'xxhash==0.6.1', 'PyYAML==3.12'],
+    install_requires=['cyclone==1.1', 'lmdb==0.92', 'service-identity==16.0.0', 'txRDQ==0.2.14', 'ujson==1.35', 'xxhash==0.6.1', 'PyYAML==3.12', 'PyMySQL==0.7.9'],
     long_description="""
 # Bitwrap-pnml
 
-A blockchain style eventsourcing service using cyclone.io and lmdb - Symas Lightning Memory-mapped Database
+A blockchain-style python eventstore using choice of mysql or LMDB backend
 
 ### Reference
 
