@@ -3,8 +3,8 @@
 """
 import os
 from cyclone.web import RequestHandler
-from bitwrap_pnml.api import headers
-import bitwrap_pnml
+from bitwrap_io.api import headers
+import bitwrap_io
 
 class ListResource(headers.Mixin, RequestHandler):
     """
@@ -13,7 +13,7 @@ class ListResource(headers.Mixin, RequestHandler):
 
     def get(self):
         """ list machines that are loaded into memory """
-        self.write({'machines': bitwrap_pnml.MACHINES.keys()})
+        self.write({'machines': bitwrap_io.MACHINES.keys()})
 
 class Resource(headers.Mixin, RequestHandler):
     """
@@ -23,7 +23,7 @@ class Resource(headers.Mixin, RequestHandler):
     def get(self, name):
         """ return state machine definition as json """
 
-        sm = bitwrap_pnml.get(name).machine
+        sm = bitwrap_io.get(name).machine
 
         self.write({
             'machine': {

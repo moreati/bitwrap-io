@@ -2,9 +2,9 @@
 return statevectors
 """
 from cyclone.web import RequestHandler
-from bitwrap_pnml.storage import Storage
-from bitwrap_pnml.api import headers
-import bitwrap_pnml
+from bitwrap_io.storage import Storage
+from bitwrap_io.api import headers
+import bitwrap_io
 
 
 class Resource(headers.Mixin, RequestHandler):
@@ -14,7 +14,7 @@ class Resource(headers.Mixin, RequestHandler):
         """ report api version """
 
         try:
-            bitwrap_pnml.get(schema)
+            bitwrap_io.get(schema)
             key = Storage.encode_key(oid)
             stor = Storage.encode_key(schema)
             storage = Storage.open(stor)

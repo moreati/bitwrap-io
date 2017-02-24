@@ -2,9 +2,9 @@
 return statevectors
 """
 from cyclone.web import RequestHandler
-from bitwrap_pnml.storage import Storage
-from bitwrap_pnml.api import headers
-import bitwrap_pnml
+from bitwrap_io.storage import Storage
+from bitwrap_io.api import headers
+import bitwrap_io
 import ujson as json
 
 
@@ -15,7 +15,7 @@ class Resource(headers.Mixin, RequestHandler):
         """ return event json """
 
         try:
-            bitwrap_pnml.get(schema)
+            bitwrap_io.get(schema)
             key = Storage.encode_key(eventid)
             stor = Storage.encode_key(schema)
             res = Storage.open(stor).fetch_str(key, db_name='events')
@@ -36,7 +36,7 @@ class HeadResource(headers.Mixin, RequestHandler):
         """ return event json """
 
         try:
-            bitwrap_pnml.get(schema)
+            bitwrap_io.get(schema)
             key = Storage.encode_key(oid)
             stor = Storage.encode_key(schema)
             storage = Storage.open(stor)
@@ -89,7 +89,7 @@ class ListResource(headers.Mixin, RequestHandler):
     def get(self, schema, oid):
         """ return event json """
 
-        assert bitwrap_pnml.get(schema)
+        assert bitwrap_io.get(schema)
         key = Storage.encode_key(oid)
         stor = Storage.encode_key(schema)
         storage = Storage.open(stor)

@@ -4,11 +4,9 @@ bitwrap_io.api - this module defines routes
 import os
 import cyclone.web
 from cyclone.web import RequestHandler
-from bitwrap_pnml.api import headers, spec, rpc, pnml, state, machine, event
+from bitwrap_io.api import headers, rpc, pnml, state, machine, event
 
-VERSION = 'v2'
-
-VENDOR_PATH = os.path.abspath(__file__ + '/../../vendor')
+VERSION = 'v3'
 
 class Index(RequestHandler):
     """ index """
@@ -19,18 +17,19 @@ class Index(RequestHandler):
 def factory():
 
     settings = {
-        'cookie_secret': os.environ.get('COOKIE_SECRET', ''),
         #github_client_id=os.environ.get('GITHUB_CLIENT_ID'),
         #github_secret=os.environ.get('GITHUB_SECRET'),
-        'template_path': os.path.dirname(__file__),
+        # TODO: add github auth
         #login_url="/auth/login",
-        #xsrf_cookies=True, # REVIEW: is this usable via api ?
+        #xsrf_cookies=True, # REVIEW: is this usable w/ rpc ?
+        'cookie_secret': os.environ.get('COOKIE_SECRET', ''),
+        'template_path': os.path.join(os.path.dirname(__file__), '../templates'),
         'debug': True
     }
 
-    """ build a valid cyclone app """
+    """ build routes for a cyclone app """
     return cyclone.web.Application([
-        (r"/", cyclone.web.RedirectHandler, {"url": "/ui/index.html"}),
+        (r"/", Index),
         (r"/api", rpc.Handler),
         (r"/version", Version),
         (r"/pnml/(.*).xml", pnml.Resource),
@@ -40,7 +39,7 @@ def factory():
         (r"/machine", machine.ListResource),
         (r"/head/(.*)/(.*)", event.HeadResource),
         (r"/stream/(.*)/(.*)", event.ListResource)
-    ])
+    ], **settings)
 
 class Version(headers.Mixin, RequestHandler):
     """ index """
