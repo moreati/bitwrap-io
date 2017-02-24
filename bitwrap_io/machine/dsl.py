@@ -1,11 +1,11 @@
 """
 dsl - module contains methods to help load a machine.
 
-bitwrap_io.pnml uses PNML as a "Domain Specific Language" (DSL) to define a bitwrap machine
+bitwrap_io._xml uses PNML as a "Domain Specific Language" (DSL) to define a bitwrap machine
 
 """
 
-from bitwrap_io.machine.xml.petrinet import Transition, Place
+from bitwrap_io.machine._xml import Transition, Place
 
 def append_roles(net):
     """ build roles from edge list """

@@ -4,9 +4,10 @@ bitwrap_io machine
 build a state machine model from Petri-net markup language
 """
 
-import os
-import sys
-import glob
-from bitwrap_io.machine import dsl, petrinet
+from bitwrap_io.machine import pnml, _json
 
-# TODO: add functions to open either json or xml
+def factory(syntax='json'):
+    if syntax == 'json':
+        return _json.Machine
+    else:
+        return pnml.Machine

@@ -1,6 +1,7 @@
 """
 pnml - load xml definitions and convert to bitwrap machines
 """
+import os
 
 PNML_PATH = os.environ.get('PNML_PATH', os.path.abspath(__file__ + '/../../examples'))
 

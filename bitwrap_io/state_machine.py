@@ -4,16 +4,16 @@ bitwrap_io.state_machine
 Combine storage and machine modules to provide a persistent state machine object
 """
 from bitwrap_io.storage import Storage
-from bitwrap_io.machine import Machine
+from bitwrap_io.machine import factory as MachineFactory
 
 class StateMachine(object):
     """
     State Machine object with persistent storage
     """
 
-    def __init__(self, schema):
+    def __init__(self, schema, **kwargs):
         self.schema = schema.__str__()
-        self.machine = Machine(self.schema)
+        self.machine = MachineFactory(**kwargs)(self.schema)
 
     def session(self, request):
         """ start a session """

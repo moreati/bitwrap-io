@@ -6,7 +6,6 @@ NOTE: this module expects the db config to be in a module called rds_config
 
 import sys
 import pymysql
-import bitwrap_lambda
 import json
 import base64
 import rds_config # get db creds
@@ -157,7 +156,7 @@ if __name__ == '__main__':
     )
 
     with conn.cursor() as txn:
-        txn.execute("DROP DATABASE bitwrap")
+        #txn.execute("DROP DATABASE bitwrap")
         txn.execute("CREATE DATABASE bitwrap")
         txn.execute("use bitwrap ; CREATE TABLE `state` ( `schema` varchar(255) NOT NULL, `oid` varchar(255) NOT NULL, `vector` text, `head` varchar(255) DEFAULT NULL, PRIMARY KEY (`schema`, `oid`));")
         txn.execute("use bitwrap ; CREATE TABLE `events` ( `id` int NOT NULL AUTO_INCREMENT, `oid` varchar(255), `schema` varchar(255), `eventid` varchar(255) NOT NULL, `body` text, `previous` varchar(255) DEFAULT NULL, PRIMARY KEY (`id`, `oid`, `schema`, `eventid`) );")
