@@ -1,7 +1,5 @@
 """
-bitwrap_pnml.api
-
-this module defines routes
+bitwrap_io.api - this module defines routes
 """
 import os
 import cyclone.web
@@ -12,17 +10,31 @@ VERSION = 'v2'
 
 VENDOR_PATH = os.path.abspath(__file__ + '/../../vendor')
 
+class Index(RequestHandler):
+    """ index """
+
+    def get(self):
+        self.render("index.html")
+
 def factory():
+
+    settings = {
+        'cookie_secret': os.environ.get('COOKIE_SECRET', ''),
+        #github_client_id=os.environ.get('GITHUB_CLIENT_ID'),
+        #github_secret=os.environ.get('GITHUB_SECRET'),
+        'template_path': os.path.dirname(__file__),
+        #login_url="/auth/login",
+        #xsrf_cookies=True, # REVIEW: is this usable via api ?
+        'debug': True
+    }
+
     """ build a valid cyclone app """
     return cyclone.web.Application([
         (r"/", cyclone.web.RedirectHandler, {"url": "/ui/index.html"}),
+        (r"/api", rpc.Handler),
         (r"/version", Version),
-        (r"/swagger.json", spec.Resource),
-        (r"/ui/?", cyclone.web.RedirectHandler, {"url": "/ui/index.html"}),
-        (r"/ui/(.+)", cyclone.web.StaticFileHandler, {"path": VENDOR_PATH + '/swagger-ui'}),
         (r"/pnml/(.*).xml", pnml.Resource),
         (r"/pnml.json", pnml.ListResource),
-        (r"/api", rpc.Handler),
         (r"/event/(.*)/(.*)", event.Resource),
         (r"/machine/(.*)", machine.Resource),
         (r"/machine", machine.ListResource),

@@ -1,7 +1,6 @@
-Thu Feb 23 22:59:12 PST 2017
+Fri Feb 24 09:57:26 PST 2017
 
-WIP - refactor to make use of either LMDB or RDS backends
-currently pulling parts of bitwrap_lambda into the project
+WIP - refactor api module to better match up to AWS lambda event handler style
 
 BACKLOG:
 * (for UI) - update pnml parser to retain graphics position information
@@ -10,7 +9,6 @@ BACKLOG:
 * after this project can be deployed on amazon lambda will refactor stackdump/marble to match
   * (for marble) re-enable keen.io analytics - test w/ lambda
   * attempt to duplicate functionality by streaming events to s3 for use with Athena
-
 
 GOAL : try to remove as much Async code without ditching cyclone as rpc base
 also try to emulate the AWS_lambda event harness where incoming events have
