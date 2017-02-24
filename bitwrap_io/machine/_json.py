@@ -8,7 +8,7 @@ import glob
 import json
 import bitwrap_io.machine
 
-JSON_PATH = os.environ.get('JSON_PATH', os.path.abspath(__file__ + '/../schemata'))
+JSON_PATH = os.environ.get('JSON_PATH', os.path.abspath(__file__ + '/../../schemata'))
 
 def schema_to_file(name):
     """ build schema filename from name """
