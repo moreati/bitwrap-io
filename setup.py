@@ -5,7 +5,7 @@ setup(
     version="0.1.0",
     author="Matthew York",
     author_email="myork@stackdump.com",
-    description="A blockchain-style python eventstore using choice of mysql or LMDB backend",
+    description="A blockchain-style python eventstore w/ choice of mysql or LMDB backend",
     license='MIT',
     keywords='PNML petri-net eventstore state-machine actor-model',
     packages=find_packages() + ['twisted.plugins'],

@@ -1,2 +1,2 @@
-recursive-include bitwrap_pnml *.*
+recursive-include bitwrap_io *.*
 recursive-include twisted *.py

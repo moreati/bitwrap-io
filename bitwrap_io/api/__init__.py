@@ -14,7 +14,25 @@ class Index(RequestHandler):
     def get(self):
         self.render("index.html")
 
+class Version(headers.Mixin, RequestHandler):
+    """ index """
+
+    def get(self):
+        """ report api version """
+        self.write({ __name__: VERSION})
+
+class Config(headers.Mixin, RequestHandler):
+    """ config """
+
+    def get(self):
+        """ direct web app to api """
+
+        self.write({
+            'endpoint': "http://127.0.0.1:8080"
+        })
+
 def factory():
+    """ cyclone app factory """
 
     settings = {
         #github_client_id=os.environ.get('GITHUB_CLIENT_ID'),
@@ -27,11 +45,11 @@ def factory():
         'debug': True
     }
 
-    """ build routes for a cyclone app """
     return cyclone.web.Application([
         (r"/", Index),
         (r"/api", rpc.Handler),
         (r"/version", Version),
+        (r"/config/(.*).json", Config),
         (r"/pnml/(.*).xml", pnml.Resource),
         (r"/pnml.json", pnml.ListResource),
         (r"/event/(.*)/(.*)", event.Resource),
@@ -40,10 +58,3 @@ def factory():
         (r"/head/(.*)/(.*)", event.HeadResource),
         (r"/stream/(.*)/(.*)", event.ListResource)
     ], **settings)
-
-class Version(headers.Mixin, RequestHandler):
-    """ index """
-
-    def get(self):
-        """ report api version """
-        self.write({ __name__: VERSION})

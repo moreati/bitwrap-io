@@ -11,9 +11,11 @@ GET  /head/{schema}/{oid} - get latest event for oid
 
 import os
 import json
-import bitwrap_lambda
-import bitwrap_lambda.machine as machine
-from bitwrap_lambda.storage import Storage
+import bitwrap_io
+import bitwrap_io.machine as machine
+
+# FIXME: import sql storage
+from bitwrap_io.storage import Storage
 
 def success(body):
     return {

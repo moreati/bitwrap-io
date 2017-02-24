@@ -3,7 +3,7 @@
 import os
 from twisted.application import service, internet
 from twisted.internet.protocol import Factory
-from bitwrap_pnml.api import factory as ApiFactory
+from bitwrap_io.api import factory as ApiFactory
 
 Factory.noisy = False
 
