@@ -1,21 +1,20 @@
 """
-bitwrap_lambda
+bitwrap_io
 """
 
 import os
 import sys
-from bitwrap_lambda.state_machine import StateMachine
-import bitwrap_lambda.machine
-
+from bitwrap_io.state_machine import StateMachine
+import bitwrap_io.machine
 
 def get(schema):
-    """ load state_machine object by schema name """
+    """ load by schema name """
     return StateMachine(schema)
 
 def put(schema, json_data):
-    """ upload pnml """
-    bitwrap_lambda.machine.write_schema(schema, json_data)
+    """ upload json """
+    bitwrap_io.machine.write_schema(schema, json_data)
 
 def rm(schema):
-    """ remove pnml """
-    bitwrap_lambda.machine.rm_schema(schema)
+    """ remove json """
+    bitwrap_io.machine.rm_schema(schema)

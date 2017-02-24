@@ -1,6 +1,11 @@
-""" helper methods for converting petrinet arcs and transitions to vectors """
+"""
+dsl - module contains methods to help load a machine.
 
-from bitwrap_pnml.machine.petrinet import Transition, Place
+bitwrap_io.pnml uses PNML as a "Domain Specific Language" (DSL) to define a bitwrap machine
+
+"""
+
+from bitwrap_io.machine.xml.petrinet import Transition, Place
 
 def append_roles(net):
     """ build roles from edge list """

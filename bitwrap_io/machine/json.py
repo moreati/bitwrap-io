@@ -1,5 +1,5 @@
 """
-build a state machine model from Petri-net markup language
+json - load bitwrap machines from json files
 """
 
 import os
