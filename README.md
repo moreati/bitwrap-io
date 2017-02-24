@@ -4,16 +4,16 @@
 
 A blockchain-style eventstore.
 
-
 ### Status
 
 Developing Web App - http://bitwrap.github.io 
 
 * completed components and prototypes
    * [stackdump/marble](https://github.com/stackdump/marble)
+   * [stackdump/marble-ui](https://github.com/stackdump/marble-ui)
    * [stackdump/bitwrap-pnml](https://github.com/stackdump/bitwrap-pnml)
+   * [stackdump/lambda-test](https://github.com/stackdump/lambda-test)
    * [bitwrap/bitwrap-lambda](https://github.com/bitwrap/bitwrap-lambda)
-   * [bitwrap/bitwrap-ui](https://github.com/bitwrap/bitwrap-ui)
    * [bitwrap/wrapserver](https://github.com/bitwrap/wrapserver)
 
 
@@ -47,7 +47,33 @@ see examples directory for petri-nets used for testing
 
 ### install
 
-TODO: add instructions about how you'd need mysql or just use the filesystem (default)
+* CI/CD: this package is built and deployed to pypi
+* Another github project deploys the build to aws lambda using travis.ci:
+  *  see [stackdump/lambda-test](https://github.com/stackdump/lambda-test) as an example of how to do this.
+
+#### LMDB
+
+make sure to set the REPO environment vars to manage database file location
+
+NOTE: LMDB is not supported when deploying to lambda due to local filesystem restrictions.
+
+#### sql w/ AWS lambda
+
+* If you are not planning using AWS-lambda:
+  * You may provide the database credentials when invoking the twisted plugin at runtime,
+  * or by setting environment variables.
+
+
+* If you are building a package to upload to lambda:
+  * create a python script called rds_config.py
+  * and make sure you add it to your python library
+
+    # ./rds_config.py
+
+    db_username = "bitwrap"
+    db_password = "5eGPelW8r8ea"
+    db_name = "bitwrap" 
+    rds_host  = "bitwrap-prod01.cplrgtpb61fz.us-east-1.rds.amazonaws.com"
 
 ### run
 

@@ -1,12 +1,14 @@
 """
-bitwrap_dynamodb.storage - provide state machine storage using dynamo
+bitwrap_io.storage - storage interface for either lmdb or mysql backend
 """
 import os
 import glob
 import shutil
 import xxhash
 import json
-from bitwrap_lambda.storage.sql import Datastore
+
+# FIXME should support lmdb backend also
+from bitwrap_io.storage.sql import Datastore
 
 _POOL = {}
 XX_SEED = 662607004 
@@ -44,11 +46,13 @@ class Storage(object):
         if repo_name in _POOL:
             self.db = _POOL[repo_name]
         else:
+            # TODO: conditionally open either LMDB or sql
             self.db = Datastore(repo_name, machine=self.state_machine)
             _POOL[repo_name] = self.db
 
 
 
+    # TODO: refactor to call mysql or lmdb commit
     def commit(self, req, dry_run=False):
         """ execute transition and persist to storage on success """
 

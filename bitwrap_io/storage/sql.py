@@ -1,9 +1,15 @@
+"""
+statevector storage using mysql
+
+NOTE: this module expects the db config to be in a module called rds_config
+"""
+
 import sys
 import pymysql
-import rds_config
 import bitwrap_lambda
 import json
 import base64
+import rds_config # get db creds
 
 def open_db(cfg):
     return pymysql.connect(
@@ -137,6 +143,7 @@ class Events:
             return { 'events': result, 'oid': oid, 'schema': self.schema }
 
 
+#TODO: make database name configurable instead of hardcoding 'bitwrap'
 if __name__ == '__main__':
 
     print 'migrating database'

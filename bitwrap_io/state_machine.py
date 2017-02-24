@@ -1,10 +1,10 @@
 """
-bitwrap_lambda.state_machine
+bitwrap_io.state_machine
 
 Combine storage and machine modules to provide a persistent state machine object
 """
-from bitwrap_lambda.storage import Storage
-from bitwrap_lambda.machine import Machine
+from bitwrap_io.storage import Storage
+from bitwrap_io.machine import Machine
 
 class StateMachine(object):
     """
