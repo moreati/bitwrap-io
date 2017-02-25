@@ -23,7 +23,7 @@ class Resource(headers.Mixin, RequestHandler):
     def get(self, name):
         """ return state machine definition as json """
 
-        sm = bitwrap_io.get(name).machine
+        sm = bitwrap_io.open(name).machine
 
         self.write({
             'machine': {

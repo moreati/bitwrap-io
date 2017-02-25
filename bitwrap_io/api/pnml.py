@@ -26,6 +26,6 @@ class Resource(headers.Mixin, RequestHandler):
         """ read schema xml """
         try:
             self.set_header('Content-Type', 'application/xml')
-            self.write(bitwrap_io.get(name).machine.net.xml)
+            self.write(bitwrap_io.open(name).machine.net.xml)
         except:
             self.set_status(404)

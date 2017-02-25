@@ -16,7 +16,7 @@ class Handler(headers.Mixin, JsonrpcRequestHandler):
     def jsonrpc_preview(self, msg):
         """ preview a state machine transformation"""
         self.set_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        return bitwrap_io.get(msg['schema']).preview(msg)
+        return bitwrap_io.open(msg['schema']).preview(msg)
 
     def jsonrpc_transform(self, msg):
         """ execute a state machine transformation"""
@@ -24,4 +24,4 @@ class Handler(headers.Mixin, JsonrpcRequestHandler):
         msg['ip'] = self.request.remote_ip
         msg['endpoint'] = self.request.host
 
-        return bitwrap_io.get(msg['schema']).transform(msg)
+        return bitwrap_io.open(msg['schema']).transform(msg)
