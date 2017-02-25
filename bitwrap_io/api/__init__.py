@@ -4,7 +4,7 @@ bitwrap_io.api - this module defines routes
 import os
 import cyclone.web
 from cyclone.web import RequestHandler
-from bitwrap_io.api import headers, rpc, pnml, machine, event
+from bitwrap_io.api import config, headers, rpc, pnml, machine, event
 
 VERSION = 'v3'
 
@@ -21,43 +21,16 @@ class Version(headers.Mixin, RequestHandler):
         """ report api version """
         self.write({ __name__: VERSION})
 
-class Config(headers.Mixin, RequestHandler):
-    """ config """
-
-    def get(self, stage):
-        """ direct web app to api """
-
-        # REVIEW: should we also include some vars like PNML_PATH etc? 
-        # database in use ? ( or a hash of it )
-        self.write({
-            'endpoint': "http://127.0.0.1:8080",
-            'stage': stage
-        })
-
-def settings():
-    """ build settings hash from env vars """
-
-    return {
-        #github_client_id=os.environ.get('GITHUB_CLIENT_ID'),
-        #github_secret=os.environ.get('GITHUB_SECRET'),
-        # TODO: add github auth
-        #login_url="/auth/login",
-        #xsrf_cookies=True, # REVIEW: is this usable w/ rpc ?
-        'cookie_secret': os.environ.get('COOKIE_SECRET', ''),
-        'template_path': os.path.join(os.path.dirname(__file__), '../templates'),
-        'debug': True
-    }
-
 def factory():
     """ cyclone app factory """
 
-    _settings = settings()
+    _settings = config.settings()
 
     handlers = [
         (r"/", Index),
         (r"/api", rpc.Handler),
         (r"/version", Version),
-        (r"/config/(.*).json", Config),
+        (r"/config/(.*).json", config.Resource),
         (r"/pnml/(.*).xml", pnml.Resource),
         (r"/pnml.json", pnml.ListResource),
         (r"/event/(.*)/(.*)", event.Resource),

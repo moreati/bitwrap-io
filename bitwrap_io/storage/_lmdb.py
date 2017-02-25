@@ -9,10 +9,10 @@ import lmdb
 import xxhash
 import ujson as json
 
-REPO_ROOT = os.environ.get('BITWRAP_REPO_PATH', os.path.abspath(__file__ + '/../../'))
-MAX_DB = int(os.environ.get('BITWRAP_REPO_MAX_DB', 10))
-XX_SEED = int(os.environ.get('BITWRAP_HASH_SEED', 662607004))
-MAP_SIZE = int(os.environ.get('BITWRAP_DB_SIZE', 1048576000))
+REPO_ROOT = os.environ.get('LMDB_PATH', os.path.abspath(__file__ + '/../../'))
+MAX_DB = int(os.environ.get('REPO_MAX_DB', 10))
+XX_SEED = int(os.environ.get('HASH_SEED', 662607004))
+MAP_SIZE = int(os.environ.get('DB_SIZE', 1048576000))
 
 _POOL = {}
 

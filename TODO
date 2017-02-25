@@ -1,10 +1,10 @@
-Sat Feb 25 09:41:57 PST 2017
+Sat Feb 25 15:09:24 PST 2017
 
 WIP - fix bug with /stream
 
 BACKLOG:
 * running pylint
-* refactor _xml & _json to reduce code duplication
+* refactor _xml & _json to re-dup code
 * (for UI) - update pnml parser to retain graphics position information
 * Expand DSL to include oid and sender/target notation
 * Roadmap to colored coins see README.md
