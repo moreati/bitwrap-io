@@ -27,15 +27,17 @@ class Config(headers.Mixin, RequestHandler):
     def get(self, stage):
         """ direct web app to api """
 
+        # REVIEW: should we also include some vars like PNML_PATH etc? 
+        # database in use ? ( or a hash of it )
         self.write({
             'endpoint': "http://127.0.0.1:8080",
             'stage': stage
         })
 
-def factory():
-    """ cyclone app factory """
+def settings():
+    """ build settings hash from env vars """
 
-    settings = {
+    return {
         #github_client_id=os.environ.get('GITHUB_CLIENT_ID'),
         #github_secret=os.environ.get('GITHUB_SECRET'),
         # TODO: add github auth
@@ -46,7 +48,12 @@ def factory():
         'debug': True
     }
 
-    return cyclone.web.Application([
+def factory():
+    """ cyclone app factory """
+
+    _settings = settings()
+
+    handlers = [
         (r"/", Index),
         (r"/api", rpc.Handler),
         (r"/version", Version),
@@ -58,4 +65,6 @@ def factory():
         (r"/machine", machine.ListResource),
         (r"/head/(.*)/(.*)", event.HeadResource),
         (r"/stream/(.*)/(.*)", event.ListResource)
-    ], **settings)
+    ]
+
+    return cyclone.web.Application(handlers, **_settings)
