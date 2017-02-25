@@ -8,6 +8,8 @@ from cyclone.jsonrpc import JsonrpcRequestHandler
 from bitwrap_io.api import headers
 import bitwrap_io
 
+_STORAGE = os.environ.get('BITWRAP_DATASTORE', 'lmdb')
+
 class Handler(headers.Mixin, JsonrpcRequestHandler):
     """
     Invoke transform actions on PNML state machines
@@ -17,7 +19,7 @@ class Handler(headers.Mixin, JsonrpcRequestHandler):
         """ preview a state machine transformation"""
         self.set_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
 
-        return bitwrap_io.open(msg['schema']).preview(**msg)
+        return bitwrap_io.open(msg['schema'], backend=_STORAGE).preview(**msg)
 
     def jsonrpc_transform(self, msg):
         """ execute a state machine transformation"""

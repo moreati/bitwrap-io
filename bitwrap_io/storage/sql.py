@@ -50,13 +50,11 @@ class Storage(object):
         if repo_name in _POOL:
             self.db = _POOL[repo_name]
         else:
-            # TODO: conditionally open either LMDB or sql
             self.db = Datastore(repo_name, machine=self.state_machine)
             _POOL[repo_name] = self.db
 
 
 
-    # TODO: refactor to call mysql or lmdb commit
     def commit(self, req, dry_run=False):
         """ execute transition and persist to storage on success """
 

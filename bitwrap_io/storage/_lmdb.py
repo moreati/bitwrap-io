@@ -31,7 +31,7 @@ class Storage(object):
     @staticmethod
     def truncate(pattern='*.lmdb'):
         """ delete all lmdb folders """
-        for d in db_files(pattern):
+        for d in Storage.db_files(pattern):
             shutil.rmtree(d)
 
     @staticmethod
@@ -57,7 +57,7 @@ class Storage(object):
         else:
             return json.loads(val)
 
-    def __init__(self, repo_name):
+    def __init__(self, repo_name, state_machine):
         if _POOL.has_key(repo_name):
             self.db = _POOL[repo_name]
         else:
@@ -67,18 +67,20 @@ class Storage(object):
         self.state = self.open_db(repo_name, ':state')
         self.events = self.open_db(repo_name, ':events')
         self.transactions = self.open_db(repo_name, ':transactions')
+        self.state_machine = state_machine
 
 
-    def commit(self, state_machine, req, dry_run=False):
+    def commit(self, req, dry_run=False):
         """ execute transition and persist to storage on success """
 
         with self.db.begin(write=(not dry_run)) as txn:
             oid = self.encode_key(req['oid'])
-            state = self.unserialize(txn.get(oid, db=self.state)) or state_machine.machine['state']
+            state = self.unserialize(txn.get(oid, db=self.state)) or self.state_machine.machine['state']
             action = req['action']
 
-            transition = state_machine.machine['transitions'][action]
-            output = state_machine.vadd(state, transition['delta'])
+            transition = self.state_machine.machine['transitions'][action]
+
+            output = self.state_machine.vadd(state, transition['delta'])
 
             res = {
                 "oid": oid,
@@ -91,7 +93,7 @@ class Storage(object):
                 "error": 0
             }
 
-            if not state_machine.is_valid(output):
+            if not self.state_machine.is_valid(output):
                 dry_run = True
                 res["error"] = 1
 

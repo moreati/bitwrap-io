@@ -12,10 +12,10 @@ class StateMachine(object):
     State Machine object with persistent storage
     """
 
-    def __init__(self, schema, **kwargs):
+    def __init__(self, schema, backend='lmdb', syntax='json'):
         self.schema = schema.__str__()
-        self.machine = MachineFactory(**kwargs)(self.schema)
-        self.storage = StorageFactory(**kwargs)
+        self.machine = MachineFactory(syntax=syntax)(self.schema)
+        self.storage = StorageFactory(backend=backend)
 
     def __call__(self, **request):
         """ execute a transformation """

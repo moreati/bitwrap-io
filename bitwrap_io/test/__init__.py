@@ -10,7 +10,7 @@ from twisted.trial.unittest import TestCase
 from bitwrap_io.api import factory as ApiFactory
 import bitwrap_io.storage
 
-Storage = bitwrap_io.storage.factory(backend='sql')
+#SqlStorage = bitwrap_io.storage.factory(backend='sql')
 
 IFACE = '127.0.0.1'
 PORT = 8888
@@ -20,8 +20,7 @@ class ApiTest(TestCase):
 
     def setUp(self):
         """ recreate database and start tcp endpoint """
-        # TODO: may need to introduce StorageFactory
-        Storage.truncate()
+        #SqlStorage.truncate()
         self.service = internet.TCPServer(PORT, ApiFactory(), interface=IFACE)
         self.service.startService()
 

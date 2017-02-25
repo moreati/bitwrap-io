@@ -25,9 +25,14 @@ usage:
 import sys
 from bitwrap_io.state_machine import StateMachine
 
-def factory(schema, **kwargs):
+MACHINES = {}
+
+def factory(schema, backend='lmdb', syntax='json'):
     """ bitwrap_io module callable """
 
-    return StateMachine(schema, **kwargs)
+    if not schema in MACHINES:
+        MACHINES[schema] = StateMachine(schema, backend=backend, syntax=syntax)
+
+    return MACHINES[schema]
 
 open = factory
