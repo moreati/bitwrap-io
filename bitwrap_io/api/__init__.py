@@ -4,7 +4,7 @@ bitwrap_io.api - this module defines routes
 import os
 import cyclone.web
 from cyclone.web import RequestHandler
-from bitwrap_io.api import headers, rpc, pnml, state, machine, event
+from bitwrap_io.api import headers, rpc, pnml, machine, event
 
 VERSION = 'v3'
 
