@@ -26,21 +26,22 @@ def settings():
 def _hash(txt):
     return xxhash.xxh64(txt, seed=bitwrap_io.storage._lmdb.XX_SEED).hexdigest()
 
-
 class Resource(headers.Mixin, RequestHandler):
     """ config """
 
     def get(self, stage):
         """ direct web app to api """
+        
+        _db_files =  [ os.path.basename(f) for f in  bitwrap_io.storage._lmdb.Storage.db_files() ] 
 
         self.write({
             'endpoint': "http://127.0.0.1:8080",
             'stage': stage,
             'ENV': {
                 'LMDB_MAP_SIZE': bitwrap_io.storage._lmdb.MAP_SIZE,
-                'LMDB_PATH': bitwrap_io.storage._lmdb.REPO_ROOT,
                 'SQL_DB': rds_config.db_name,
-                'SQL_HOST': _hash(rds_config.rds_host)
+                'SQL_HOST': _hash(rds_config.rds_host),
+                'LMDB_DB': _db_files
             }
         })
 

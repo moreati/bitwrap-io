@@ -25,9 +25,13 @@ class Storage(object):
         return self.db.open_db(key)
 
     @staticmethod
+    def db_files(pattern='*.lmdb'):
+        return glob.glob(REPO_ROOT + '/' + pattern)
+
+    @staticmethod
     def truncate(pattern='*.lmdb'):
         """ delete all lmdb folders """
-        for d in glob.glob(REPO_ROOT + '/' + pattern):
+        for d in db_files(pattern):
             shutil.rmtree(d)
 
     @staticmethod
