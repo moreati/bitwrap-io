@@ -17,8 +17,14 @@ class StateMachine(object):
         self.machine = MachineFactory(**kwargs)(self.schema)
         self.storage = StorageFactory(**kwargs)
 
+    def __call__(self, **request):
+        """ execute a transformation """
+        return self.transform(**request)
+
     def session(self, request):
         """ start a session """
+        request['schema'] = self.schema
+
         return Transaction(
             request,
             machine=self.machine,
@@ -26,14 +32,13 @@ class StateMachine(object):
             StorageProvider=self.storage
         )
 
-    def transform(self, msg):
+    def transform(self, **request):
         """ execute a transformation """
-        return self.session(msg).commit()
+        return self.session(request).commit()
 
-    def preview(self, msg):
+    def preview(self, **request):
         """ simulate a transformation """
-        return self.session(msg).simulate()
-
+        return self.session(request).commit(dry_run=True)
 
 class Transaction(object):
     """ state machine transaction """
@@ -45,10 +50,6 @@ class Transaction(object):
         self.dry_run = None
         self.response = None
         self.storage = StorageProvider(self.schema, self.machine)
-
-    def simulate(self):
-        """ simulate transform and return cache values """
-        return self.commit(dry_run=True)
 
     def commit(self, dry_run=False):
         """ transform and persist state to storage """

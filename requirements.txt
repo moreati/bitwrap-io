@@ -6,3 +6,4 @@ ujson==1.35
 xxhash==0.6.1
 PyYAML==3.12
 PyMySQL==0.7.9
+#-e ./
