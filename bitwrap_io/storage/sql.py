@@ -19,6 +19,32 @@ def open_db(cfg):
         connect_timeout=5
     )
 
+def create_db(name='bitwrap', drop=False):
+    """ create/drop/recreate database """
+
+    conn = pymysql.connect(
+        rds_config.rds_host,
+        user=rds_config.db_username,
+        passwd=rds_config.db_password,
+        db='mysql',
+        connect_timeout=5
+    )
+
+    with conn.cursor() as txn:
+        if drop:
+            print 'recreating db: ' + name
+            txn.execute("DROP DATABASE IF EXISTS %s" % name)
+        else:
+            print 'creating db: ' + name
+
+        txn.execute("CREATE DATABASE %s" % name)
+        txn.execute("USE %s" % name)
+        txn.execute("CREATE TABLE `state` ( `schema` varchar(255) NOT NULL, `oid` varchar(255) NOT NULL, `vector` text, `head` varchar(255) DEFAULT NULL, PRIMARY KEY (`schema`, `oid`));")
+        txn.execute("CREATE TABLE `events` ( `id` int NOT NULL AUTO_INCREMENT, `oid` varchar(255), `schema` varchar(255), `eventid` varchar(255) NOT NULL, `body` text, `previous` varchar(255) DEFAULT NULL, PRIMARY KEY (`id`, `oid`, `schema`, `eventid`) );")
+
+    conn.commit()
+
+
 class Datastore:
 
     def __init__(self, name, conn=None, machine=None, txn=None):
@@ -142,24 +168,6 @@ class Events:
             return { 'events': result, 'oid': oid, 'schema': self.schema }
 
 
-#TODO: make database name configurable instead of hardcoding 'bitwrap'
 if __name__ == '__main__':
 
-    print 'migrating database'
-
-    conn = pymysql.connect(
-        rds_config.rds_host,
-        user=rds_config.db_username,
-        passwd=rds_config.db_password,
-        db='mysql',
-        connect_timeout=5
-    )
-
-    with conn.cursor() as txn:
-        #txn.execute("DROP DATABASE bitwrap")
-        txn.execute("CREATE DATABASE bitwrap")
-        txn.execute("use bitwrap ; CREATE TABLE `state` ( `schema` varchar(255) NOT NULL, `oid` varchar(255) NOT NULL, `vector` text, `head` varchar(255) DEFAULT NULL, PRIMARY KEY (`schema`, `oid`));")
-        txn.execute("use bitwrap ; CREATE TABLE `events` ( `id` int NOT NULL AUTO_INCREMENT, `oid` varchar(255), `schema` varchar(255), `eventid` varchar(255) NOT NULL, `body` text, `previous` varchar(255) DEFAULT NULL, PRIMARY KEY (`id`, `oid`, `schema`, `eventid`) );")
-
-    conn.commit()
-
+    create_db('bitwrap', drop=True)

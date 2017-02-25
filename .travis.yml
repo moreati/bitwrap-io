@@ -3,7 +3,7 @@ python:
 - '2.7'
 env: PYTHONPATH=./
 script:
-- trial bitwrap_pnml.test
+- ./.travis.sh && trial bitwrap_io
 deploy:
   provider: pypi
   user: stackdump
