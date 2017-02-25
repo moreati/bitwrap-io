@@ -10,3 +10,5 @@ write 'db_username = "travis"'
 write 'db_password = ""'
 write 'db_name = "bitwrap"'
 write 'rds_host = "127.0.0.1"'
+
+python -m bitwrap_io.storage.sql

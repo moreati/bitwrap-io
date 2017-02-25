@@ -1,9 +1,14 @@
 language: python
 python:
 - '2.7'
-env: PYTHONPATH=./
+env:
+- PYTHONPATH=./
+services:
+- mysql
+before_script:
+- ./.travis.sh
 script:
-- ./.travis.sh && trial bitwrap_io
+- trial bitwrap_io
 deploy:
   provider: pypi
   user: stackdump
