@@ -24,11 +24,12 @@ class Version(headers.Mixin, RequestHandler):
 class Config(headers.Mixin, RequestHandler):
     """ config """
 
-    def get(self):
+    def get(self, stage):
         """ direct web app to api """
 
         self.write({
-            'endpoint': "http://127.0.0.1:8080"
+            'endpoint': "http://127.0.0.1:8080",
+            'stage': stage
         })
 
 def factory():

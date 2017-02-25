@@ -1,20 +1,26 @@
 """
-bitwrap_io
+bitwrap-io - this module is the eventstore factory
+
+usage:
+
+    #!/usr/bin/env python
+    import bitwrap_io
+    state_machine = bitwrap_io('counter', backend='mysql')
+    ...
+
 """
 
-import os
-import sys
-from bitwrap_io.state_machine import StateMachine
-import bitwrap_io.machine
+class ModelFactory(object):
+    """ Make bitwrap_io module callable """
 
-def get(schema):
-    """ load by schema name """
-    return StateMachine(schema)
+    def __call__(backend='mysql'):
+        """ factory method """
 
-def put(schema, json_data):
-    """ upload json """
-    bitwrap_io.machine.write_schema(schema, json_data)
+        return StateMachine(schema, backend=datastore)
 
-def rm(schema):
-    """ remove json """
-    bitwrap_io.machine.rm_schema(schema)
+        if backend == 'mysql':
+            return sql.Storage
+         else:
+            return _lmdb.Storage
+
+sys.modules[__name__] = ModelFactory()

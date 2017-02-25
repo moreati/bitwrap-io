@@ -1,6 +1,7 @@
 """
 bitwrap_pnml.storage - provide state machine storage using lmdb
 """
+
 import os
 import glob
 import shutil
@@ -15,7 +16,6 @@ MAP_SIZE = int(os.environ.get('BITWRAP_DB_SIZE', 1048576000))
 
 _POOL = {}
 
-# pylint: disable=E1103
 class Storage(object):
     """ lmdb Storage provider """
 
@@ -110,5 +110,3 @@ class Storage(object):
     def fetch(self, key, db_key='state'):
         """ fetch and load json """
         return self.unserialize(self.fetch_str(key, db_name=db_key))
-
-# pylint: enable=E1103

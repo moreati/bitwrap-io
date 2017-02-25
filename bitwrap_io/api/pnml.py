@@ -19,7 +19,7 @@ class ListResource(headers.Mixin, RequestHandler):
 
 class Resource(headers.Mixin, RequestHandler):
     """
-    REST for PNML
+    View for PNML
     """
 
     def get(self, name):
@@ -29,7 +29,3 @@ class Resource(headers.Mixin, RequestHandler):
             self.write(bitwrap_io.get(name).machine.net.xml)
         except:
             self.set_status(404)
-
-    def post(self, name):
-        """ update schema xml """
-        bitwrap_io.put(name, self.request.body)

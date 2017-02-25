@@ -2,10 +2,11 @@
 return statevectors
 """
 from cyclone.web import RequestHandler
-from bitwrap_io.storage import Storage
+import bitwrap_io.storage
 from bitwrap_io.api import headers
 import bitwrap_io
 
+Storage = bitwrap_io.storage.factory(backend='mysql')
 
 class Resource(headers.Mixin, RequestHandler):
     """ index """

@@ -1,8 +1,10 @@
-Fri Feb 24 09:57:26 PST 2017
+Sat Feb 25 09:41:57 PST 2017
 
-WIP - refactor api module to better match up to AWS lambda event handler style
+WIP - fix bug with /stream
 
 BACKLOG:
+* running pylint
+* refactor _xml & _json to reduce code duplication
 * (for UI) - update pnml parser to retain graphics position information
 * Expand DSL to include oid and sender/target notation
 * Roadmap to colored coins see README.md

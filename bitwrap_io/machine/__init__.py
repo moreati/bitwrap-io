@@ -1,12 +1,14 @@
 """
-bitwrap_io machine
-
-build a state machine model from Petri-net markup language
+bitwrap_io.machine
 """
 
 from bitwrap_io.machine import pnml, _json
 
-def factory(syntax='json'):
+def factory(syntax='json', **kwargs):
+    """
+    build a state machine model from Petri-net markup language
+    """
+
     if syntax == 'json':
         return _json.Machine
     else:

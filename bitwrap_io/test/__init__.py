@@ -4,11 +4,13 @@ run tests against a webserver running in the same reactor
 NOTE: this test uses port 8888 on localhost
 """
 
+import cyclone.httpclient
 from twisted.application import internet
 from twisted.trial.unittest import TestCase
-import cyclone.httpclient
-from bitwrap_io.storage import Storage
 from bitwrap_io.api import factory as ApiFactory
+import bitwrap_io.storage
+
+Storage = bitwrap_io.storage.factory(backend='sql')
 
 IFACE = '127.0.0.1'
 PORT = 8888
@@ -18,6 +20,7 @@ class ApiTest(TestCase):
 
     def setUp(self):
         """ recreate database and start tcp endpoint """
+        # TODO: may need to introduce StorageFactory
         Storage.truncate()
         self.service = internet.TCPServer(PORT, ApiFactory(), interface=IFACE)
         self.service.startService()
@@ -28,7 +31,7 @@ class ApiTest(TestCase):
         
     @staticmethod
     def url(resource):
-        """ bulid a url for test endpoint """
+        """ bulid a url using test endpoint """
         return 'http://%s:%s/%s' % (IFACE, PORT, resource)
 
     @staticmethod

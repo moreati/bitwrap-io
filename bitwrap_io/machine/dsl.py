@@ -1,7 +1,7 @@
 """
-dsl - module contains methods to help load a machine.
+dsl - methods for constructing a bitwrap schema
 
-bitwrap_io._xml uses PNML as a "Domain Specific Language" (DSL) to define a bitwrap machine
+Uses Petri-Net Markup as a "Domain Specific Language" (DSL) to define a bitwrap machine.
 
 """
 
@@ -9,6 +9,7 @@ from bitwrap_io.machine._xml import Transition, Place
 
 def append_roles(net):
     """ build roles from edge list """
+
     for edge in net.edges:
         if edge.inhibitor and ('_role' in edge.source):
             role_name = edge.source.replace('_role', '')
@@ -19,13 +20,14 @@ def append_roles(net):
             edge.role = role_name # set required role
 
 def places(net):
-    """ build place vector """
+    """ build place vector definition """
+
     _places = {}
     offset = 0
 
     for place in net.places:
 
-        # KLUDGE: refactor these conventions to be more explicit
+        # KLUDGE: refactor 'role' conventions to be more explicit
         if not '_role' in place:
             _places[place] = {
                 'offset': offset,
@@ -43,6 +45,7 @@ def empty_vector(size):
 
 def transitions(net, net_places):
     """ build set of transitions from network """
+
     _transitions = {}
 
     for action in net.transitions:
@@ -52,6 +55,7 @@ def transitions(net, net_places):
 
 def apply_edges(net, net_places, net_transitions):
     """ re-index edges and places """
+
     for edge in net.edges:
         source = edge.find_source()
         target = edge.find_target()
