@@ -17,7 +17,7 @@ class Resource(headers.Mixin, RequestHandler):
             m = bitwrap_io.open(schema)
             key = m.storage.encode_key(eventid)
             stor = m.storage.encode_key(schema)
-            storage = m.storage.open(stor, m)
+            storage = m.storage(stor, m)
 
              # FIXME: fetch_str isn't interchangable b/t sql and lmdb storage providers
             res = storage.fetch_str(key, db_name='events')
@@ -40,7 +40,7 @@ class HeadResource(headers.Mixin, RequestHandler):
         m = bitwrap_io.open(schema)
         key = m.storage.encode_key(oid)
         stor = m.storage.encode_key(schema)
-        storage = m.storage.open(stor, m)
+        storage = m.storage(stor, m)
 
         # FIXME: fetch_str isn't interchangable b/t sql and lmdb storage providers
         head_event = storage.fetch_str(key, db_name='transactions')
@@ -92,7 +92,7 @@ class ListResource(headers.Mixin, RequestHandler):
         m = bitwrap_io.open(schema)
         key = m.storage.encode_key(oid)
         stor = m.storage.encode_key(schema)
-        storage = m.storage.open(stor, m)
+        storage = m.storage(stor, m)
 
         # FIXME
         head_event = storage.fetch_str(key, db_name='transactions')

@@ -37,7 +37,7 @@ class EventTest(ApiTest):
         --+--+--
         20|21|22
 
-    string: '[X|O][0-2][0-2]'
+    string: '(X|O)[0-2][0-2]'
     to specify token placment
     --------------------------
     move('X11')
@@ -125,7 +125,7 @@ class EventTest(ApiTest):
             d.addCallback( test_response )
 
         def test_prev(i):
-            """ test head event """
+            """ test event has previous"""
 
             def _test(obj):
               print "\n* event -", i

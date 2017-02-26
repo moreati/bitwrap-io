@@ -7,7 +7,7 @@ import glob
 import shutil
 import lmdb
 import xxhash
-import ujson as json
+from bitwrap_io.storage import base
 
 REPO_ROOT = os.environ.get('LMDB_PATH', os.path.abspath(__file__ + '/../../'))
 MAX_DB = int(os.environ.get('REPO_MAX_DB', 10))
@@ -16,7 +16,7 @@ MAP_SIZE = int(os.environ.get('DB_SIZE', 1048576000))
 
 _POOL = {}
 
-class Storage(object):
+class Storage(base.Storage):
     """ lmdb Storage provider """
 
     def open_db(self, base_name, label):
@@ -33,29 +33,6 @@ class Storage(object):
         """ delete all lmdb folders """
         for d in Storage.db_files(pattern):
             shutil.rmtree(d)
-
-    @staticmethod
-    def open(repo_name, state_machine):
-        """ open storage db """
-        return Storage(repo_name, state_machine)
-
-    @staticmethod
-    def encode_key(input_str):
-        """ make sure keys are safe for lmdb """
-        return input_str.encode('latin-1')
-
-    @staticmethod
-    def serialize(val):
-        """ unserialize json from lmdb """
-        return json.dumps(val)
-
-    @staticmethod
-    def unserialize(val):
-        """ unserialize json from lmdb """
-        if val is None:
-            return None
-        else:
-            return json.loads(val)
 
     def __init__(self, repo_name, state_machine):
         if _POOL.has_key(repo_name):
