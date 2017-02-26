@@ -69,11 +69,13 @@ NOTE: LMDB is not supported when deploying to lambda due to local filesystem res
   * create a python script called rds_config.py
   * and make sure you add it to your python library
 
-    # ./rds_config.py
-    db_username = "bitwrap"
-    db_password = "5eGPelW8r8ea"
-    db_name = "bitwrap" 
-    rds_host  = "bitwrap-prod01.cplrgtpb61fz.us-east-1.rds.amazonaws.com"
+````
+# ./rds_config.py
+db_username = "bitwrap"
+db_password = "5eGPelW8r8ea"
+db_name = "bitwrap" 
+rds_host  = "bitwrap-prod01.cplrgtpb61fz.us-east-1.rds.amazonaws.com"
+````
 
 ### run
 

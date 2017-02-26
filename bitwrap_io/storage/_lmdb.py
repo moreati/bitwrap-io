@@ -50,29 +50,22 @@ class Datastore(object):
         self.txn = txn
 
     def rollback(self):
+        # FIXME
         pass
     
     def commit(self):
+        # FIXME
         pass
 
     def open_db(self, base_name, label):
         """ open sub-db """
-        key = base_name + label
+        key = base_name + ':' + label
         return self.conn.open_db(key)
 
 
     def cursor(self, dry_run=False):
         self.txn = self.conn.begin(write=(not dry_run))
         return self.txn
-
-    def fetch_str(self, key, db_name='state'):
-        """ fetch raw json string from address keystore"""
-        with self.conn.begin(write=False) as txn:
-            return txn.get(key, db=getattr(self, db_name))
-
-    def fetch(self, key, db_key='state'):
-        """ fetch and load json """
-        return self.unserialize(self.fetch_str(key, db_name=db_key))
 
 
 class State:
@@ -82,16 +75,24 @@ class State:
     def __init__(self, store):
         self.store = store
         self.table = store.open_db(store.schema, ':state')
-        self.schema = self.store.schema
 
     def get(self, oid):
-        return store.txn.get(oid, db=self.table)
+
+        return {
+            'oid': oid,
+            'head': self.head(oid),
+            'vector': self.vector(oid),
+            'schema': self.store.schema
+        }
 
     def put(self, oid, vector=[], head=None):
-        pass
+        if head:
+            self.store.txn.put(oid, head, db=self.store.transactions.table)
 
-    def head(self, oid, vector=[], prev=None):
-        pass
+        return self.store.txn.put(oid, Storage.serialize(vector), db=self.table)
+
+    def head(self, oid):
+        return self.store.txn.get(oid, db=self.store.transactions.table)
 
     def vector(self, oid):
         rec = self.store.txn.get(oid, db=self.table)
@@ -99,7 +100,7 @@ class State:
         if rec  is None:
             return self.store.state_machine.machine['state']
         else:
-            return self.unserialize(rec[0])
+            return Storage.unserialize(rec)
 
 class Transactions:
     """
@@ -108,10 +109,6 @@ class Transactions:
     def __init__(self, store):
         self.store = store
         self.table = store.open_db(store.schema, ':transactions')
-        self.schema = self.store.schema
-
-    def get(self, oid):
-        pass
 
 class Events:
     """
@@ -120,7 +117,6 @@ class Events:
     def __init__(self, store):
         self.store = store
         self.table = store.open_db(store.schema, ':events')
-        self.schema = self.store.schema
 
     def put(self, eventid, body, prev):
         pass

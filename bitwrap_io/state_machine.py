@@ -15,26 +15,16 @@ class StateMachine(object):
     def __init__(self, schema, backend=None, syntax=None):
         self.schema = schema.__str__()
         self.machine = MachineFactory(syntax=syntax)(self.schema)
-        self.storage = StorageFactory(backend=backend)
+        self.storage = StorageFactory(backend=backend)(self.schema, self.machine)
 
     def __call__(self, **request):
         """ execute a transformation """
-        return self.transform(**request)
+        return self.session(request).commit()
 
     def session(self, request):
         """ start a session """
         request['schema'] = self.schema
-
-        return Transaction(
-            request,
-            machine=self.machine,
-            schema=self.schema,
-            StorageProvider=self.storage
-        )
-
-    def transform(self, **request):
-        """ execute a transformation """
-        return self.session(request).commit()
+        return Transaction( request, schema=self.schema, machine=self.machine, storage=self.storage)
 
     def preview(self, **request):
         """ simulate a transformation """
@@ -43,13 +33,13 @@ class StateMachine(object):
 class Transaction(object):
     """ state machine transaction """
 
-    def __init__(self, request, schema=None, machine=None, StorageProvider=None):
+    def __init__(self, request, schema=None, machine=None, storage=None):
         self.schema = schema
         self.request = request
         self.machine = machine
+        self.storage = storage
         self.dry_run = None
         self.response = None
-        self.storage = StorageProvider(self.schema, self.machine)
 
     def commit(self, dry_run=False):
         """ transform and persist state to storage """

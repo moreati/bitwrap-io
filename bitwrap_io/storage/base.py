@@ -22,8 +22,6 @@ class Storage(object):
         if val is None or val == '':
             return None
         else:
-            print '__VAL__'
-            print val
             return json.loads(val)
 
     @staticmethod
