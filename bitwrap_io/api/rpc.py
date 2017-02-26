@@ -8,7 +8,6 @@ from cyclone.jsonrpc import JsonrpcRequestHandler
 from bitwrap_io.api import headers
 import bitwrap_io
 
-_STORAGE = os.environ.get('BITWRAP_DATASTORE', 'lmdb')
 
 class Handler(headers.Mixin, JsonrpcRequestHandler):
     """

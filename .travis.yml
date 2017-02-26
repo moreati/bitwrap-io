@@ -8,7 +8,8 @@ services:
 before_script:
 - ./.travis.sh
 script:
-- trial bitwrap_io
+- BITWRAP_DATASTORE=lmdb trial bitwrap_io
+- BITWRAP_DATASTORE=mysql trial bitwrap_io
 deploy:
   provider: pypi
   user: stackdump

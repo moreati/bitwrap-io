@@ -27,7 +27,7 @@ from bitwrap_io.state_machine import StateMachine
 
 MACHINES = {}
 
-def factory(schema, backend='lmdb', syntax='json'):
+def factory(schema, backend=None, syntax=None):
     """ bitwrap_io module callable """
 
     if not schema in MACHINES:
