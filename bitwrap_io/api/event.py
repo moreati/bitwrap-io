@@ -7,9 +7,6 @@ from bitwrap_io.api import headers
 import bitwrap_io
 import ujson as json
 
-Storage = bitwrap_io.storage.factory(backend='mysql')
-
-
 class Resource(headers.Mixin, RequestHandler):
     """ index """
 
@@ -17,10 +14,11 @@ class Resource(headers.Mixin, RequestHandler):
         """ return event json """
 
         try:
-            bitwrap_io.open(schema)
-            key = Storage.encode_key(eventid)
-            stor = Storage.encode_key(schema)
-            res = Storage.open(stor).fetch_str(key, db_name='events')
+            m = bitwrap_io.open(schema)
+            key = m.storage.encode_key(eventid)
+            stor = m.storage.encode_key(schema)
+            storage = m.storage.open(stor, m)
+            res = storage.fetch_str(key, db_name='events')
             
             if res:
                 self.write('{ "event": ' + res + ', "id": "' + eventid +'" }')
@@ -38,10 +36,10 @@ class HeadResource(headers.Mixin, RequestHandler):
         """ return event json """
 
         try:
-            bitwrap_io.open(schema)
-            key = Storage.encode_key(oid)
-            stor = Storage.encode_key(schema)
-            storage = Storage.open(stor)
+            m = bitwrap_io.open(schema)
+            key = m.storage.encode_key(oid)
+            stor = m.storage.encode_key(schema)
+            storage = m.storage.open(stor, m)
             head_event = storage.fetch_str(key, db_name='transactions')
 
             res = storage.fetch_str(head_event, db_name='events')
@@ -63,7 +61,7 @@ class ListResource(headers.Mixin, RequestHandler):
         events=[]
 
         def _get_event(eventid):
-            key = Storage.encode_key(eventid)
+            key = storage.encode_key(eventid)
             evt = storage.fetch(key, db_key='events')
             if evt is None:
                 return None
@@ -91,10 +89,10 @@ class ListResource(headers.Mixin, RequestHandler):
     def get(self, schema, oid):
         """ return event json """
 
-        assert bitwrap_io.open(schema)
-        key = Storage.encode_key(oid)
-        stor = Storage.encode_key(schema)
-        storage = Storage.open(stor)
+        m = bitwrap_io.open(schema)
+        key = m.storage.encode_key(oid)
+        stor = m.storage.encode_key(schema)
+        storage = m.storage.open(stor, m)
 
         head_event = storage.fetch_str(key, db_name='transactions')
 

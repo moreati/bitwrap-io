@@ -35,9 +35,9 @@ class Storage(object):
             shutil.rmtree(d)
 
     @staticmethod
-    def open(repo_name):
+    def open(repo_name, state_machine):
         """ open storage db """
-        return Storage(repo_name)
+        return Storage(repo_name, state_machine)
 
     @staticmethod
     def encode_key(input_str):
