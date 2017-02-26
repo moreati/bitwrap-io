@@ -79,9 +79,9 @@ class EventTest(ApiTest):
 
         def test_transform(res, action):
 
+            print "\n", json.dumps(res)
             self.assertEqual(res['event']['error'], seq[action][1])
             self.assertEqual(res['event']['state'], seq[action][0])
-            print "\n", json.dumps(res)
 
         def test_sequence(seq):
             """ generate a valid event stream """

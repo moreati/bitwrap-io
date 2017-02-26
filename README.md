@@ -9,12 +9,13 @@ A blockchain-style eventstore.
 Developing Web App - http://bitwrap.github.io 
 
 * completed components and prototypes
-   * [stackdump/marble](https://github.com/stackdump/marble)
-   * [stackdump/marble-ui](https://github.com/stackdump/marble-ui)
-   * [stackdump/bitwrap-pnml](https://github.com/stackdump/bitwrap-pnml)
-   * [stackdump/lambda-test](https://github.com/stackdump/lambda-test)
-   * [bitwrap/bitwrap-lambda](https://github.com/bitwrap/bitwrap-lambda)
-   * [bitwrap/wrapserver](https://github.com/bitwrap/wrapserver)
+   * [stackdump/marble](https://github.com/stackdump/marble) - use bitwrap with keen.io
+   * [stackdump/marble-ui](https://github.com/stackdump/marble-ui) - a single page web-app
+   * [stackdump/bitwrap-pnml](https://github.com/stackdump/bitwrap-pnml) - an eventstore prototype based solely on PNML
+   * [stackdump/lambda-test](https://github.com/stackdump/lambda-test) - test deploying bitwrap-lambda to AWS lambda
+   * [bitwrap/bitwrap-lambda](https://github.com/bitwrap/bitwrap-lambda) - bitwrap with sql backend suitable for lambda
+   * [bitwrap/wrapserver](https://github.com/bitwrap/wrapserver) - npm module for rendering state-machines as .svg images
+   * [gitwrap-dot-com/gitwrap-io](https://github.com/gitwrap-dot-com/gitwrap-io) - bitwrap using git commit messages as an eventstore
 
 
 ### Roadmap
@@ -69,7 +70,6 @@ NOTE: LMDB is not supported when deploying to lambda due to local filesystem res
   * and make sure you add it to your python library
 
     # ./rds_config.py
-
     db_username = "bitwrap"
     db_password = "5eGPelW8r8ea"
     db_name = "bitwrap" 

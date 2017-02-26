@@ -20,7 +20,6 @@ class ApiTest(TestCase):
 
     def setUp(self):
         """ recreate database and start tcp endpoint """
-        #SqlStorage.truncate()
         self.service = internet.TCPServer(PORT, ApiFactory(), interface=IFACE)
         self.service.startService()
 
