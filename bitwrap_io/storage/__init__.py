@@ -17,3 +17,5 @@ def factory(backend=None):
         return sql.Storage
     elif backend == 'lmdb':
         return _lmdb.Storage
+
+    raise Exception('invalid backend')

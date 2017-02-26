@@ -18,6 +18,8 @@ class Resource(headers.Mixin, RequestHandler):
             key = m.storage.encode_key(eventid)
             stor = m.storage.encode_key(schema)
             storage = m.storage.open(stor, m)
+
+             # FIXME: fetch_str isn't interchangable b/t sql and lmdb storage providers
             res = storage.fetch_str(key, db_name='events')
             
             if res:
@@ -35,23 +37,21 @@ class HeadResource(headers.Mixin, RequestHandler):
     def get(self, schema, oid):
         """ return event json """
 
-        try:
-            m = bitwrap_io.open(schema)
-            key = m.storage.encode_key(oid)
-            stor = m.storage.encode_key(schema)
-            storage = m.storage.open(stor, m)
-            head_event = storage.fetch_str(key, db_name='transactions')
+        m = bitwrap_io.open(schema)
+        key = m.storage.encode_key(oid)
+        stor = m.storage.encode_key(schema)
+        storage = m.storage.open(stor, m)
 
-            res = storage.fetch_str(head_event, db_name='events')
-            
-            if res:
-                self.write('{ "event": ' + res + ', "id": "' + head_event +'" }')
-                return
-        except:
-            pass
+        # FIXME: fetch_str isn't interchangable b/t sql and lmdb storage providers
+        head_event = storage.fetch_str(key, db_name='transactions')
 
-        self.write({ 'event': None })
-        self.set_status(404)
+        res = storage.fetch_str(head_event, db_name='events')
+        
+        if res:
+            self.write('{ "event": ' + res + ', "id": "' + head_event +'" }')
+        else:
+            self.write({ 'event': None })
+            self.set_status(404)
 
 class ListResource(headers.Mixin, RequestHandler):
     """ index """
@@ -94,6 +94,7 @@ class ListResource(headers.Mixin, RequestHandler):
         stor = m.storage.encode_key(schema)
         storage = m.storage.open(stor, m)
 
+        # FIXME
         head_event = storage.fetch_str(key, db_name='transactions')
 
         if head_event:

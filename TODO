@@ -1,8 +1,9 @@
-Sat Feb 25 15:09:24 PST 2017
+Sun Feb 26 00:05:38 PST 2017
 
-WIP - fix bug with /stream
+WIP - fix refactor lmdb storage to be more similar to theh sql storage
 
 BACKLOG:
+* fix remaining issues when switching between storage providers
 * running pylint
 * refactor _xml & _json to re-dup code
 * (for UI) - update pnml parser to retain graphics position information

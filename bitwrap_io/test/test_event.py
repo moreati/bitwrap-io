@@ -29,16 +29,16 @@ class EventTest(ApiTest):
 
         def test_response(res):
             """ test event response """
+            print "\n", res.body
             self.assertEquals(res.code, 200)
             obj = json.loads(res.body)
-            #print "\n", obj
             return obj
 
         def test_transform(res, action):
 
             self.assertEqual(res['event']['error'], 0)
             self.assertEqual(res['event']['state'], seq[action])
-            #print "\n", json.dumps(res)
+            print "\n", json.dumps(res)
 
         def test_sequence():
             """ generate a valid event stream """
@@ -73,8 +73,8 @@ class EventTest(ApiTest):
             d.addCallback( test_response )
 
         test_sequence()
-        test_stream()
         test_head()
+        test_stream()
 
         d.callback(None)
         return d
