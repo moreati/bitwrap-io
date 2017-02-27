@@ -20,7 +20,7 @@ class Version(headers.Mixin, RequestHandler):
 
     def get(self):
         """ report api version """
-        self.write({ __name__: VERSION})
+        self.write({__name__: VERSION})
 
 def factory():
     """ cyclone app factory """

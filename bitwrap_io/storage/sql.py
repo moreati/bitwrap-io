@@ -4,14 +4,10 @@ bitwrap_io.storage.sql - statevector storage using mysql
 NOTE: this module expects the db config to be in a module called rds_config
 """
 
-import os
 import base64
-import glob
-import xxhash
 import json
 import pymysql
 from bitwrap_io.storage import base
-
 import rds_config # get db creds
 
 _POOL = {}
@@ -99,24 +95,28 @@ class Datastore(object):
         self.txn = txn
 
     def cursor(self):
+        """ open db transaction """
         self.txn = self.conn.cursor()
         return self.txn
 
     def commit(self):
+        """ commit txn """
         pass
 
     def rollback(self):
+        """ rollback txn """
         pass
 
 class State(object):
-    """ StateModel get and set state by oid """
+    """ Model """
 
     def __init__(self, store):
+
         self.store = store
         self.schema = self.store.schema
 
     def put(self, oid, vector=None, head=None):
-        """ """
+        """ write """
 
         if head is None:
             head = 'null'
@@ -141,7 +141,7 @@ class State(object):
         return res
 
     def head(self, oid):
-        """ """
+        """ read head """
 
         sql = """
         SELECT `head` FROM bitwrap.state
@@ -156,28 +156,30 @@ class State(object):
             return self.store.txn.fetchone()[0]
 
     def vector(self, oid):
-        """ """
+        """ get state vector """
 
         sql = """
         SELECT `vector` FROM bitwrap.state
         WHERE `oid` = "%s" AND `schema` = "%s"
         """
 
-        if 0 == self.store.txn.execute(sql % (oid, self.schema)):
+        res = self.store.txn.execute(sql % (oid, self.schema))
+        if res == 0:
             return self.store.state_machine.machine['state']
         else:
             rec = self.store.txn.fetchone()
             return json.loads(rec[0])
 
     def get(self, oid):
-        """ """
+        """ get state record"""
 
         sql = """
         SELECT `oid`, `vector`, `head` FROM bitwrap.state
         WHERE `oid` = "%s" AND `schema` = "%s"
         """
 
-        if 0 == self.store.txn.execute(sql % (oid, self.schema)):
+        res = self.store.txn.execute(sql % (oid, self.schema))
+        if res == 0:
             # use default state
             return self.store.state_machine.machine['state']
         else:
@@ -190,15 +192,15 @@ class State(object):
                 'schema': self.schema
             }
 
-class Events:
-    """ """
+class Events(object):
+    """ Model """
 
     def __init__(self, store):
         self.store = store
         self.schema = self.store.schema
 
     def put(self, eventid, body, prev):
-        """ """
+        """ write event """
         oid = body.get('oid', None)
         body = base64.b64encode(json.dumps(body))
 
@@ -209,14 +211,15 @@ class Events:
         return self.store.txn.execute(sql % (oid, self.schema, eventid, body, prev))
 
     def get(self, eventid):
-        """ """
+        """ get event by id """
 
         sql = """
         SELECT `body`, `id` FROM bitwrap.events
         WHERE `eventid` = "%s" and `schema` = "%s"
         """
 
-        if 0 == self.store.txn.execute(sql % (eventid, self.schema)):
+        res = self.store.txn.execute(sql % (eventid, self.schema))
+        if res == 0:
             return {'id': None, 'event': {}, 'schema': self.schema, 'seq': None}
         else:
             rec = self.store.txn.fetchone()
@@ -229,14 +232,15 @@ class Events:
             }
 
     def list(self, oid):
-        """ """
+        """ read complete stream """
 
         sql = """
         SELECT `body`, `eventid`, `id` FROM bitwrap.events
         WHERE `oid` = "%s" and `schema` = "%s" ORDER BY id DESC
         """
 
-        if 0 == self.store.txn.execute(sql % (oid, self.schema)):
+        res = self.store.txn.execute(sql % (oid, self.schema))
+        if res == 0:
             return {'events': []}
         else:
             result = []

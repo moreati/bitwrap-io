@@ -10,7 +10,7 @@ import ujson as json
 class Resource(headers.Mixin, RequestHandler):
     """ /event/{schema}/{eventid} """
 
-    def get(self, schema, key):
+    def get(self, schema, key, *args):
         """ get event by eventid """
 
         m = bitwrap_io.open(schema)
@@ -23,7 +23,7 @@ class Resource(headers.Mixin, RequestHandler):
 class HeadResource(headers.Mixin, RequestHandler):
     """ /head/{schema}/{oid} """
 
-    def get(self, schema, key):
+    def get(self, schema, key, *args):
         """ get head event by oid"""
 
         m = bitwrap_io.open(schema)
@@ -37,7 +37,7 @@ class HeadResource(headers.Mixin, RequestHandler):
 class ListResource(headers.Mixin, RequestHandler):
     """ /stream/{schema}/{oid} """
 
-    def get(self, schema, key):
+    def get(self, schema, key, *args):
         """ return event stream """
         m = bitwrap_io.open(schema)
         oid = m.storage.encode_key(key)

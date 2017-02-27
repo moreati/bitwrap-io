@@ -14,7 +14,6 @@ def settings():
     return {
         #github_client_id=os.environ.get('GITHUB_CLIENT_ID'),
         #github_secret=os.environ.get('GITHUB_SECRET'),
-        # TODO: add github auth
         #login_url="/auth/login",
         #xsrf_cookies=True, # REVIEW: is this usable w/ rpc ?
         'cookie_secret': os.environ.get('COOKIE_SECRET', ''),
@@ -26,10 +25,10 @@ def settings():
 class Resource(headers.Mixin, RequestHandler):
     """ config """
 
-    def get(self, stage):
+    def get(self, stage, *args):
         """ direct web app to api """
-        
-        _db_files =  [ os.path.basename(f) for f in  _lmdb.Storage.db_files() ] 
+
+        _db_files = [os.path.basename(f) for f in _lmdb.Storage.db_files()]
 
         self.write({
             'endpoint': "http://127.0.0.1:8080",
@@ -41,4 +40,3 @@ class Resource(headers.Mixin, RequestHandler):
                 'LMDB_DB': _db_files
             }
         })
-

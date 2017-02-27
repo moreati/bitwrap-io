@@ -3,7 +3,6 @@ bitwrap_io.api
 
 this module defines a json-rpc api using cyclone.io
 """
-import os
 from cyclone.jsonrpc import JsonrpcRequestHandler
 from bitwrap_io.api import headers
 import bitwrap_io

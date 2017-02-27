@@ -23,6 +23,10 @@ class Machine(object):
 class PTNet(object):
     """ p/t net """
 
+    def __init__(self):
+        self.places = None
+        self.transitions = None
+
     def empty_vector(self):
         """ return an empty state-vector """
         return [0] * len(self.places)
@@ -42,4 +46,3 @@ class PTNet(object):
             state_vector = self.inital_vector()
 
         return {'state': state_vector, 'transitions': self.transitions}
-

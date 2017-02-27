@@ -4,7 +4,6 @@ bitwrap_pnml.storage - provide state machine storage using lmdb
 
 import os
 import glob
-import shutil
 import lmdb
 from bitwrap_io.storage import base
 
@@ -15,10 +14,11 @@ MAP_SIZE = int(os.environ.get('DB_SIZE', 1048576000))
 _POOL = {}
 
 class Storage(base.Storage):
-    """ lmdb Storage provider """
+    """ lmdb.Storage """
 
     @staticmethod
     def db_files(pattern='*.lmdb'):
+        """ list all lmdb files """
         return glob.glob(REPO_ROOT + '/' + pattern)
 
     def __init__(self, repo_name, state_machine):
@@ -31,6 +31,7 @@ class Storage(base.Storage):
             _POOL[repo_name] = self.db
 
 class Datastore(object):
+    """ lmdb.Datastore """
 
     def __init__(self, name, conn=None, machine=None, txn=None):
         if not conn:
@@ -50,11 +51,11 @@ class Datastore(object):
         self.txn = txn
 
     def rollback(self):
-        # FIXME
+        """ rollback txn """
         pass
-    
+
     def commit(self):
-        # FIXME
+        """ commit txn """
         pass
 
     def open_db(self, base_name, label):
@@ -64,19 +65,20 @@ class Datastore(object):
 
 
     def cursor(self, dry_run=False):
+        """ start db transaction """
         self.txn = self.conn.begin(write=(not dry_run))
         return self.txn
 
 
-class State:
-    """
-    """
+class State(object):
+    """ lmdb.State"""
 
     def __init__(self, store):
         self.store = store
         self.table = store.open_db(store.schema, ':state')
 
     def get(self, oid):
+        """ read state """
 
         return {
             'oid': oid,
@@ -85,16 +87,19 @@ class State:
             'schema': self.store.schema
         }
 
-    def put(self, oid, vector=[], head=None):
+    def put(self, oid, vector=None, head=None):
+        """ write state """
         if head:
             self.store.txn.put(oid, head, db=self.store.transactions.table)
 
         return self.store.txn.put(oid, Storage.serialize(vector), db=self.table)
 
     def head(self, oid):
+        """ get head eventid by oid """
         return self.store.txn.get(oid, db=self.store.transactions.table)
 
     def vector(self, oid):
+        """ get statevector by oid """
         rec = self.store.txn.get(oid, db=self.table)
 
         if rec  is None:
@@ -102,47 +107,45 @@ class State:
         else:
             return Storage.unserialize(rec)
 
-class Transactions:
-    """
-    """
+class Transactions(object):
+    """ lmdb.Transactions """
 
     def __init__(self, store):
         self.store = store
         self.table = store.open_db(store.schema, ':transactions')
 
-class Events:
-    """
-    """
+class Events(object):
+    """ lmdb.Events """
 
     def __init__(self, store):
         self.store = store
         self.table = store.open_db(store.schema, ':events')
 
-    def put(self, eventid, body={}, **kwargs):
+    def put(self, eventid, body=None, **kwargs):
+        """ write event """
         return self.store.txn.put(eventid, Storage.serialize(body), db=self.table)
 
     def get(self, eventid):
+        """ read event """
         rec = self.store.txn.get(eventid, db=self.table)
 
         if rec  is None:
-            return { 'id': None, 'event': None }
+            return {'id': None, 'event': None}
         else:
             event = Storage.unserialize(rec)
-            return { 'id': eventid, 'event': event , 'schema': self.store.schema }
+            return {'id': eventid, 'event': event, 'schema': self.store.schema}
 
     def list(self, oid):
         """ buld list using a loop """
 
-        result=[]
-
+        result = []
         eventid = self.store.state.head(oid)
-
         res = self.get(eventid)
 
         if not res:
             return result
-        else:
-            evt = res['event']
+
+        evt = res['event']
 
         if not evt['previous']:
             result.append(evt)
@@ -154,5 +157,4 @@ class Events:
 
             result.append(evt)
 
-        return { 'events': result, 'oid': oid, 'schema': self.store.schema }
-
+        return {'events': result, 'oid': oid, 'schema': self.store.schema}

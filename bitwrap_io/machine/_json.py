@@ -36,4 +36,3 @@ class PTNet(base.PTNet):
             assert self.data['machine']['name'] == self.name
             self.places = self.data['machine']['places']
             self.transitions = self.data['machine']['transitions']
-

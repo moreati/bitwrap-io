@@ -1,12 +1,10 @@
-"""
-"""
+""" bitwrap.test.test_machine """
 
 from twisted.internet import defer
 from bitwrap_io.test import ApiTest
 
 class MachineTest(ApiTest):
-    """
-    """
+    """ test api methods not dealing with events"""
 
     cli = ApiTest.client('api')
 
