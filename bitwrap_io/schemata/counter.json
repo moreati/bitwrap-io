@@ -1,0 +1,29 @@
+{
+    "machine": {
+        "name": "counter",
+        "places": {
+            "P0": {
+                "inital": 0,
+                "offset": 0,
+                "position": [
+                    105.0,
+                    30.0
+                ]
+            }
+        },
+        "transitions": {
+            "DEC": {
+                "delta": [
+                    -1
+                ],
+                "role": "default"
+            },
+            "INC": {
+                "delta": [
+                    1
+                ],
+                "role": "default"
+            }
+        }
+    }
+}
