@@ -4,7 +4,7 @@
 import os
 from cyclone.web import RequestHandler
 import bitwrap_io
-import bitwrap_io.machine
+from bitwrap_io.machine import pnml
 from bitwrap_io.api import headers
 
 class ListResource(headers.Mixin, RequestHandler):
@@ -14,8 +14,8 @@ class ListResource(headers.Mixin, RequestHandler):
 
     def get(self):
         """ list schema files """
-        _list = [ os.path.basename(xml)[:-4] for xml in bitwrap_io.machine.schema_list()]
-        self.write({'pnml': _list})
+        res = [os.path.basename(xml)[:-4] for xml in pnml.schema_list()]
+        self.write({'pnml': res})
 
 class Resource(headers.Mixin, RequestHandler):
     """
@@ -24,8 +24,5 @@ class Resource(headers.Mixin, RequestHandler):
 
     def get(self, name):
         """ read schema xml """
-        try:
-            self.set_header('Content-Type', 'application/xml')
-            self.write(bitwrap_io.open(name).machine.net.xml)
-        except:
-            self.set_status(404)
+        self.set_header('Content-Type', 'application/xml')
+        self.write(pnml.Machine(name).machine.net.xml)
