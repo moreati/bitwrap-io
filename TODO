@@ -1,9 +1,9 @@
-Sun Feb 26 00:05:38 PST 2017
+Mon Feb 27 01:33:11 PST 2017
 
-WIP - fix refactor lmdb storage to be more similar to theh sql storage
+WIP - fix remaining issues when switching between storage providers
+lmdb hangs when running test
 
 BACKLOG:
-* fix remaining issues when switching between storage providers
 * running pylint
 * refactor _xml & _json to re-dup code
 * (for UI) - update pnml parser to retain graphics position information
