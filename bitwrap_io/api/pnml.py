@@ -8,9 +8,7 @@ from bitwrap_io.machine import pnml
 from bitwrap_io.api import headers
 
 class ListResource(headers.Mixin, RequestHandler):
-    """
-    List PNML
-    """
+    """ list PNML """
 
     def get(self):
         """ list schema files """
@@ -18,11 +16,9 @@ class ListResource(headers.Mixin, RequestHandler):
         self.write({'pnml': res})
 
 class Resource(headers.Mixin, RequestHandler):
-    """
-    View for PNML
-    """
+    """ view PNML """
 
     def get(self, name):
         """ read schema xml """
         self.set_header('Content-Type', 'application/xml')
-        self.write(pnml.Machine(name).machine.net.xml)
+        self.write(pnml.Machine(name).net.xml)

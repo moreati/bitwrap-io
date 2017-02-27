@@ -4,7 +4,7 @@ pnml - load xml definitions and convert to bitwrap machines
 import os
 import glob
 from bitwrap_io.machine import _xml as petrinet
-from bitwrap_io.machine import base
+from bitwrap_io.machine import base, dsl
 
 PNML_PATH = os.environ.get('PNML_PATH', os.path.abspath(__file__ + '/../../pnml'))
 
@@ -31,7 +31,7 @@ class PTNet(base.PTNet):
         self.places = None
         self.transitions = None
         self.filename = schema_to_file(name)
-        self.net = petrinet.parse_io_file(self.filename)[0]
+        self.net = petrinet.parse_pnml_file(self.filename)[0]
         self.reindex()
 
         with open(self.filename, 'r') as pnml:
