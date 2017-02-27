@@ -33,9 +33,9 @@ def factory():
         (r"/config/(.*).json", config.Resource),
         (r"/pnml/(.*).xml", pnml.Resource),
         (r"/pnml.json", pnml.ListResource),
-        (r"/event/(.*)/(.*)", event.Resource),
         (r"/machine/(.*)", machine.Resource),
         (r"/machine", machine.ListResource),
+        (r"/event/(.*)/(.*)", event.Resource),
         (r"/head/(.*)/(.*)", event.HeadResource),
         (r"/stream/(.*)/(.*)", event.ListResource)
     ]
