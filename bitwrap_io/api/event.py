@@ -8,29 +8,23 @@ import bitwrap_io
 import ujson as json
 
 class Resource(headers.Mixin, RequestHandler):
-    """ index """
+    """ /event/{schema}/{eventid} """
 
     def get(self, schema, key):
-        """ return event json """
+        """ get event by eventid """
 
         m = bitwrap_io.open(schema)
         eventid = m.storage.encode_key(key)
-        stor = m.storage.encode_key(schema)
-        storage = m.storage(stor, m)
 
-        res = storage.store.events.get(eventid)
-        
-        if res:
-            return self.write(json.dumps(res))
-
-        self.write({ 'event': None })
-        self.set_status(404)
+        with m.storage.db.cursor() as txn:
+            evt = m.storage.db.events.get(eventid)
+            self.write(evt)
 
 class HeadResource(headers.Mixin, RequestHandler):
-    """ index """
+    """ /head/{schema}/{oid} """
 
     def get(self, schema, key):
-        """ return event json """
+        """ get head event by oid"""
 
         m = bitwrap_io.open(schema)
         oid = m.storage.encode_key(key)
@@ -41,10 +35,10 @@ class HeadResource(headers.Mixin, RequestHandler):
             self.write(evt)
 
 class ListResource(headers.Mixin, RequestHandler):
-    """ index """
+    """ /stream/{schema}/{oid} """
 
     def get(self, schema, key):
-        """ return event json """
+        """ return event stream """
         m = bitwrap_io.open(schema)
         oid = m.storage.encode_key(key)
 

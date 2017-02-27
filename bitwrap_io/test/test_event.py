@@ -128,7 +128,6 @@ class EventTest(ApiTest):
             """ test event has previous"""
 
             def _test(obj):
-              print "\n* event -", i
               self.assertTrue(obj['event']['previous'])
               return obj
 
