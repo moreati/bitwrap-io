@@ -38,7 +38,7 @@ class PTNet(base.PTNet):
             self.xml = pnml.read()
 
     def reindex(self):
-        """ rebuild net using PNML as a domain specific language """
+        """ rebuild net """
 
         dsl.append_roles(self.net)
         self.places = dsl.places(self.net)

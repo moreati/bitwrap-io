@@ -24,7 +24,7 @@ class StateMachine(object):
     def session(self, request):
         """ start a session """
         request['schema'] = self.schema
-        return Transaction( request, schema=self.schema, machine=self.machine, storage=self.storage)
+        return Transaction(request, schema=self.schema, machine=self.machine, storage=self.storage)
 
     def preview(self, **request):
         """ simulate a transformation """

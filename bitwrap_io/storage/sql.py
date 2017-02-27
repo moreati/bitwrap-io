@@ -15,9 +15,10 @@ from bitwrap_io.storage import base
 import rds_config # get db creds
 
 _POOL = {}
-XX_SEED = 662607004 
+XX_SEED = 662607004
 
 def open_db(cfg):
+    """ connect to mysql """
     return pymysql.connect(
         cfg.rds_host,
         user=cfg.db_username,
@@ -46,8 +47,26 @@ def create_db(name='bitwrap', drop=False):
 
         txn.execute("CREATE DATABASE %s" % name)
         txn.execute("USE %s" % name)
-        txn.execute("CREATE TABLE `state` ( `schema` varchar(255) NOT NULL, `oid` varchar(255) NOT NULL, `vector` text, `head` varchar(255) DEFAULT NULL, PRIMARY KEY (`schema`, `oid`));")
-        txn.execute("CREATE TABLE `events` ( `id` int NOT NULL AUTO_INCREMENT, `oid` varchar(255), `schema` varchar(255), `eventid` varchar(255) NOT NULL, `body` text, `previous` varchar(255) DEFAULT NULL, PRIMARY KEY (`id`, `oid`, `schema`, `eventid`) );")
+        txn.execute("""
+        CREATE TABLE `state` (
+          `schema` varchar(255) NOT NULL,
+          `oid` varchar(255) NOT NULL,
+          `vector` text, `head` varchar(255) DEFAULT NULL,
+           PRIMARY KEY (`schema`, `oid`)
+        );
+        """)
+
+        txn.execute("""
+        CREATE TABLE `events` (
+          `id` int NOT NULL AUTO_INCREMENT,
+          `oid` varchar(255),
+          `schema` varchar(255),
+          `eventid` varchar(255) NOT NULL,
+          `body` text,
+          `previous` varchar(255) DEFAULT NULL,
+          PRIMARY KEY (`id`, `oid`, `schema`, `eventid`)
+        );
+        """)
 
     conn.commit()
 
@@ -64,8 +83,8 @@ class Storage(base.Storage):
             self.db = Datastore(repo_name, machine=self.state_machine)
             _POOL[repo_name] = self.db
 
-
 class Datastore(object):
+    """ store """
 
     def __init__(self, name, conn=None, machine=None, txn=None):
         if not conn:
@@ -90,16 +109,14 @@ class Datastore(object):
         pass
 
 class State(object):
-    """
-    StateModel get and set state by oid
-    """
+    """ StateModel get and set state by oid """
 
     def __init__(self, store):
         self.store = store
-        self.table = store.schema + '_' + 'state';
         self.schema = self.store.schema
 
-    def put(self, oid, vector=[], head=None):
+    def put(self, oid, vector=None, head=None):
+        """ """
 
         if head is None:
             head = 'null'
@@ -107,37 +124,60 @@ class State(object):
             head = '"' + head + '"'
 
         body = json.dumps(vector)
-        sql = 'UPDATE bitwrap.state SET `vector` = "%s", `head` = %s WHERE `oid` = "%s" AND `schema` = "%s"' % ( body, head, oid, self.schema )
+        sql = """
+        UPDATE bitwrap.state SET `vector` = "%s", `head` = %s
+        WHERE `oid` = "%s" AND `schema` = "%s"
+        """
 
-        res = self.store.txn.execute(sql);
+        res = self.store.txn.execute(sql % (body, head, oid, self.schema))
+
         if res == 0:
-            res = self.store.txn.execute(
-                'INSERT INTO bitwrap.state VALUES ( "%s", "%s", "%s", %s)' % (self.schema, oid, body, head)
-            )
+            sql = """
+            INSERT INTO bitwrap.state
+            VALUES ("%s", "%s", "%s", %s)
+            """
+            res = self.store.txn.execute(sql % (self.schema, oid, body, head))
 
         return res
 
-    def head(self, oid, vector=[], prev=None):
-        sql = 'SELECT `head` FROM bitwrap.state WHERE `oid` = "%s" AND `schema` = "%s"' % ( oid, self.schema )
+    def head(self, oid):
+        """ """
 
-        if 0 == self.store.txn.execute(sql):
+        sql = """
+        SELECT `head` FROM bitwrap.state
+        WHERE `oid` = "%s" AND `schema` = "%s"
+        """
+
+        res = self.store.txn.execute(sql % (oid, self.schema))
+
+        if res == 0:
             return None
         else:
             return self.store.txn.fetchone()[0]
 
     def vector(self, oid):
-        sql = 'SELECT `vector` FROM bitwrap.state WHERE `oid` = "%s" AND `schema` = "%s"' % (oid, self.schema)
+        """ """
 
-        if 0 == self.store.txn.execute(sql):
+        sql = """
+        SELECT `vector` FROM bitwrap.state
+        WHERE `oid` = "%s" AND `schema` = "%s"
+        """
+
+        if 0 == self.store.txn.execute(sql % (oid, self.schema)):
             return self.store.state_machine.machine['state']
         else:
             rec = self.store.txn.fetchone()
             return json.loads(rec[0])
 
     def get(self, oid):
-        sql = 'SELECT `oid`, `vector`, `head` FROM bitwrap.state WHERE `oid` = "%s" AND `schema` = "%s"' % (oid, self.schema)
+        """ """
 
-        if 0 == self.store.txn.execute(sql):
+        sql = """
+        SELECT `oid`, `vector`, `head` FROM bitwrap.state
+        WHERE `oid` = "%s" AND `schema` = "%s"
+        """
+
+        if 0 == self.store.txn.execute(sql % (oid, self.schema)):
             # use default state
             return self.store.state_machine.machine['state']
         else:
@@ -151,47 +191,62 @@ class State(object):
             }
 
 class Events:
-    """
-    EventsModel Create and view events
-    """
+    """ """
 
     def __init__(self, store):
         self.store = store
-        self.table = store.schema + '_' + 'events';
         self.schema = self.store.schema
 
     def put(self, eventid, body, prev):
-
+        """ """
         oid = body.get('oid', None)
-
         body = base64.b64encode(json.dumps(body))
-        _sql = 'INSERT INTO bitwrap.events( `oid`, `schema`, `eventid`, `body`, `previous`) VALUES ( "%s", "%s", "%s", "%s", "%s")'
-        sql = _sql % (oid, self.schema, eventid, body, prev)
-        return self.store.txn.execute(sql)
+
+        sql = """
+        INSERT INTO bitwrap.events( `oid`, `schema`, `eventid`, `body`, `previous`)
+        VALUES ( "%s", "%s", "%s", "%s", "%s")
+        """
+        return self.store.txn.execute(sql % (oid, self.schema, eventid, body, prev))
 
     def get(self, eventid):
-        sql = 'SELECT `body`, `id` FROM bitwrap.events WHERE `eventid` = "%s" and `schema` = "%s"' % (eventid, self.schema)
+        """ """
 
-        if 0 == self.store.txn.execute(sql):
-            return { 'id': None, 'event': {}, 'schema': self.schema, 'seq': None }
+        sql = """
+        SELECT `body`, `id` FROM bitwrap.events
+        WHERE `eventid` = "%s" and `schema` = "%s"
+        """
+
+        if 0 == self.store.txn.execute(sql % (eventid, self.schema)):
+            return {'id': None, 'event': {}, 'schema': self.schema, 'seq': None}
         else:
             rec = self.store.txn.fetchone()
-            return { 'id': eventid, 'event': json.loads(base64.b64decode(rec[0])), 'schema': self.schema, 'seq': rec[1] }
+
+            return {
+                'id': eventid,
+                'event': json.loads(base64.b64decode(rec[0])),
+                'schema': self.schema,
+                'seq': rec[1]
+            }
 
     def list(self, oid):
-        sql = 'SELECT `body`, `eventid`, `id` FROM bitwrap.events WHERE `oid` = "%s" and `schema` = "%s" ORDER BY id DESC' % (oid, self.schema)
+        """ """
 
-        if 0 == self.store.txn.execute(sql):
-            return { 'events': [] }
+        sql = """
+        SELECT `body`, `eventid`, `id` FROM bitwrap.events
+        WHERE `oid` = "%s" and `schema` = "%s" ORDER BY id DESC
+        """
+
+        if 0 == self.store.txn.execute(sql % (oid, self.schema)):
+            return {'events': []}
         else:
             result = []
             for rec in self.store.txn.fetchall():
-                e = json.loads(base64.b64decode(rec[0]))
-                e['id'] = rec[1]
-                e['seq'] = rec[2]
-                result.append(e)
+                evt = json.loads(base64.b64decode(rec[0]))
+                evt['id'] = rec[1]
+                evt['seq'] = rec[2]
+                result.append(evt)
 
-            return { 'events': result, 'oid': oid, 'schema': self.schema }
+            return {'events': result, 'oid': oid, 'schema': self.schema}
 
 if __name__ == '__main__':
 

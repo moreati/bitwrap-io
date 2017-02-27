@@ -11,7 +11,7 @@ class ListResource(headers.Mixin, RequestHandler):
     List schemata
     """
 
-    def get(self):
+    def get(self, *args, **kwargs):
         """ list machines that are loaded into memory """
         self.write({'machines': bitwrap_io.MACHINES.keys()})
 
