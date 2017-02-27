@@ -118,12 +118,41 @@ class Events:
         self.store = store
         self.table = store.open_db(store.schema, ':events')
 
-    def put(self, eventid, body, prev):
-        pass
+    def put(self, eventid, body={}, **kwargs):
+        return self.store.txn.put(eventid, Storage.serialize(body), db=self.table)
 
     def get(self, eventid):
-        pass
+        rec = self.store.txn.get(eventid, db=self.table)
+
+        if rec  is None:
+            return { 'id': None, 'event': None }
+        else:
+            event = Storage.unserialize(rec)
+            return { 'id': eventid, 'event': event , 'schema': self.store.schema }
 
     def list(self, oid):
-        pass
+        """ buld list using a loop """
+
+        events=[]
+
+        eventid = self.store.state.head(oid)
+
+        res = self.get(eventid)
+
+        if not res:
+            return events
+        else:
+            evt = res['event']
+
+        if not evt['previous']:
+            events.append(evt)
+        else:
+            while evt['previous']:
+                events.append(evt)
+                previd = Storage.encode_key(evt['previous'])
+                evt = self.get(previd)['event']
+
+            events.append(evt)
+
+        return events
 
