@@ -45,32 +45,32 @@ class Storage(object):
         action = req['action']
         transition = self.state_machine.machine['transitions'][action]
 
-        self.db.cursor()
-        output = self.state_machine.vadd(self.db.state.vector(oid), transition['delta'])
-        prev = self.db.state.head(oid)
+        with self.db.cursor():
+            output = self.state_machine.vadd(self.db.state.vector(oid), transition['delta'])
+            prev = self.db.state.head(oid)
 
-        res = {
-            "oid": oid,
-            "action": action,
-            "state": output,
-            "payload": req.get('payload', {}),
-            "previous": prev,
-            "endpoint": req.get('endpoint', None),
-            "ip": req.get('ip', None),
-            "error": 0
-        }
+            res = {
+                "oid": oid,
+                "action": action,
+                "state": output,
+                "payload": req.get('payload', {}),
+                "previous": prev,
+                "endpoint": req.get('endpoint', None),
+                "ip": req.get('ip', None),
+                "error": 0
+            }
 
-        if not self.state_machine.is_valid(output):
-            dry_run = True
-            res["error"] = 1
-            self.db.rollback()
+            if not self.state_machine.is_valid(output):
+                dry_run = True
+                res["error"] = 1
+                self.db.rollback()
 
-        if not dry_run:
-            eventid = self.hexdigest(self.serialize(res))
-            self.db.events.put(eventid, body=res, prev=prev)
-            self.db.state.put(oid, vector=output, head=eventid)
-            self.db.commit()
+            if not dry_run:
+                eventid = self.hexdigest(self.serialize(res))
+                self.db.events.put(eventid, body=res, prev=prev)
+                self.db.state.put(oid, vector=output, head=eventid)
+                self.db.commit()
 
-            return {'id': eventid, 'event': res}
-        else:
-            return {'id': None, 'event': res}
+                return {'id': eventid, 'event': res}
+            else:
+                return {'id': None, 'event': res}
