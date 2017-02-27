@@ -133,26 +133,26 @@ class Events:
     def list(self, oid):
         """ buld list using a loop """
 
-        events=[]
+        result=[]
 
         eventid = self.store.state.head(oid)
 
         res = self.get(eventid)
 
         if not res:
-            return events
+            return result
         else:
             evt = res['event']
 
         if not evt['previous']:
-            events.append(evt)
+            result.append(evt)
         else:
             while evt['previous']:
-                events.append(evt)
+                result.append(evt)
                 previd = Storage.encode_key(evt['previous'])
                 evt = self.get(previd)['event']
 
-            events.append(evt)
+            result.append(evt)
 
-        return events
+        return { 'events': result, 'oid': oid, 'schema': self.store.schema }
 
