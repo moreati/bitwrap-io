@@ -2,7 +2,7 @@
 
 from cyclone.web import RequestHandler
 from bitwrap_io.api import headers
-import bitwrap_io
+import bitwrap_io.machine
 
 class ListResource(headers.Mixin, RequestHandler):
     """ List schemata """
@@ -17,7 +17,7 @@ class Resource(headers.Mixin, RequestHandler):
     def get(self, name, *args):
         """ return state machine definition as json """
 
-        sm = bitwrap_io.open(name).machine
+        sm = bitwrap_io.machine.factory(syntax='pnml')(name)
 
         self.write({
             'machine': {

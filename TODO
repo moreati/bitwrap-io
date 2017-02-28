@@ -1,21 +1,14 @@
-Mon Feb 27 01:33:11 PST 2017
+Tue Feb 28 00:01:15 PST 2017
 
-WIP - fix remaining issues when switching between storage providers
-lmdb hangs when running test
+WIP - testing Docker container with octothorpe widget on test environment
 
 BACKLOG:
-* running pylint
-* refactor _xml & _json to re-dup code
 * (for UI) - update pnml parser to retain graphics position information
-* Expand DSL to include oid and sender/target notation
-* Roadmap to colored coins see README.md
 * after this project can be deployed on amazon lambda will refactor stackdump/marble to match
   * (for marble) re-enable keen.io analytics - test w/ lambda
   * attempt to duplicate functionality by streaming events to s3 for use with Athena
+* update twisted plugin to function w/ lmdb or mysql
 
-GOAL : try to remove as much Async code without ditching cyclone as rpc base
-also try to emulate the AWS_lambda event harness where incoming events have
-some extra extraction based on which pipeline they are part of
-
-Long Term: 
-Make this lib deployable to either aws-lambda or runable as a docker container w/ similar API/event harness 
+ICEBOX:
+* Roadmap to colored coins see README.md
+  * Expand DSL to include oid and sender/target notation

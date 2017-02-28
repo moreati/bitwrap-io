@@ -14,4 +14,5 @@ docker run -it --name=${CONTAINER_NAME} \
 -e "VIRTUAL_HOST=api.bitwrap.io" \
 -v ${HOME}:/opt/bitwrap \
 -v /tmp:/repo \
+-p 127.0.0.1:8080:8080 \
 bitwrap/bitwrap-io:dev
