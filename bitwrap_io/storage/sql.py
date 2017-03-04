@@ -7,8 +7,7 @@ NOTE: this module expects the db config to be in a module called rds_config
 import base64
 import json
 import pymysql
-from bitwrap_io.storage import base
-import rds_config # get db creds
+from bitwrap_io.storage import base, rds_config
 
 _POOL = {}
 XX_SEED = 662607004
