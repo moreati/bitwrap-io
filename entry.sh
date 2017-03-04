@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-PYTHONPATH=./ twist bitwrap
+PYTHONPATH=./ twistd -n bitwrap
