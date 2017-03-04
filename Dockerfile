@@ -8,8 +8,9 @@ RUN pip install -r requirements.txt
 
 VOLUME ["/opt/bitwrap", "/repo"]
 
+ENV BITWRAP_DATASTORE=lmdb
 ENV LMDB_PATH=/repo/
-ENV SCHEMA_PATH=/opt/bitwrap-io/schemata
+ENV SCHEMA_PATH=/opt/bitwrap-io/bitwrap_io/schemata
 ENV BITWRAP_PORT=8080
 
 EXPOSE 8080

@@ -70,4 +70,4 @@ _trial*
 *.lmdb
 twisted/plugins/dropin.cache
 *.pid
-rds_config.py
+*.rc
