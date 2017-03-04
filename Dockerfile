@@ -1,6 +1,6 @@
 FROM python:2.7.12
 
-ENV PROJECT_VERSION=0.1.2
+ENV PROJECT_VERSION=0.1.3
 
 WORKDIR /opt/bitwrap-io
 COPY . /opt/bitwrap-io/ 

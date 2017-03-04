@@ -11,11 +11,9 @@ GET  /head/{schema}/{oid} - get latest event for oid
 
 import os
 import json
-import bitwrap_io
 import bitwrap_io.machine as machine
-
-# FIXME: import sql storage
-from bitwrap_io.storage import Storage
+from bitwrap_io.storage import factory as StorageFactory
+Storage = StorageFactory(backend='mysql')
 
 def success(body):
     return {

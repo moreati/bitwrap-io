@@ -11,7 +11,6 @@ Factory.noisy = False
 
 class Options(usage.Options):
 
-    # TODO: optionally accept mysql connection string
     optParameters = (
         ("listen-port", "p", int(os.environ.get('BITWRAP_PORT', 8080)), "The port number to listen on."),
         ("listen-address", "a", os.environ.get('BITWRAP_IFACE', "127.0.0.1"), "The listen address."),

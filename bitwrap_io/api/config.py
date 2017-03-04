@@ -5,8 +5,8 @@ bitwrap_io.api.config - font end stats and config
 import os
 from cyclone.web import RequestHandler
 from bitwrap_io.api import headers
+from bitwrap_io.storage import rds_config
 import bitwrap_io.storage._lmdb as _lmdb
-import rds_config
 
 def settings():
     """ build settings hash from env vars """

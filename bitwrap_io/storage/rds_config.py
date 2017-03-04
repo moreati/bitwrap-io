@@ -1,3 +1,4 @@
+"""" config module for sql """
 import os
 
 rds_host = os.environ.get('RDS_HOST', '')
