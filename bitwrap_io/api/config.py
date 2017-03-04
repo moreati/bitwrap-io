@@ -32,6 +32,7 @@ class Resource(headers.Mixin, RequestHandler):
 
         self.write({
             'endpoint': os.environ.get('ENDPOINT', 'http://127.0.0.1:8080'),
+            'wrapserver': os.environ.get('WRAPSERVER', 'http://127.0.0.1:8001'),
             'stage': stage,
             'ENV': {
                 'LMDB_MAP_SIZE': _lmdb.MAP_SIZE,
