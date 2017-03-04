@@ -71,3 +71,4 @@ _trial*
 twisted/plugins/dropin.cache
 *.pid
 *.rc
+*.venv
