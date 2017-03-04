@@ -20,7 +20,9 @@ class ApiTest(TestCase):
 
     def setUp(self):
         """ recreate database and start tcp endpoint """
+        #pylint: disable=no-member
         self.service = internet.TCPServer(PORT, ApiFactory(), interface=IFACE)
+        #pylint: enable=no-member
         self.service.startService()
 
     def tearDown(self):
