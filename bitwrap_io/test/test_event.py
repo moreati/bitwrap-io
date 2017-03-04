@@ -5,9 +5,9 @@ using bitwrap schema file named "octothorpe"
 
 import time
 import json
+from collections import OrderedDict
 from twisted.internet import defer
 from bitwrap_io.test import ApiTest
-from collections import OrderedDict
 
 
 class EventTest(ApiTest):
@@ -77,6 +77,7 @@ class EventTest(ApiTest):
             return obj
 
         def test_transform(res, action):
+            """ transform & assert response is expected """
 
             print "\n", json.dumps(res)
             self.assertEqual(res['event']['error'], seq[action][1])
@@ -123,7 +124,7 @@ class EventTest(ApiTest):
             d.addCallback(_test)
             d.addCallback(test_response)
 
-        def test_prev(i):
+        def test_prev(_):
             """ test event has previous"""
 
             def _test(obj):

@@ -121,9 +121,9 @@ class Events(object):
         self.store = store
         self.table = store.open_db(store.schema, ':events')
 
-    def put(self, eventid, body=None, **kwargs):
+    def put(self, eventid, **kwargs):
         """ write event """
-        return self.store.txn.put(eventid, Storage.serialize(body), db=self.table)
+        return self.store.txn.put(eventid, Storage.serialize(kwargs['body']), db=self.table)
 
     def get(self, eventid):
         """ read event """
@@ -145,7 +145,7 @@ class Events(object):
         if not res:
             return result
 
-        evt = res['event']
+        evt = dict(res['event'])
 
         if not evt['previous']:
             result.append(evt)
