@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="bitwrap_io",
-    version="0.1.1",
+    version="0.1.2",
     author="Matthew York",
     author_email="myork@stackdump.com",
     description="A blockchain-style python eventstore w/ mysql or LMDB backend",
