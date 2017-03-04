@@ -9,11 +9,9 @@ GET  /event/{schema}/{eventid} - get event by id
 GET  /head/{schema}/{oid} - get latest event for oid
 """
 
-import os
-import json
-import bitwrap_io.machine as machine
+import ujson as json
+import bitwrap_io
 from bitwrap_io.storage import factory as StorageFactory
-Storage = StorageFactory(backend='mysql')
 
 def success(body):
     return {
@@ -31,7 +29,7 @@ def transform(event):
     _s = msg['params'][0]['schema']
 
     err = None
-    m = bitwrap_lambda.get(_s)
+    m = bitwrap_io.open(_s)
 
     preview = msg['method'] != 'transform'
     res = m.session(msg['params'][0]).commit(dry_run=preview)
@@ -53,8 +51,8 @@ def query(event):
     _p = event['pathParameters']
     _s = _p['schema']
 
-    m = bitwrap_lambda.get(_s)
-    s = Storage( _s, m)
+    m = bitwrap_io.open(_s)
+    s = StorageFactory(backend='mysql')(_s, m)
 
     if not 'eventid' in _p and not 'oid' in _p:
 
@@ -78,9 +76,8 @@ def query(event):
 def handler(event, context):
     """ dispatch gateway api event """
 
-    if event['path']  == "/machine":
-        lst =  [ os.path.basename(x).replace('.json', '') for x in machine.schema_list() ]
-        return success(lst)
+    if event['path'] == "/machine":
+        return success(bitwrap_io.MACHINES.keys())
 
     if event['path'] == '/api':
         return transform(event)
