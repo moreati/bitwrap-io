@@ -1,8 +1,18 @@
 # Bitwrap-io
 
 [![Build Status](https://travis-ci.org/bitwrap/bitwrap-io.svg?branch=master)](https://travis-ci.org/bitwrap/bitwrap-io)
+[![PyPI version](https://badge.fury.io/py/bitwrap_io.svg)](https://badge.fury.io/py/bitwrap_io)
 
 A blockchain-style eventstore.
+### install
+
+    pip install bitwrap_io
+
+
+### run
+
+    twistd -n bitwrap --listen-address 127.0.0.1 --listen-port 8080 --schema-path ./bitwrap_io/pnml --lmdb-path /tmp
+
 
 ### Status
 
@@ -76,8 +86,4 @@ db_password = "5eGPelW8r8ea"
 db_name = "bitwrap" 
 rds_host  = "bitwrap-prod01.cplrgtpb61fz.us-east-1.rds.amazonaws.com"
 ````
-
-### run
-
-    twistd -n bitwrap --listen-address 127.0.0.1 --listen-port 8080 --io-path ./examples --lmdb-path /tmp
 
