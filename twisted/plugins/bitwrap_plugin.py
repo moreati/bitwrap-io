@@ -29,8 +29,8 @@ class ServiceFactory(object):
 
     def makeService(self, options):
 
-        os.environ['SCHEMA_PATH'] = options['schmea-path']
-        os.environ['LMDB_PATH'] = options['lmdb-path']
+        os.environ.get('SCHEMA_PATH', options['schema-path'])
+        os.environ.get('LMDB_PATH', options['lmdb-path'])
 
         from bitwrap_io.api import factory as ApiFactory
 
