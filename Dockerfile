@@ -1,6 +1,6 @@
-FROM python:2.7.12
+FROM python:2.7.13
 
-ENV PROJECT_VERSION=0.1.3
+ENV PROJECT_VERSION=0.1.4
 
 WORKDIR /opt/bitwrap-io
 COPY . /opt/bitwrap-io/ 
@@ -9,9 +9,8 @@ RUN pip install -r requirements.txt
 VOLUME ["/opt/bitwrap", "/repo"]
 
 ENV BITWRAP_DATASTORE=lmdb
-ENV LMDB_PATH=/repo/
 ENV SCHEMA_PATH=/opt/bitwrap-io/bitwrap_io/schemata
-ENV BITWRAP_PORT=8080
+ENV LMDB_PATH=/repo/
 
 EXPOSE 8080
 
