@@ -4,42 +4,35 @@
 [![PyPI version](https://badge.fury.io/py/bitwrap_io.svg)](https://badge.fury.io/py/bitwrap_io)
 
 A blockchain-style eventstore.
-### install
-
-    pip install bitwrap_io
-
-
-### run
-
-    twistd -n bitwrap --listen-address 127.0.0.1 --listen-port 8080 --schema-path ./bitwrap_io/pnml --lmdb-path /tmp
-
 
 ### Status
 
-Developing Web App - http://bitwrap.github.io 
+* Developing Demo Apps & Widgets
+  * http://bitwrap.github.io 
 
-* completed components and prototypes
-   * [stackdump/marble](https://github.com/stackdump/marble) - use bitwrap with keen.io
-   * [stackdump/marble-ui](https://github.com/stackdump/marble-ui) - a single page web-app
-   * [stackdump/bitwrap-pnml](https://github.com/stackdump/bitwrap-pnml) - an eventstore prototype based solely on PNML
-   * [stackdump/lambda-test](https://github.com/stackdump/lambda-test) - test deploying bitwrap-lambda to AWS lambda
-   * [bitwrap/bitwrap-lambda](https://github.com/bitwrap/bitwrap-lambda) - bitwrap with sql backend suitable for lambda
-   * [bitwrap/wrapserver](https://github.com/bitwrap/wrapserver) - npm module for rendering state-machines as .svg images
-   * [gitwrap-dot-com/gitwrap-io](https://github.com/gitwrap-dot-com/gitwrap-io) - bitwrap using git commit messages as an eventstore
+* Testing AWS Lambda integration
 
+#### install
+
+    pip install bitwrap_io
+
+    twistd -n bitwrap \
+      --listen-address 127.0.0.1 \
+      --listen-port 8080 \
+      --schema-path ./bitwrap_io/pnml \
+      --lmdb-path /tmp
+
+    # visit http://127.0.0.1:8080
 
 ### Roadmap
 
-WIP - Refactoring sql & lmdb storeage modules to be interchangeable
+* Auth - provide authentication via Oauth2
 
-* support all pnml functions when creating/reading json definitions
-* support colored tokens
-  * colors allow expressions of roles and transient properties
-* support inhibitor arcs
-  * inhibitors provide basic boolean operations 
-* allow cross-net interaction between elementary nets
-  * existing: Event(oid)
-  * new: Event(oid, sender=<oid>)
+* Contracts - api for joint event execution (think multisig transations) between statevectors
+  * contracts form the basis for a Python API
+  * using bitwrap to develop applications
+
+* Analytics - archive event data to S3/Athena for warehousing & analysis
 
 ### Reference
 
@@ -49,41 +42,31 @@ Watch an event sourcing video from [Greg Young](https://www.youtube.com/watch?v=
 
 Read an article about how event sourcing compliments blockchain [ 6 Components of any Blockchain design solution ] (http://blockchain.glorat.net/2015/11/16/6-components-of-any-blockchain-design-solution/)
 
-### PNML Tools 
+### Platform Independent Petrinet Editor
+see ./bitwrap_io/pnml/ directory for petri-nets included with bitwrap
 
-see examples directory for petri-nets used for testing
+Download:
+* [PIPEv4](https://sourceforge.net/projects/pipe2/files/PIPEv4/PIPEv4.3.0/) - PIPEv4.3.0
+* [PIPEv5](https://github.com/sarahtattersall/PIPE) - PIPEv5 being released as a jar on github
 
-* [PIPEv4](https://sourceforge.net/projects/pipe2/files/PIPEv4/PIPEv4.3.0/) - PIPEv4.3.0 (simulator seems more stable than v5)
-* [Platform Independent Petrinet Editor](https://github.com/sarahtattersall/PIPE) - v5 being released on github
+### Deployment
 
-### install
+#### SQL w/ AWS lambda
 
-* CI/CD: this package is built and deployed to pypi
-* Another github project deploys the build to aws lambda using travis.ci:
-  *  see [stackdump/lambda-test](https://github.com/stackdump/lambda-test) as an example of how to do this.
+* If you are planning using AWS-lambda:
+  * configure the db connection using env vars
+  * see: https://github.com/bitwrap/bitwrap-lambda
 
-#### LMDB
+#### LMDB w/ Docker
 
-make sure to set the REPO environment vars to manage database file location
+Automated Build: https://hub.docker.com/r/bitwrap/bitwrap-io/~/dockerfile/
 
-NOTE: LMDB is not supported when deploying to lambda due to local filesystem restrictions.
+Run the image: ( by default uses LMDB storage )
 
-#### sql w/ AWS lambda
+    docker pull bitwrap/bitwrap-io
 
-* If you are not planning using AWS-lambda:
-  * You may provide the database credentials when invoking the twisted plugin at runtime,
-  * or by setting environment variables.
-
-
-* If you are building a package to upload to lambda:
-  * create a python script called rds_config.py
-  * and make sure you add it to your python library
-
-````
-# ./rds_config.py
-db_username = "bitwrap"
-db_password = "5eGPelW8r8ea"
-db_name = "bitwrap" 
-rds_host  = "bitwrap-prod01.cplrgtpb61fz.us-east-1.rds.amazonaws.com"
-````
+    docker run -it --name=bitwrap-io \
+    -v /tmp:/repo \
+    -p 127.0.0.1:8080:8080 \
+    bitwrap/bitwrap-io:latest
 

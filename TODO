@@ -9,6 +9,11 @@ BACKLOG:
   * attempt to duplicate functionality by streaming events to s3 for use with Athena
 * update twisted plugin to function w/ lmdb or mysql
 * work on design work for 'contracts'
+  * support inhibitor arcs
+    * inhibitors provide basic boolean operations 
+  * allow cross-net interaction between elementary nets
+    * existing: Event(oid)
+    * new: Event(oid, sender=<oid>)
 
 ICEBOX:
 * Roadmap to colored coins see README.md
