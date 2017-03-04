@@ -31,7 +31,7 @@ class Resource(headers.Mixin, RequestHandler):
         _db_files = [os.path.basename(f) for f in _lmdb.Storage.db_files()]
 
         self.write({
-            'endpoint': "http://127.0.0.1:8080",
+            'endpoint': os.environ.get('ENDPOINT', 'http://127.0.0.1:8080'),
             'stage': stage,
             'ENV': {
                 'LMDB_MAP_SIZE': _lmdb.MAP_SIZE,
