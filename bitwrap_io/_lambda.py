@@ -25,7 +25,6 @@ def failure(msg='__UNHANDLED__'):
 
 def transform(event):
     """ perform a state machine transformation """
-    print event['body']
     msg = json.loads(event['body'])
     _s = msg['params'][0]['schema']
 
