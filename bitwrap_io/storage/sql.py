@@ -100,7 +100,7 @@ class Datastore(object):
 
     def commit(self):
         """ commit txn """
-        pass
+        return self.conn.commit()
 
     def rollback(self):
         """ rollback txn """
