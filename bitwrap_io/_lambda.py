@@ -6,7 +6,8 @@ POST /api - jsonrpc api
 GET  /machine - list schema names
 GET  /machine/{schema} - get machine json
 GET  /event/{schema}/{eventid} - get event by id
-GET  /head/{schema}/{oid} - get latest event for oid
+GET  /head/{schema}/{oid} - get latest event by oid
+GET  /stream/{schema}/{oid} - get all events by oid
 """
 
 import json
@@ -17,6 +18,7 @@ def success(body):
     return {
         "statusCode": 200,
         "headers": {'Content-Type': 'application/json'},
+        "headers": {'Access-Control-Allow-Origin': '*'},
         "body": json.dumps(body)
     } 
 
@@ -67,9 +69,12 @@ def query(event):
             return success(evt)
         
         if 'oid' in _p:
-            head = s.db.state.head(_p["oid"])
-            evt = s.db.events.get(head)
-            return success(evt)
+            if event['path'] == "/head":
+                head = s.db.state.head(_p["oid"])
+                evt = s.db.events.get(head)
+                return success(evt)
+            elif event['path'] == "/stream":
+                return success(s.db.events.list(_p["oid"]))
 
     failure()
 
