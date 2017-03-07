@@ -66,6 +66,7 @@ class Storage(object):
                 self.db.rollback()
 
             if not dry_run:
+                print '__COMMIT__'
                 eventid = self.hexdigest(self.serialize(res))
                 self.db.events.put(eventid, body=res, prev=prev)
                 self.db.state.put(oid, vector=output, head=eventid)
@@ -73,4 +74,5 @@ class Storage(object):
 
                 return {'id': eventid, 'event': res}
             else:
+                print '__DRY_RUN__'
                 return {'id': None, 'event': res}
