@@ -31,6 +31,7 @@ def transform(event):
     err = None
     m = bitwrap_io.open(_s)
 
+    print '__EVENT__', msg
     preview = msg['method'] != 'transform'
     res = m.session(msg['params'][0]).commit(dry_run=preview)
 
