@@ -5,25 +5,25 @@ This handler expects events from these routes:
 POST /api - jsonrpc api 
 GET  /machine - list schema names
 GET  /machine/{schema} - get machine json
-GET  /event/{schema}/{eventid} - get event by id
-GET  /head/{schema}/{oid} - get latest event by oid
-GET  /stream/{schema}/{oid} - get all events by oid
+GET  /head/{schema}/{headid} - get latest event by headid
+GET  /event/{schema}/{eventid} - get event by eventid
+GET  /stream/{schema}/{streamid} - get all events by streamid
 """
 
-import json
+import ujson as json
 import bitwrap_io
 from bitwrap_io.storage import factory as StorageFactory
 
 def success(body):
     return {
         "statusCode": 200,
-        "headers": {'Content-Type': 'application/json'},
-        "headers": {'Access-Control-Allow-Origin': '*'},
+        "headers": {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        },
         "body": json.dumps(body)
     } 
 
-def failure(msg='__UNHANDLED__'):
-    raise Exception(msg)
 
 def transform(event):
     """ perform a state machine transformation """
@@ -56,27 +56,21 @@ def query(event):
     m = bitwrap_io.open(_s)
     s = StorageFactory(backend='mysql')(_s, m)
 
-    if not 'eventid' in _p and not 'oid' in _p:
-
-        # show machine definition
-        return success(m.machine.net.data)
-
     with s.db.cursor() as txn:
 
-        if 'eventid' in _p:
+        if 'headid' in _p:
+            head = s.db.state.head(_p["headid"])
+            return success(s.db.events.get(head))
+
+        elif 'eventid' in _p:
             evt = s.db.events.get(_p["eventid"])
             return success(evt)
         
-        if 'oid' in _p:
-            if event['path'] == "/head":
-                head = s.db.state.head(_p["oid"])
-                evt = s.db.events.get(head)
-                return success(evt)
-            elif event['path'] == "/stream":
-                return success(s.db.events.list(_p["oid"]))
+        elif 'streamid' in _p:
+            return success(s.db.events.list(_p["streamid"]))
 
-    failure()
-
+        else:
+            return success(m.machine.net.data)
 
 def handler(event, context):
     """ dispatch gateway api event """
