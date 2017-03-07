@@ -1,0 +1,23 @@
+Mon Mar  6 23:01:14 PST 2017
+
+WIP - testing lambda, gateway API + wrapserver front end development
+
+
+BACKLOG:
+* (for UI) - update pnml parser to retain graphics position information
+* after this project can be deployed on amazon lambda will refactor stackdump/marble to match
+  * (for marble) re-enable keen.io analytics - test w/ lambda
+  * attempt to duplicate functionality by streaming events to s3 for use with Athena
+* update twisted plugin to function w/ lmdb or mysql
+* work on design work for 'contracts'
+  * support inhibitor arcs
+    * inhibitors provide basic boolean operations 
+  * allow cross-net interaction between elementary nets
+    * existing: Event(oid)
+    * new: Event(oid, sender=<oid>)
+
+ICEBOX:
+* Roadmap to colored coins see README.md
+  * Expand DSL to include oid and sender/target notation
+* Consider keeping elementary nets as a primary feature.
+  * Secondary transactions that cross primary nets are called 'contracts'

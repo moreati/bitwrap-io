@@ -1,0 +1,2 @@
+recursive-include bitwrap_io *.*
+recursive-include twisted *.py
