@@ -1,9 +1,18 @@
-Mon Mar  6 23:01:14 PST 2017
+Thu Mar  9 23:43:51 PST 2017
 
 WIP - testing lambda, gateway API + wrapserver front end development
 
+* Refactor
+  * extract 'storage' providers
+    * bitwrap-storage-lmdb
+    * bitwrap-storage-mysql
+  * & Twisted, cyclone / API modules
+  * idea is to be able to have a clean install to aws-lambda as 'native' environment
+  * create new bitwrap-storage-dynamodb ??
+    * are DB table/row?? transactions global ?? 
 
 BACKLOG:
+* update or remove older storage prototypes arangodb etc... 
 * (for UI) - update pnml parser to retain graphics position information
 * after this project can be deployed on amazon lambda will refactor stackdump/marble to match
   * (for marble) re-enable keen.io analytics - test w/ lambda
