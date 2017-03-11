@@ -5,6 +5,9 @@
 
 A blockchain-style eventstore.
 
+![tic-tac-toe state machine](https://bitwrap.github.io/image/octothorpe.png)
+
+(above is a tic-tac-toe state machine )
 ### Status
 
 * Developing Demo Apps & Widgets
