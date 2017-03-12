@@ -49,7 +49,11 @@ def transitions(net, net_places):
     _transitions = {}
 
     for action in net.transitions:
-        _transitions[action] = {'delta': empty_vector(len(net_places)), 'role': 'default'}
+        _transitions[action] = {
+            'delta': empty_vector(len(net_places)),
+            'position': net.transitions[action].position,
+            'role': 'default'
+        }
 
     return _transitions
 
