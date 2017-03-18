@@ -83,4 +83,5 @@ https://bitwrap.github.io/#octothorpe
 By using state-vectors designed to model the tic-tac-toe board, we have effectively modeled
 a game of tic-tac-to as a deterministic state machine without suffering from 'State Explosion'.
 
+![tic-tac-toe state machine](https://bitwrap.github.io/image/octothorpe.png)
 
