@@ -1,4 +1,4 @@
-# Solving State Explosion with A Petri-Nets and Vectors
+# Solving State Explosion with Petri-Nets and Vector Clocks
 
 Event driven programming has a problem formally modeling events
 https://en.wikipedia.org/wiki/Event-driven_programming#Criticism
