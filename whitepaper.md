@@ -68,7 +68,7 @@ the valid range of scalar values is constrained to natural numbers. (integers >=
  [ 0,1,0]
 +[-1,1,0]
  --------
- [-1,1,0] <= invalid state
+ [-1,2,0] <= invalid state
 ```
 
 Using this machine as a programing model -
