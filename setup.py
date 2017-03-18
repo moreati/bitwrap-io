@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="bitwrap_io",
-    version="0.1.7",
+    version="0.1.8",
     author="Matthew York",
     author_email="myork@stackdump.com",
     description="A blockchain-style python eventstore w/ mysql or LMDB backend",
@@ -10,7 +10,7 @@ setup(
     keywords='PNML petri-net eventstore state-machine actor-model',
     packages=find_packages() + ['twisted.plugins'],
     include_package_data=True,
-    install_requires=['cyclone==1.1', 'lmdb==0.92', 'service-identity==16.0.0', 'ujson==1.35', 'xxhash==0.6.1', 'PyYAML==3.12', 'PyMySQL==0.7.9'],
+    install_requires=['cyclone==1.1', 'lmdb==0.92', 'service-identity==16.0.0', 'ujson==1.35', 'xxhash==0.6.1', 'PyMySQL==0.7.9'],
     long_description="""
 # Bitwrap-pnml
 
