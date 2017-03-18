@@ -1,0 +1,58 @@
+{
+    "machine": {
+        "name": "user",
+        "places": {
+            "disabled": {
+                "inital": 1,
+                "offset": 0,
+                "position": [
+                    195.0,
+                    120.0
+                ]
+            },
+            "schemata": {
+                "inital": 0,
+                "offset": 1,
+                "position": [
+                    195.0,
+                    255.0
+                ]
+            }
+        },
+        "transitions": {
+            "ADD_SCHEMA": {
+                "delta": [
+                    0,
+                    1
+                ],
+                "position": [
+                    135.0,
+                    180.0
+                ],
+                "role": null
+            },
+            "CONFIRM_EMAIL": {
+                "delta": [
+                    -1,
+                    0
+                ],
+                "position": [
+                    135.0,
+                    60.0
+                ],
+                "role": "default"
+            },
+            "DEL_SCHEMA": {
+                "delta": [
+                    0,
+                    -1
+                ],
+                "position": [
+                    135.0,
+                    315.0
+                ],
+                "role": "default"
+            }
+        }
+    }
+}

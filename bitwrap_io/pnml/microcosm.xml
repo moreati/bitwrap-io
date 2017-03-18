@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><pnml>
+<net id="Net-One" type="P/T net">
+<token id="Default" enabled="true" red="0" green="0" blue="0"/>
+<place id="ACCOUNT">
+<graphics>
+<position x="510.0" y="300.0"/>
+</graphics>
+<name>
+<value>ACCOUNT</value>
+<graphics>
+<offset x="93.0" y="25.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="BANK">
+<graphics>
+<position x="300.0" y="45.0"/>
+</graphics>
+<name>
+<value>BANK</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="WALLET">
+<graphics>
+<position x="90.0" y="315.0"/>
+</graphics>
+<name>
+<value>WALLET</value>
+<graphics>
+<offset x="-14.0" y="34.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<transition id="buy">
+<graphics>
+<position x="285.0" y="135.0"/>
+</graphics>
+<name>
+<value>buy</value>
+<graphics>
+<offset x="-2.0" y="16.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="deposit">
+<graphics>
+<position x="375.0" y="60.0"/>
+</graphics>
+<name>
+<value>deposit</value>
+<graphics>
+<offset x="70.0" y="25.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="divest">
+<graphics>
+<position x="180.0" y="270.0"/>
+</graphics>
+<name>
+<value>divest</value>
+<graphics>
+<offset x="51.0" y="42.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="invest">
+<graphics>
+<position x="450.0" y="345.0"/>
+</graphics>
+<name>
+<value>invest</value>
+<graphics>
+<offset x="-5.0" y="35.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="sell">
+<graphics>
+<position x="105.0" y="225.0"/>
+</graphics>
+<name>
+<value>sell</value>
+<graphics>
+<offset x="-5.0" y="35.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="withdraw">
+<graphics>
+<position x="420.0" y="255.0"/>
+</graphics>
+<name>
+<value>withdraw</value>
+<graphics>
+<offset x="5.0" y="16.0"/>
+</graphics>
+</name>
+<orientation>
+<value>0</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<arc id="ACCOUNT to deposit" source="ACCOUNT" target="deposit">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="514" y="298" curvePoint="false"/>
+<arcpath id="001" x="387" y="87" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="ACCOUNT to divest" source="ACCOUNT" target="divest">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="507" y="310" curvePoint="false"/>
+<arcpath id="001" x="196" y="282" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="BANK to sell" source="BANK" target="sell">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="301" y="67" curvePoint="false"/>
+<arcpath id="001" x="121" y="237" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="BANK to withdraw" source="BANK" target="withdraw">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="320" y="69" curvePoint="false"/>
+<arcpath id="001" x="432" y="252" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="buy to BANK" source="buy" target="BANK">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="297" y="132" curvePoint="false"/>
+<arcpath id="001" x="309" y="71" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="deposit to BANK" source="deposit" target="BANK">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="381" y="72" curvePoint="false"/>
+<arcpath id="001" x="326" y="60" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="divest to WALLET" source="divest" target="WALLET">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="186" y="282" curvePoint="false"/>
+<arcpath id="001" x="115" y="320" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="invest to ACCOUNT" source="invest" target="ACCOUNT">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="466" y="357" curvePoint="false"/>
+<arcpath id="001" x="510" y="321" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="sell to WALLET" source="sell" target="WALLET">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="117" y="252" curvePoint="false"/>
+<arcpath id="001" x="104" y="312" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="WALLET to buy" source="WALLET" target="buy">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="113" y="317" curvePoint="false"/>
+<arcpath id="001" x="291" y="147" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="WALLET to invest" source="WALLET" target="invest">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="116" y="328" curvePoint="false"/>
+<arcpath id="001" x="456" y="357" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="withdraw to ACCOUNT" source="withdraw" target="ACCOUNT">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="436" y="267" curvePoint="false"/>
+<arcpath id="001" x="508" y="305" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+</net>
+</pnml>

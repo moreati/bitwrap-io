@@ -3,12 +3,12 @@
 <token id="Default" enabled="true" red="0" green="0" blue="0"/>
 <place id="affirmative">
 <graphics>
-<position x="75.0" y="90.0"/>
+<position x="105.0" y="90.0"/>
 </graphics>
 <name>
 <value>affirmative</value>
 <graphics>
-<offset x="0.0" y="0.0"/>
+<offset x="-8.0" y="14.0"/>
 </graphics>
 </name>
 <initialMarking>
@@ -23,12 +23,12 @@
 </place>
 <place id="negative">
 <graphics>
-<position x="210.0" y="90.0"/>
+<position x="240.0" y="90.0"/>
 </graphics>
 <name>
 <value>negative</value>
 <graphics>
-<offset x="59.0" y="-6.0"/>
+<offset x="95.0" y="21.0"/>
 </graphics>
 </name>
 <initialMarking>
@@ -43,7 +43,7 @@
 </place>
 <place id="vote">
 <graphics>
-<position x="150.0" y="270.0"/>
+<position x="180.0" y="315.0"/>
 </graphics>
 <name>
 <value>vote</value>
@@ -61,12 +61,12 @@
 <value>0</value>
 </capacity>
 </place>
-<transition id="CONVERT">
+<transition id="convert">
 <graphics>
-<position x="150.0" y="30.0"/>
+<position x="180.0" y="30.0"/>
 </graphics>
 <name>
-<value>CONVERT</value>
+<value>convert</value>
 <graphics>
 <offset x="79.0" y="21.0"/>
 </graphics>
@@ -87,12 +87,12 @@
 <value>1</value>
 </priority>
 </transition>
-<transition id="DISSENT">
+<transition id="dissent">
 <graphics>
-<position x="150.0" y="165.0"/>
+<position x="180.0" y="165.0"/>
 </graphics>
 <name>
-<value>DISSENT</value>
+<value>dissent</value>
 <graphics>
 <offset x="-5.0" y="35.0"/>
 </graphics>
@@ -115,7 +115,7 @@
 </transition>
 <transition id="NAY">
 <graphics>
-<position x="270.0" y="165.0"/>
+<position x="240.0" y="210.0"/>
 </graphics>
 <name>
 <value>NAY</value>
@@ -141,7 +141,7 @@
 </transition>
 <transition id="YAY">
 <graphics>
-<position x="30.0" y="165.0"/>
+<position x="105.0" y="210.0"/>
 </graphics>
 <name>
 <value>YAY</value>
@@ -165,7 +165,7 @@
 <value>1</value>
 </priority>
 </transition>
-<arc id="affirmative to DISSENT" source="affirmative" target="DISSENT">
+<arc id="affirmative to DISSENT" source="affirmative" target="dissent">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -174,11 +174,11 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="98" y="111" curvePoint="false"/>
-<arcpath id="001" x="156" y="177" curvePoint="false"/>
+<arcpath id="000" x="128" y="111" curvePoint="false"/>
+<arcpath id="001" x="186" y="177" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="CONVERT to affirmative" source="CONVERT" target="affirmative">
+<arc id="CONVERT to affirmative" source="convert" target="affirmative">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -187,11 +187,11 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="156" y="42" curvePoint="false"/>
-<arcpath id="001" x="98" y="92" curvePoint="false"/>
+<arcpath id="000" x="186" y="42" curvePoint="false"/>
+<arcpath id="001" x="128" y="92" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="DISSENT to negative" source="DISSENT" target="negative">
+<arc id="DISSENT to negative" source="dissent" target="negative">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -200,8 +200,8 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="166" y="177" curvePoint="false"/>
-<arcpath id="001" x="213" y="114" curvePoint="false"/>
+<arcpath id="000" x="196" y="177" curvePoint="false"/>
+<arcpath id="001" x="243" y="114" curvePoint="false"/>
 <type value="normal"/>
 </arc>
 <arc id="NAY to negative" source="NAY" target="negative">
@@ -213,11 +213,11 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="277" y="172" curvePoint="false"/>
-<arcpath id="001" x="231" y="113" curvePoint="false"/>
+<arcpath id="000" x="252" y="207" curvePoint="false"/>
+<arcpath id="001" x="252" y="116" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="negative to CONVERT" source="negative" target="CONVERT">
+<arc id="negative to CONVERT" source="negative" target="convert">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -226,8 +226,8 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="211" y="90" curvePoint="false"/>
-<arcpath id="001" x="166" y="42" curvePoint="false"/>
+<arcpath id="000" x="243" y="89" curvePoint="false"/>
+<arcpath id="001" x="196" y="42" curvePoint="false"/>
 <type value="normal"/>
 </arc>
 <arc id="vote to NAY" source="vote" target="NAY">
@@ -239,8 +239,8 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="172" y="271" curvePoint="false"/>
-<arcpath id="001" x="276" y="182" curvePoint="false"/>
+<arcpath id="000" x="200" y="314" curvePoint="false"/>
+<arcpath id="001" x="252" y="237" curvePoint="false"/>
 <type value="normal"/>
 </arc>
 <arc id="vote to YAY" source="vote" target="YAY">
@@ -252,8 +252,8 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="151" y="271" curvePoint="false"/>
-<arcpath id="001" x="46" y="177" curvePoint="false"/>
+<arcpath id="000" x="185" y="313" curvePoint="false"/>
+<arcpath id="001" x="121" y="222" curvePoint="false"/>
 <type value="normal"/>
 </arc>
 <arc id="YAY to affirmative" source="YAY" target="affirmative">
@@ -265,8 +265,8 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="42" y="162" curvePoint="false"/>
-<arcpath id="001" x="78" y="114" curvePoint="false"/>
+<arcpath id="000" x="117" y="207" curvePoint="false"/>
+<arcpath id="001" x="117" y="116" curvePoint="false"/>
 <type value="normal"/>
 </arc>
 </net>

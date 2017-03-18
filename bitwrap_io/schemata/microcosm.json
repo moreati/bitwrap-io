@@ -1,0 +1,105 @@
+{
+    "machine": {
+        "name": "microcosm",
+        "places": {
+            "ACCOUNT": {
+                "inital": 0,
+                "offset": 1,
+                "position": [
+                    510.0,
+                    300.0
+                ]
+            },
+            "BANK": {
+                "inital": 0,
+                "offset": 2,
+                "position": [
+                    300.0,
+                    45.0
+                ]
+            },
+            "WALLET": {
+                "inital": 0,
+                "offset": 0,
+                "position": [
+                    90.0,
+                    315.0
+                ]
+            }
+        },
+        "transitions": {
+            "buy": {
+                "delta": [
+                    -1,
+                    0,
+                    1
+                ],
+                "position": [
+                    285.0,
+                    135.0
+                ],
+                "role": "default"
+            },
+            "deposit": {
+                "delta": [
+                    0,
+                    -1,
+                    1
+                ],
+                "position": [
+                    375.0,
+                    60.0
+                ],
+                "role": "default"
+            },
+            "divest": {
+                "delta": [
+                    1,
+                    -1,
+                    0
+                ],
+                "position": [
+                    180.0,
+                    270.0
+                ],
+                "role": "default"
+            },
+            "invest": {
+                "delta": [
+                    -1,
+                    1,
+                    0
+                ],
+                "position": [
+                    450.0,
+                    345.0
+                ],
+                "role": "default"
+            },
+            "sell": {
+                "delta": [
+                    1,
+                    0,
+                    -1
+                ],
+                "position": [
+                    105.0,
+                    225.0
+                ],
+                "role": "default"
+            },
+            "withdraw": {
+                "delta": [
+                    0,
+                    1,
+                    -1
+                ],
+                "position": [
+                    420.0,
+                    255.0
+                ],
+                "role": "default"
+            }
+        }
+    }
+}

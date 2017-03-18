@@ -1,1 +1,81 @@
-{"machine": {"transitions": {"DISSENT": {"role": "default", "delta": [0, 1, -1]}, "CONVERT": {"role": "default", "delta": [0, -1, 1]}, "NAY": {"role": "default", "delta": [-1, 1, 0]}, "YAY": {"role": "default", "delta": [-1, 0, 1]}}, "name": "vote", "places": {"vote": {"position": [150.0, 270.0], "inital": 1, "offset": 0}, "negative": {"position": [210.0, 90.0], "inital": 0, "offset": 1}, "affirmative": {"position": [75.0, 90.0], "inital": 0, "offset": 2}}}}
+{
+    "machine": {
+        "name": "vote",
+        "places": {
+            "affirmative": {
+                "inital": 0,
+                "offset": 2,
+                "position": [
+                    105.0,
+                    90.0
+                ]
+            },
+            "negative": {
+                "inital": 0,
+                "offset": 1,
+                "position": [
+                    240.0,
+                    90.0
+                ]
+            },
+            "vote": {
+                "inital": 1,
+                "offset": 0,
+                "position": [
+                    180.0,
+                    315.0
+                ]
+            }
+        },
+        "transitions": {
+            "NAY": {
+                "delta": [
+                    -1,
+                    1,
+                    0
+                ],
+                "position": [
+                    240.0,
+                    210.0
+                ],
+                "role": "default"
+            },
+            "YAY": {
+                "delta": [
+                    -1,
+                    0,
+                    1
+                ],
+                "position": [
+                    105.0,
+                    210.0
+                ],
+                "role": "default"
+            },
+            "convert": {
+                "delta": [
+                    0,
+                    -1,
+                    1
+                ],
+                "position": [
+                    180.0,
+                    30.0
+                ],
+                "role": "default"
+            },
+            "dissent": {
+                "delta": [
+                    0,
+                    1,
+                    -1
+                ],
+                "position": [
+                    180.0,
+                    165.0
+                ],
+                "role": "default"
+            }
+        }
+    }
+}
