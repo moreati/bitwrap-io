@@ -30,9 +30,17 @@ https://en.wikipedia.org/wiki/Petri_net
 
 ### Vector Form
 
-given a simple 3-place Petri-Net
+given this simple 3-place Petri-Net that models a voting system:
 
-#TODO add diagram
+![vote_machine graph](https://bitwrap.github.io/image/vote_machine.png)
+
+* We can represent the state as an array of 'places'.
+  * Each place is acted upon but a 'transition' vector.
+* We represent an instrction set as a set of deltas
+  * Each transition vector maps to a single instruction.
+* During an execution
+  * Transition vectors are combined with input states using vector addition.
+  * Output vectors having only positive scalar integers are valid.
 
 #### State-Vectors
 
@@ -72,7 +80,7 @@ See A 21-place Petri-Net in action:
 
 https://bitwrap.github.io/#octothorpe
 
-By using state-vectors designed to model the tic-tac-toe board, we can effectively model
-a game of tic-tac-to as a deterministic state machine without suffering from 'State Explosion'
+By using state-vectors designed to model the tic-tac-toe board, we have effectively modeled
+a game of tic-tac-to as a deterministic state machine without suffering from 'State Explosion'.
 
 
